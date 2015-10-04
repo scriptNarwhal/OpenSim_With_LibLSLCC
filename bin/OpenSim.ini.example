@@ -863,6 +863,9 @@
     ;# {Enabled} {} {Enable the XEngine scripting engine?} {true false} true
     ;; Enable this engine in this OpenSim instance
     ; Enabled = true
+		
+	
+	; WriteScriptSourceToDebugFile = true
 	
 	
 	;==========================================

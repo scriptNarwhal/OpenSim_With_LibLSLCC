@@ -15,15 +15,17 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
     public class LibLSLCCCodeGenerator : ICodeConverter
     {
         private readonly ILSLMainLibraryDataProvider _libraryData;
+        private readonly bool _insertCoopTerminationCalls;
 
         public LibLSLCCCodeGenerator()
         {
 
         }
 
-        public LibLSLCCCodeGenerator(ILSLMainLibraryDataProvider libraryData, IScriptModuleComms comms, bool mInsertCoopTerminationCalls)
+        public LibLSLCCCodeGenerator(ILSLMainLibraryDataProvider libraryData, IScriptModuleComms comms, bool insertCoopTerminationCalls)
         {
             _libraryData = libraryData;
+            _insertCoopTerminationCalls = insertCoopTerminationCalls;
         }
 
 
@@ -83,14 +85,19 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             _warnings = warningListener.Warnings;
 
+
+
+            if (validator.HasSyntaxErrors) return "";
+
             var outStream = new MemoryStream();
 
-            if (!validator.HasSyntaxErrors)
-            {
-                var compiler = new LSLOpenSimCSCompiler(LSLOpenSimCSCompilerSettings.OpenSimClientUploadable(_libraryData));
+            var compilerSettings = LSLOpenSimCSCompilerSettings.OpenSimClientUploadable(_libraryData);
+            compilerSettings.InsertCoOpTerminationCalls = _insertCoopTerminationCalls;
 
-                compiler.Compile(syntaxTree, new StreamWriter(outStream, Encoding.UTF8));
-            }
+            var compiler = new LSLOpenSimCSCompiler(compilerSettings);
+
+            compiler.Compile(syntaxTree, new StreamWriter(outStream, Encoding.UTF8));
+            
 
             return Encoding.UTF8.GetString(outStream.ToArray());
         }
