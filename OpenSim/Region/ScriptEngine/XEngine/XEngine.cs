@@ -927,13 +927,14 @@ namespace OpenSim.Region.ScriptEngine.XEngine
             object[] parms = (object[])p;
             int sleepTime = (int)parms[0];
 
-            foreach (IScriptInstance inst in m_Scripts.Values)
+            if (m_KillTimedOutScripts)
             {
-                if (inst.EventTime() > m_EventLimit)
+                foreach (IScriptInstance inst in m_Scripts.Values)
                 {
-                    inst.Stop(100);
-                    if (!m_KillTimedOutScripts)
-                        inst.Start();
+                    if (inst.EventTime() > m_EventLimit)
+                    {
+                        inst.Stop(100);
+                    }
                 }
             }
 
