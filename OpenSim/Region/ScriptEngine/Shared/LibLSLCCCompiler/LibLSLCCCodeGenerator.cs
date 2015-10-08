@@ -77,10 +77,10 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             ILSLCompilationUnitNode syntaxTree;
 
-            using (var m = new MemoryStream(Encoding.UTF8.GetBytes(script)))
+            using (var m = new MemoryStream(Encoding.Unicode.GetBytes(script)))
             {
 
-                syntaxTree = validator.Validate(new StreamReader(m, Encoding.UTF8));
+                syntaxTree = validator.Validate(new StreamReader(m, Encoding.Unicode));
             }
 
             _warnings = warningListener.Warnings;
@@ -96,10 +96,10 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             var compiler = new LSLOpenSimCSCompiler(compilerSettings);
 
-            compiler.Compile(syntaxTree, new StreamWriter(outStream, Encoding.UTF8));
+            compiler.Compile(syntaxTree, new StreamWriter(outStream, Encoding.Unicode));
             
 
-            return Encoding.UTF8.GetString(outStream.ToArray());
+            return Encoding.Unicode.GetString(outStream.ToArray());
         }
 
 
