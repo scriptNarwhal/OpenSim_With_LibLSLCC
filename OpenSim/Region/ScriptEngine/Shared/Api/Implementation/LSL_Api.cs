@@ -11441,7 +11441,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                     if (active[j])
                     {
                         // scan all of the markers
-                        if ((offset[j] = src.IndexOf(separray[j].ToString(), beginning)) == -1)
+                        if ((offset[j] = src.IndexOf(separray[j].ToString(), beginning, StringComparison.Ordinal)) == -1)
                         {
                             // not present at all
                             active[j] = false;
@@ -11472,7 +11472,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
                         if (active[j])
                         {
                             // scan all of the markers
-                            if ((offset[j] = src.IndexOf(spcarray[j-seplen].ToString(), beginning)) == -1)
+                            if ((offset[j] = src.IndexOf(spcarray[j-seplen].ToString(), beginning, StringComparison.Ordinal)) == -1)
                             {
                                 // not present at all
                                 active[j] = false;
