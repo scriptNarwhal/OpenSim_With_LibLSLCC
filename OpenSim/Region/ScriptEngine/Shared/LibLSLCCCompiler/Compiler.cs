@@ -122,6 +122,14 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
                 libraryAdditions |= LSLLibraryDataAdditions.OpenSimBulletPhysics;
             }
 
+
+            var jsonStore = m_scriptEngine.ConfigSource.Configs["JsonStore"];
+
+            if (jsonStore != null && jsonStore.GetBoolean("Enabled", false))
+            {
+                libraryAdditions |= LSLLibraryDataAdditions.OpenSimJsonStore;
+            }
+
             bool allowModFunctions = m_scriptEngine.Config.GetBoolean("AllowMODFunctions", false);
             if (allowModFunctions)
             {
