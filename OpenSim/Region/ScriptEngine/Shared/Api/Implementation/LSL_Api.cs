@@ -624,6 +624,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
         {
             List<ISceneEntity> ret;
 
+            
+
             switch (linkType)
             {
                 case ScriptBaseClass.LINK_SET:
