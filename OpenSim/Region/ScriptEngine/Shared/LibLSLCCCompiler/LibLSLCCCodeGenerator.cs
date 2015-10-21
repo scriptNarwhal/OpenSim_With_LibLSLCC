@@ -14,7 +14,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
     // ReSharper disable once InconsistentNaming
     public class LibLSLCCCodeGenerator : ICodeConverter
     {
-        private readonly ILSLMainLibraryDataProvider _libraryData;
+        private readonly ILSLLibraryDataProvider _libraryData;
         private readonly bool _insertCoopTerminationCalls;
 
         public LibLSLCCCodeGenerator()
@@ -22,7 +22,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
         }
 
-        public LibLSLCCCodeGenerator(ILSLMainLibraryDataProvider libraryData, IScriptModuleComms comms, bool insertCoopTerminationCalls)
+        public LibLSLCCCodeGenerator(ILSLLibraryDataProvider libraryData, IScriptModuleComms comms, bool insertCoopTerminationCalls)
         {
             _libraryData = libraryData;
             _insertCoopTerminationCalls = insertCoopTerminationCalls;
@@ -67,7 +67,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var warningListener = new WarningListener();
 
             validatorServices.ExpressionValidator = ExpressionValidator;
-            validatorServices.MainLibraryDataProvider = _libraryData;
+            validatorServices.LibraryDataProvider = _libraryData;
             validatorServices.StringLiteralPreProcessor = new LSLDefaultStringPreProcessor();
             validatorServices.SyntaxErrorListener = errorListener;
             validatorServices.SyntaxWarningListener = warningListener;

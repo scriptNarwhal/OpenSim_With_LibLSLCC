@@ -53,7 +53,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 
-        ILSLMainLibraryDataProvider _libLslccMainLibraryDataProvider;
+        ILSLLibraryDataProvider _libLslccMainLibraryDataProvider;
 
 
 
