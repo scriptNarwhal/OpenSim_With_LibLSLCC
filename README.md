@@ -2,8 +2,7 @@ Welcome to OpenSim!
 
 # LibLSLCC Integration
 
-This distribution of OpenSim integrates the LibLSLCC Compiler and moves
-OpenSim over to using .NET Framework 4.5 instead of 4.0
+This distribution of OpenSim integrates the LibLSLCC Compiler.
 
 See:
 
