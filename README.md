@@ -2,7 +2,9 @@ Welcome to OpenSim!
 
 # LibLSLCC Integration
 
-This distribution of OpenSim integrates the LibLSLCC Compiler.
+This distribution of OpenSim integrates the LibLSLCC OpenSim LSL Compiler
+as an optional compiler that can be used instead of the default compiler inside
+XEngine.
 
 See:
 
