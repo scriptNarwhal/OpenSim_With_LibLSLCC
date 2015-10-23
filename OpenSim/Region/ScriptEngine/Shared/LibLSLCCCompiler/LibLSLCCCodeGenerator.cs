@@ -34,23 +34,38 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             get { return new Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>>(); }
         }
 
+
         private class ErrorListener : LSLDefaultSyntaxErrorListener
         {
             public override void OnError(LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
             {
-                int line = location.LineStart == 0 ? 0 : location.LineStart - 1;
+                int line = MapLineNumber(location.LineStart);
+
                 throw new Exception(string.Format("({0},{1}): ERROR, {2}", line, location.ColumnStart, message));
             }
+
+            public override int MapLineNumber(int oneBasedLine)
+            {
+                //return -1 for all line indexes, since the SecondLife viewer's LSL editor uses a 0 based index and LibLSLCC uses a 1 based index.
+                return oneBasedLine - 1;
+            }
         }
+
 
         private class WarningListener : LSLDefaultSyntaxWarningListener
         {
             public readonly List<string> Warnings = new List<string>();
             public override void OnWarning(LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
             {
-                int line = location.LineStart == 0 ? 0 : location.LineStart - 1;
+                int line = MapLineNumber(location.LineStart);
 
                 Warnings.Add(string.Format("({0},{1}): WARNING, {2}", line, location.ColumnStart, message));
+            }
+
+            public override int MapLineNumber(int oneBasedLine)
+            {
+                //return -1 for all line indexes, since the SecondLife viewer's LSL editor uses a 0 based index and LibLSLCC uses a 1 based index.
+                return oneBasedLine - 1;
             }
         }
 
