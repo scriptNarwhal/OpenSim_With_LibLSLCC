@@ -37,6 +37,38 @@ Under [XEngine] in OpenSim.ini you will find these new settings:
 	;The assembly to load the compiler implementation from
 	;CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
 	CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
+	
+	
+There is also a new section called [LibLSLCC]:
+
+
+	[LibLSLCC]
+	
+	; Documentation on the XML files used to define library data can be found in:
+	; ./bin/LibLSLCC/LibraryData_XML_Syntax_README.txt
+	
+	; This is the library data directory which XML library data files should be loaded from.
+	; It defaults to ".\LibLSLCC\LibraryData\"
+	;
+	; You can look at the contents of the files in your library data directory to determine what subset names
+	; you can use in the LibrarySubsets list setting in the [LibLSLCC] section.  
+	;
+	; Just look at the 'SubsetDescription' node's 'Subset' attribute's.  SubsetDescription nodes always exist at the top of the library data XML files.
+	LibraryDataDir = ".\LibLSLCC\LibraryData\"
+	
+	
+	; This is a list of library data subsets for LibLSLCC to load.
+	; Each subset defines a certain set of constants and functions.
+	; The default value for this setting is "os-lsl" if you leave it blank.
+	; "os-lsl" is the library subset containing the standard LSL functions that OpenSim has implemented.
+	; The setting string seen here is all possible current library subsets.
+	;
+	; Just because you put a subset name in the list, does not mean that module is actually enabled, you
+	; must make sure that the subset names in this list line up with the modules you have active on the server.
+	
+	; Otherwise LibLSLCC will compile functions that are not supposed to be available and the backend
+	; compiler that gets passed the generated code will complain about missing function definitions.
+	LibrarySubsets = "os-lsl,os-mod-api,ossl,os-bullet-physics,os-lightshare,os-json-store"
 
 
 
