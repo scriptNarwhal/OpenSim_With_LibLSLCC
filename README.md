@@ -23,7 +23,7 @@ The included OpenSim.ini.example and OpenSim.ini have the default compiler assem
 set to the "LibLSLCCCompiler.dll" so that LibLSLCC is used as the default compiler.
 
 
-# Added Configuration
+# Configuration I Have Added
 
 
 Under [XEngine] in OpenSim.ini you will find these new settings:
