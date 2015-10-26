@@ -29,17 +29,19 @@ set to the "LibLSLCCCompiler.dll" so that LibLSLCC is used as the default compil
 Under [XEngine] in OpenSim.ini you will find these new settings:
 
 
-	;==========================================
-	;LibLSLCC Patch Settings
-	;==========================================
-
-	;The name of the class that implements the compiler
-	;CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
-	CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler"
-
-	;The assembly to load the compiler implementation from
-	;CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
-	CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
+	; ==========================================
+	; LibLSLCC Patch Settings
+	; ==========================================
+	
+	; The name of the class that implements the compiler
+	; CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
+	  CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCC.Compiler"
+	
+	; The assembly to load the compiler implementation from
+	; CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
+	  CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCC.dll"
+	
+	;============================================
 	
 	
 There is also a new section called [LibLSLCC]:
