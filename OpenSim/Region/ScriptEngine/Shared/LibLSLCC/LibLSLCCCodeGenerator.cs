@@ -4,12 +4,12 @@ using System.IO;
 using System.Text;
 using LibLSLCC.CodeValidator.Components;
 using LibLSLCC.CodeValidator.Components.Interfaces;
-using LibLSLCC.CodeValidator.ValidatorNodes.Interfaces;
+using LibLSLCC.CodeValidator.Nodes.Interfaces;
 using LibLSLCC.Compilers;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.ScriptEngine.Shared.CodeTools;
 
-namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
+namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCC
 {
     // ReSharper disable once InconsistentNaming
     public class LibLSLCCCodeGenerator : ICodeConverter
@@ -37,14 +37,14 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
         private class ErrorListener : LSLDefaultSyntaxErrorListener
         {
-            public override void OnError(LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
+            protected override void OnError(global::LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
             {
                 int line = MapLineNumber(location.LineStart);
 
                 throw new Exception(string.Format("({0},{1}): ERROR, {2}", line, location.ColumnStart, message));
             }
 
-            public override int MapLineNumber(int oneBasedLine)
+            protected override int MapLineNumber(int oneBasedLine)
             {
                 //return -1 for all line indexes, since the SecondLife viewer's LSL editor uses a 0 based index and LibLSLCC uses a 1 based index.
                 return oneBasedLine - 1;
@@ -55,14 +55,15 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         private class WarningListener : LSLDefaultSyntaxWarningListener
         {
             public readonly List<string> Warnings = new List<string>();
-            public override void OnWarning(LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
+
+            protected override void OnWarning(global::LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
             {
                 int line = MapLineNumber(location.LineStart);
 
                 Warnings.Add(string.Format("({0},{1}): WARNING, {2}", line, location.ColumnStart, message));
             }
 
-            public override int MapLineNumber(int oneBasedLine)
+            protected override int MapLineNumber(int oneBasedLine)
             {
                 //return -1 for all line indexes, since the SecondLife viewer's LSL editor uses a 0 based index and LibLSLCC uses a 1 based index.
                 return oneBasedLine - 1;
@@ -88,7 +89,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             validatorServices.SyntaxWarningListener = warningListener;
 
 
-            var validator = new LibLSLCC.CodeValidator.LSLCodeValidator(validatorServices);
+            var validator = new global::LibLSLCC.CodeValidator.LSLCodeValidator(validatorServices);
 
             ILSLCompilationUnitNode syntaxTree;
 

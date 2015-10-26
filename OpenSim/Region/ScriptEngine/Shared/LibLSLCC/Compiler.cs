@@ -34,10 +34,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using log4net;
-using LibLSLCC.CodeValidator.Components;
-using LibLSLCC.CodeValidator.Components.Interfaces;
+using LibLSLCC.LibraryData;
 using Microsoft.CSharp;
 using Microsoft.VisualBasic;
 using OpenMetaverse;
@@ -45,15 +43,14 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.ScriptEngine.Interfaces;
 using OpenSim.Region.ScriptEngine.Shared.CodeTools;
 
-
-namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
+namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCC
 {
     public class Compiler : ICompiler
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 
-        ILSLLibraryDataProvider _libLslccMainLibraryDataProvider;
+        LSLXmlLibraryDataProvider _libLslccMainLibraryDataProvider;
 
 
 
@@ -113,42 +110,36 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
         public void ReadConfig()
         {
-            var libraryAdditions = LSLLibraryDataAdditions.None;
+            
 
-            var extendedPhysics = m_scriptEngine.ConfigSource.Configs["ExtendedPhysics"];
+            var libLslccConfig = m_scriptEngine.ConfigSource.Configs["LibLSLCC"];
 
-            if (extendedPhysics != null && extendedPhysics.GetBoolean("Enabled", false))
+            if (libLslccConfig == null)
             {
-                libraryAdditions |= LSLLibraryDataAdditions.OpenSimBulletPhysics;
+                _libLslccMainLibraryDataProvider = new LSLXmlLibraryDataProvider(new [] {"os-lsl"}, false);
+                _libLslccMainLibraryDataProvider.AddFromXmlDirectory(Path.Combine(Environment.CurrentDirectory, "LibLSLCC", "LibraryData"));
             }
-
-
-            var jsonStore = m_scriptEngine.ConfigSource.Configs["JsonStore"];
-
-            if (jsonStore != null && jsonStore.GetBoolean("Enabled", false))
+            else
             {
-                libraryAdditions |= LSLLibraryDataAdditions.OpenSimJsonStore;
-            }
 
-            bool allowModFunctions = m_scriptEngine.Config.GetBoolean("AllowMODFunctions", false);
-            if (allowModFunctions)
-            {
-                libraryAdditions |= LSLLibraryDataAdditions.OpenSimModInvoke;
-            }
+                var subsets = libLslccConfig.GetString("LibrarySubsets", "os-lsl").Split(',');
 
-            bool windlightFunctions = m_scriptEngine.Config.GetBoolean("AllowLightshareFunctions", false);
-            if (windlightFunctions)
-            {
-                libraryAdditions |= LSLLibraryDataAdditions.OpenSimWindlight;
-            }
+                if (subsets.Length == 0)
+                {
+                    throw new ArgumentException(
+                        "[LibLSLCC].LibrarySubsets list must contain at least one subset, check that your configuration is correct.");
+                }
 
-            bool osslFunctions = m_scriptEngine.Config.GetBoolean("AllowOSFunctions", false);
-            if (osslFunctions)
-            {
-                libraryAdditions |= LSLLibraryDataAdditions.OpenSimOssl;
-            }
+                //Throws an LSLInvalidSubsetNameException if any subset name does not match the pattern ([a-zA-Z]+[a-zA-Z_0-9\\-]*)
+                //OpenSim terminates with an error message if this happens.
+                //Do not enable live filtering, this saves memory since only the specified subsets are ever loaded into memory.
+                _libLslccMainLibraryDataProvider = new LSLXmlLibraryDataProvider(subsets, false);
 
-            _libLslccMainLibraryDataProvider = new LSLDefaultLibraryDataProvider(false, LSLLibraryBaseData.OpensimLsl, libraryAdditions);
+                //load all XML library data files from the 'LibLSLCC\LibraryData' directory in the working directory.
+                //if there is a failure this will throw and OpenSim will terminate with an error message.
+                _libLslccMainLibraryDataProvider.AddFromXmlDirectory(libLslccConfig.GetString("LibraryDataDirectory",
+                    Path.Combine("LibLSLCC", "LibraryData")));
+            }
 
 
 

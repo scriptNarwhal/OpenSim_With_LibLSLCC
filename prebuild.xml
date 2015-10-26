@@ -2099,7 +2099,7 @@
     </Project>
 	
 	
-    <Project frameworkVersion="v4_0" name="OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler" path="OpenSim/Region/ScriptEngine/Shared/LibLSLCCCompiler" type="Library">
+    <Project frameworkVersion="v4_0" name="OpenSim.Region.ScriptEngine.Shared.LibLSLCC" path="OpenSim/Region/ScriptEngine/Shared/LibLSLCC" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../bin/</OutputPath>
