@@ -2099,7 +2099,7 @@
     </Project>
 	
 	
-    <Project frameworkVersion="v4_0" name="OpenSim.Region.ScriptEngine.Shared.LibLSLCC" path="OpenSim/Region/ScriptEngine/Shared/LibLSLCC" type="Library">
+    <Project frameworkVersion="v4_0" name="OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler" path="OpenSim/Region/ScriptEngine/Shared/LibLSLCCCompiler" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../../../bin/</OutputPath>
@@ -2117,6 +2117,7 @@
       <Reference name="OpenSim.Framework"/>
       <Reference name="OpenSim.Region.Framework"/>
       <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
+	  <Reference name="OpenSim.Region.ScriptEngine.Shared.Api.Runtime"/>
 	  <Reference name="OpenSim.Region.ScriptEngine.Shared.CodeTools"/>
       <Reference name="OpenSim.Region.CoreModules"/>
       <Reference name="OpenMetaverseTypes" path="../../../../../bin/"/>

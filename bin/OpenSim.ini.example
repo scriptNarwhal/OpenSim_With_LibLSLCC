@@ -872,13 +872,13 @@
 	;LibLSLCC Patch Settings
 	;==========================================
 	
-	;The name of the class that implements the compiler
-	;CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
-	CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler"
+	; The name of the class that implements the compiler
+	; CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
+	  CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler"
 	
-	;The assembly to load the compiler implementation from
-	;CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
-	CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
+	; The assembly to load the compiler implementation from
+	; CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
+	  CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
 
     ;; How many threads to keep alive even if nothing is happening
     ; MinThreads = 2
