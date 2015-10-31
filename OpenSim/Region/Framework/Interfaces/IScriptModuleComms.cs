@@ -34,6 +34,87 @@ namespace OpenSim.Region.Framework.Interfaces
 {
     public delegate void ScriptCommand(UUID script, string id, string module, string command, string k);
 
+
+    public class ScriptInvocationInfo
+    {
+        /// <summary>
+        /// Gets the script invocation delegate, which is a delegate that calls the <see cref="OriginalMethod"/> with the first two parameters bound.
+        /// </summary>
+        /// <value>
+        /// The script invocation delegate.
+        /// </value>
+        public Delegate ScriptInvocationDelegate { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the function.
+        /// </summary>
+        /// <value>
+        /// The name of the function.
+        /// </value>
+        public string FunctionName { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> signature of <see cref="ScriptInvocationDelegate"/>. (The parameter <see cref="Type"/>'s)
+        /// </summary>
+        /// <value>
+        /// The <see cref="Type"/> signature of <see cref="ScriptInvocationDelegate"/>.
+        /// </value>
+        public Type[] TypeSignature { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the return type of <see cref="ScriptInvocationDelegate"/>.
+        /// </summary>
+        /// <value>
+        /// The return type of <see cref="ScriptInvocationDelegate"/>.
+        /// </value>
+        public Type ReturnType { get; private set; }
+
+        /// <summary>
+        /// Gets the original <see cref="MethodInfo"/> from the actual method in the module class that implements this script function.
+        /// </summary>
+        /// <value>
+        /// The original <see cref="MethodInfo"/> from the module class that implements this script function.
+        /// </value>
+        public MethodInfo OriginalMethod { get; private set; }
+
+        public ScriptInvocationInfo(MethodInfo originalMethod, Delegate functionDelegate, Type[] callSignature, Type returnType)
+        {
+            OriginalMethod = originalMethod;
+            FunctionName = originalMethod.Name;
+            ScriptInvocationDelegate = functionDelegate;
+            TypeSignature = callSignature;
+            ReturnType = returnType;
+        }
+    }
+
+
+
+    public class ScriptConstantInfo
+    {
+        public ScriptConstantInfo(MemberInfo classMember, object constantValue)
+        {
+            ClassMember = classMember;
+            ConstantValue = constantValue;
+        }
+
+        /// <summary>
+        /// Gets the class member that represents the constant.
+        /// Could be a field or property.
+        /// </summary>
+        /// <value>
+        /// The class member that represents the constant.
+        /// </value>
+        public MemberInfo ClassMember { get; private set; }
+
+        /// <summary>
+        /// Gets the constants value, taken from the class member that represents it.
+        /// </summary>
+        /// <value>
+        /// The constants value, taken from the class member.
+        /// </value>
+        public object ConstantValue { get; private set; }
+    }
+
     /// <summary>
     /// Interface for communication between OpenSim modules and in-world scripts
     /// </summary>
@@ -84,14 +165,17 @@ namespace OpenSim.Region.Framework.Interfaces
         void RegisterScriptInvocations(IRegionModuleBase target);
 
         /// <summary>
-        /// Returns an array of all registered script calls
+        /// Returns an array of information about all registered script calls
         /// </summary>
         /// <returns></returns>
-        Delegate[] GetScriptInvocationList();
+        ScriptInvocationInfo[] GetScriptInvocationList();
 
-        Delegate LookupScriptInvocation(string fname);
+        ScriptInvocationInfo LookupScriptInvocation(string fname);
+
         string LookupModInvocation(string fname);
+
         Type[] LookupTypeSignature(string fname);
+
         Type LookupReturnType(string fname);
 
         object InvokeOperation(UUID hostId, UUID scriptId, string fname, params object[] parms);
@@ -105,19 +189,6 @@ namespace OpenSim.Region.Framework.Interfaces
         /// <param name="key"></param>
         void DispatchReply(UUID scriptId, int code, string text, string key);
 
-        /// <summary>
-        /// Operation to for a region module to register a constant to be used
-        /// by the script engine
-        /// </summary>
-        /// <param name="cname">
-        /// The name of the constant. LSL convention is for constant names to
-        /// be uppercase.
-        /// </param>
-        /// <param name="value">
-        /// The value of the constant. Should be of a type that can be
-        /// converted to one of <see cref="OpenSim.Region.ScriptEngine.Shared.LSL_Types"/>
-        /// </param>
-        void RegisterConstant(string cname, object value);
 
         /// <summary>
         /// Automatically register all constants on a region module by
@@ -130,9 +201,14 @@ namespace OpenSim.Region.Framework.Interfaces
         /// Operation to check for a registered constant
         /// </summary>
         /// <param name="cname">Name of constant</param>
-        /// <returns>Value of constant or null if none found.</returns>
-        object LookupModConstant(string cname);
-        Dictionary<string, object> GetConstants();
+        /// <returns>Information about the constant if found, otherwise <c>null</c>.</returns>
+        ScriptConstantInfo LookupModConstant(string cname);
+
+        /// <summary>
+        /// Gets a dictionary that containing information about registered module constants by name.
+        /// </summary>
+        /// <returns>Dictionary containing information about registered module constants by name.</returns>
+        Dictionary<string, ScriptConstantInfo> GetConstants();
 
         // For use ONLY by the script API
         void RaiseEvent(UUID script, string id, string module, string command, string key);

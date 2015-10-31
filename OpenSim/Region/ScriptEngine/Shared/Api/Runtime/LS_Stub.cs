@@ -31,6 +31,8 @@ using System.Threading;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.LibraryData.Reflection;
 using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.ScriptEngine.Interfaces;
@@ -58,20 +60,25 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LS_Functions = (ILS_Api)api;
         }
 
-        public LSL_List lsGetWindlightScene(LSL_List rules)
+        [LSLFunction(LSLType.List)]
+        public LSL_List lsGetWindlightScene([LSLParam(LSLType.List)] LSL_List rules)
         {
             return m_LS_Functions.lsGetWindlightScene(rules);
         }
 
-        public int lsSetWindlightScene(LSL_List rules)
+        [LSLFunction(LSLType.Integer)]
+        public int lsSetWindlightScene([LSLParam(LSLType.List)] LSL_List rules)
         {
             return m_LS_Functions.lsSetWindlightScene(rules);
         }
 
-        public int lsSetWindlightSceneTargeted(LSL_List rules, key target)
+        [LSLFunction(LSLType.Integer)]
+        public int lsSetWindlightSceneTargeted([LSLParam(LSLType.List)] LSL_List rules, [LSLParam(LSLType.Key)] key target)
         {
             return m_LS_Functions.lsSetWindlightSceneTargeted(rules, target);
         }
+
+        [LSLFunction(LSLType.Void)]
         public void lsClearWindlightScene()
         {
             m_LS_Functions.lsClearWindlightScene();

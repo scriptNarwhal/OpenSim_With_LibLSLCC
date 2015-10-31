@@ -23,6 +23,7 @@ The included OpenSim.ini.example and OpenSim.ini have the default compiler assem
 set to the "LibLSLCCCompiler.dll" so that LibLSLCC is used as the default compiler.
 
 
+
 # Configuration I Have Added
 
 
@@ -42,40 +43,6 @@ Under [XEngine] in OpenSim.ini you will find these new settings:
 	  CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCC.dll"
 	
 	;============================================
-	
-	
-There is also a new section called [LibLSLCC]:
-
-
-	[LibLSLCC]
-	
-	; Documentation on the XML files used to define library data can be found in:
-	; ./bin/LibLSLCC/LibraryData_XML_Syntax_README.txt
-	
-	; This is the library data directory which XML library data files should be loaded from.
-	; It defaults to ".\LibLSLCC\LibraryData\"
-	;
-	; You can look at the contents of the files in your library data directory to determine what subset names
-	; you can use in the LibrarySubsets list setting in the [LibLSLCC] section.  
-	;
-	; Just look at the 'SubsetDescription' node's 'Subset' attribute's.  SubsetDescription nodes always exist at the top of the library data XML files.
-	LibraryDataDir = ".\LibLSLCC\LibraryData\"
-	
-	
-	; This is a list of library data subsets for LibLSLCC to load.
-	; Each subset defines a certain set of constants and functions.
-	; The default value for this setting is "os-lsl" if you leave it blank.
-	; "os-lsl" is the library subset containing the standard LSL functions that OpenSim has implemented.
-	; The setting string seen here is all possible current library subsets.
-	;
-	; Just because you put a subset name in the list, does not mean that module is actually enabled, you
-	; must make sure that the subset names in this list line up with the modules you have active on the server.
-	
-	; Otherwise LibLSLCC will compile functions that are not supposed to be available and the backend
-	; compiler that gets passed the generated code will complain about missing function definitions.
-	LibrarySubsets = "os-lsl,os-mod-api,ossl,os-bullet-physics,os-lightshare,os-json-store"
-
-
 
 When you clone this repository OpenSim is pre-configured in standalone mode using the SQLite storage backend.
 
@@ -85,6 +52,126 @@ for this distribution to make running a test server on your PC easier.  If you j
 to run a test server on localhost, you should not have to modify any configuration after building,
 just run OpenSim.exe and set up your region and region owner by answering the questions OpenSim
 asks you in the command prompt.
+
+
+
+# OpenSim Framework Changes (IScriptModuleComms)
+
+
+
+I have modified the IScriptModuleComms interface to return more information
+about the origin of script constants and library methods.
+
+The ScriptModuleCommsModule implementation has been updated to support this new interface.
+
+
+The interface can now provide MethodInfo objects pertaining to where a script
+Delegate for module method was generated from when it was registered.
+
+	Delegate[] GetScriptInvocationList();
+
+	is now:
+
+	ScriptInvocationInfo[] GetScriptInvocationList();
+	
+
+The ScriptInvocationInfo object encapsulates the Delegate with
+additional information about the Method the delegate was generated from.
+
+So I can reflect off the MethodInfo to generate library data for my compiler
+using LibLSLCC's attribute framework.
+
+
+
+	Dictionary<string, object> GetConstants();
+	
+	is now:
+
+	Dictionary<string, ScriptConstantInfo> GetConstants();
+	
+	
+	
+ScriptConstantInfo contains the reflected value of the constant from the static
+field it was defined with, as well as a MemberInfo object for the static field it came from.
+This is so you can reflect attributes off the MemberInfo if needed.  LibLSLCC uses this
+again with its attribute framework to generate library data for syntax checking.
+
+
+
+	object LookupModConstant LookupModConstant();
+
+	is now:
+
+	ScriptConstantInfo LookupModConstant(string cname);
+	
+
+Again returning a ScriptConstantInfo here so I can grab more info about the constant definition.
+
+
+This has been removed as it was not used in any module and did not support the idea
+behind the new interface:
+
+	void RegisterConstant(string cname, object value);
+	
+
+	
+All refactorings have been made to make this new interface work with the old OpenSim
+compiler, the were only two changes made to the old compiler.
+
+
+
+# OpenSim Framework Changes (New Module/ScriptBaseClass Attributes)
+
+
+
+Each core/optional module containing script invocations, as well as ScriptBaseClass
+have been given attributes from LibLSLCC's method/constant namespace LibLSLCC.LibraryData.Reflection.
+
+This is so LibLSLCC can use its built in class serializer to generate library data for loaded modules
+instead of loading it off the disk from a seperate configuration file.
+
+
+None of the old [ScriptConstant] and [ScriptConstantInfo] attributes were removed
+and the IScriptModuleComms implementation ScriptModuleCommsModule will still detect them.
+
+
+ScriptModuleCommsModule now also detects attributes from LibLSLCC's 
+LibLSLCC.LibraryData.Reflection namespace as well as the old [ScriptConstant] and [ScriptConstantInfo]
+attributes.
+
+
+LibLSLCC has the ability to use 'type converters' in its serializer to convert the types
+of a .NET signature (either a property/field or method) into a corrisponding LSLType that
+is consumeable by the library,  however I chose to attribute each constant, method and parameter
+of every module with LibLSLCC attributes.
+
+I think it is better for the serializer not to be guessing for modules that are provided with 
+OpenSim.   
+
+
+LibLSLCC's attribute system allows a class to provide its own type converter for when you
+do not want to explicitly attribute each method.
+
+Each [LSLFunctionAttribute] and [LSLConstantAttribute] can also provide a prefered type converter
+for the field/property or method they are applied to.
+
+
+If no type converter is found, the job of type converting the types in a field/property or signature
+falls back to the LSLLibraryDataReflectionSerializer used in the compiler.
+(OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler)
+
+The serializer does not define any converters so it will throw an exception if the module does not
+define one and types need to be converted because the types in a signature were not explicitly attributed.
+
+
+The serializer will only attempt to serialize fields/properties and methods with an [LSLConstantAttribute]
+or [LSLFunctionAttribute]. currently, the serializer's settings specify that parameters that are not attributed
+with [LSLParamAttribute] are to be left out of the signature generated for library data. 
+
+This is so the first two parameters of each module script invocation can be left out of the signature 
+used by LibLSLCC for syntax checking, since they are called via a generated delegate and a modInvoke*
+function call.
+
 
 
 

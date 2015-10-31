@@ -143,133 +143,65 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
             _libLslccMainLibraryDataProvider = new LSLLibraryDataProvider(new[] {"os-lsl"}, false);
-            _libLslccMainLibraryDataProvider.AddSubsetDescription(new LSLLibrarySubsetDescription("os-lsl",
-                "All OpenSim Modules"));
-
-            _libLslccMainLibraryDataProvider.AddSubsetDescription(new LSLLibrarySubsetDescription("lsl",
-                "LSL, Required for event definition the hack at the end of this function."));
 
 
-            var reflectionSerializer = new LSLLibraryDataReflectionSerializer()
+            //this subset is for everything reflected from OpenSims loaded modules and script base class.
+            _libLslccMainLibraryDataProvider.AddSubsetDescription(new LSLLibrarySubsetDescription("os-lsl", "OpenSim Modules"));
+
+
+            var reflectionSerializer = new LSLLibraryDataReflectionSerializer();
+
+
+            //all the functions in the ScriptBaseClass and the OptionalModules have been given LibLSLCC library data
+            //attributes from the LibLSLCC.LibraryData.Reflection namespace.
+            //they do not need a type mapper.
+
+            //the below are all already set to true when LSLLibraryDataReflectionSerializer is created (they default to true)
+            //they are just set here to illustrate whats going on.
+
+            reflectionSerializer.AttributedMethodsOnly = true;
+            reflectionSerializer.AttributedConstantsOnly = true;
+
+            //OptionalModules do not have attributes on the first too parameters, in this case
+            //the serializer ignores the first two parameters.
+            reflectionSerializer.AttributedParametersOnly = true;
+
+            //
+
+
+
+            foreach (var method in reflectionSerializer.DeSerializeMethods(typeof(ScriptBaseClass)))
             {
-                AttributedConstantsOnly = false,
-                AttributedMethodsOnly = false,
-            };
-
-            var paramTypeMapping = new LSLTypeConverterMap();
-            reflectionSerializer.ReturnTypeConverter = paramTypeMapping;
-            
-
-            paramTypeMapping.Add(typeof (void), LSLType.Void);
-
-            paramTypeMapping.Add(typeof (LSL_Types.Vector3), LSLType.Vector);
-            paramTypeMapping.Add(typeof (LSL_Types.LSLFloat), LSLType.Float);
-            paramTypeMapping.Add(typeof (LSL_Types.LSLInteger), LSLType.Integer);
-            paramTypeMapping.Add(typeof (LSL_Types.LSLString), LSLType.String);
-            paramTypeMapping.Add(typeof (LSL_Types.Quaternion), LSLType.Rotation);
-            paramTypeMapping.Add(typeof (LSL_Types.key), LSLType.Key);
-
-
-            paramTypeMapping.Add(typeof (LSL_Types.list), LSLType.List);
-            paramTypeMapping.Add(typeof (object[]), LSLType.List);
-            paramTypeMapping.Add(typeof (string[]), LSLType.List);
-
-            paramTypeMapping.Add(typeof (string), LSLType.String);
-
-            paramTypeMapping.Add(typeof (bool), LSLType.Integer);
-            paramTypeMapping.Add(typeof (sbyte), LSLType.Integer);
-            paramTypeMapping.Add(typeof (byte), LSLType.Integer);
-            paramTypeMapping.Add(typeof (char), LSLType.Integer);
-            paramTypeMapping.Add(typeof (short), LSLType.Integer);
-            paramTypeMapping.Add(typeof (ushort), LSLType.Integer);
-            paramTypeMapping.Add(typeof (int), LSLType.Integer);
-            paramTypeMapping.Add(typeof (uint), LSLType.Integer);
-            paramTypeMapping.Add(typeof (long), LSLType.Integer);
-            paramTypeMapping.Add(typeof (ulong), LSLType.Integer);
-
-            paramTypeMapping.Add(typeof (float), LSLType.Float);
-            paramTypeMapping.Add(typeof (double), LSLType.Float);
-            paramTypeMapping.Add(typeof (decimal), LSLType.Float);
-
-            paramTypeMapping.Add(typeof (UUID), LSLType.Key);
-
-            //not sure if these are necessary, but just in case?
-            paramTypeMapping.Add(typeof (Vector3), LSLType.Vector);
-            paramTypeMapping.Add(typeof (Vector3d), LSLType.Vector);
-            paramTypeMapping.Add(typeof (Vector4), LSLType.Rotation);
-            paramTypeMapping.Add(typeof (Quaternion), LSLType.Rotation);
-
-
-            //clone the dictionary
-            var constantMapping = paramTypeMapping.Clone();
-
-            reflectionSerializer.ConstantTypeConverter = constantMapping;
-
-            constantMapping.Remove(typeof (void));
-
-
-            var paramMapping = constantMapping.Clone();
-
-            reflectionSerializer.ParamTypeConverter = paramMapping;
-
-            //for variadic void parameters only, we need to filter out
-            //method info that contains parameters with 'object' parameters that are not variadic
-            //because only a variadic parameters base type is used for the mapping, so actual 'object'
-            //parameters can get declared as LSLType.Void.
-            paramMapping.Add(typeof (object), LSLType.Void);
-
-
-            
-
-
-            var methodFilter = new LSLLambdaMethodFilter()
-            {
-                PreFilterFunction = (serializer, info) =>
-                {
-                    //we don't want non variadic 'object' parameters.
-                    //variadic object parameters will have the parameter type typeof(object[]) and have a variadic
-                    //attribute.  We don't even need to look for the attribute because if its not an array type then
-                    //the possibility of it being variadic is ruled out immediately.
-                    return info.GetParameters().Any(x => x.ParameterType == typeof (object));
-                }
-            };
-
-
-            reflectionSerializer.MethodFilter = methodFilter;
-
-            reflectionSerializer.FieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static |
-                                                     BindingFlags.Instance | BindingFlags.DeclaredOnly;
-
-            reflectionSerializer.PropertyBindingFlags = BindingFlags.Public | BindingFlags.NonPublic |
-                                                        BindingFlags.Static | BindingFlags.Instance |
-                                                        BindingFlags.DeclaredOnly;
-
-            reflectionSerializer.MethodBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static |
-                                                      BindingFlags.Instance | BindingFlags.DeclaredOnly;
-
-
-            reflectionSerializer.ValueStringConverter = new ConstantValueStringConverter();
-
-            foreach (var method in reflectionSerializer.DeSerializeMethods(typeof (ScriptBaseClass)))
-            {
-                method.AddSubsets("os-lsl");
+                method.Subsets.Add("os-lsl");
                 _libLslccMainLibraryDataProvider.DefineFunction(method);
             }
 
-            foreach (var method in reflectionSerializer.DeSerializeConstants(typeof (ScriptBaseClass)))
+            foreach (var method in reflectionSerializer.DeSerializeConstants(typeof(ScriptBaseClass)))
             {
-                method.AddSubsets("os-lsl");
+                method.Subsets.Add("os-lsl");
                 _libLslccMainLibraryDataProvider.DefineConstant(method);
             }
 
 
-            foreach (var method in comms.GetScriptInvocationList().Select(x => x.Method))
+            reflectionSerializer.FieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+
+            reflectionSerializer.PropertyBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+
+            reflectionSerializer.MethodBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+
+
+            reflectionSerializer.ValueStringConverter = new ConstantValueStringConverter();
+
+
+
+
+            foreach (var method in comms.GetScriptInvocationList().Select(x => x.OriginalMethod))
             {
                 var def = reflectionSerializer.DeSerializeMethod(method);
                 if (def != null)
                 {
                     //make sure it does not get filtered when you add it by giving it the all subset
-                    def.AddSubsets("os-lsl");
+                    def.Subsets.Add("os-lsl");
                     def.ModInvoke = true;
                     _libLslccMainLibraryDataProvider.DefineFunction(def);
                 }
@@ -282,21 +214,15 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             foreach (var constant in comms.GetConstants())
             {
-                Type valueType = constant.Value.GetType();
+                var memberInfo = constant.Value.ClassMember;
 
-                LSLType t;
+                var c = reflectionSerializer.DeSerializeConstantGeneric(memberInfo);
 
-                //the Field type mappings an Property type mappings are the same in our case.
-                if (reflectionSerializer.ConstantTypeConverter.Convert(valueType, out t))
+                if (c != null)
                 {
-                    string valueString;
-                    reflectionSerializer.ValueStringConverter.Convert(t, constant.Value, out valueString);
-
-                    //the value needs to be expanded by the compiler
-                    var cdef = new LSLLibraryConstantSignature(t, constant.Key,valueString) {Expand = true};
-
-                    cdef.AddSubsets("os-lsl");
-                    _libLslccMainLibraryDataProvider.DefineConstant(cdef);
+                    c.Subsets.Add("os-lsl");
+                    c.Expand = true;
+                    _libLslccMainLibraryDataProvider.DefineConstant(c);
                 }
                 else
                 {
@@ -305,8 +231,33 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
                 }
             }
 
-            var ev = new LSLDefaultLibraryDataProvider(new [] {"os-lsl"}, false);
-            _libLslccMainLibraryDataProvider.DefineEventHandlers(ev.SupportedEventHandlers);
+
+            //the following is a hack, because OpenSim does not keep information about event signatures around, just the names.
+
+            //standard LSL, no additions, just the events get loaded into memory since live filtering disabled.
+            var ev = new LSLDefaultLibraryDataProvider(
+                LSLLibraryBaseData.StandardLsl,LSLLibraryDataAdditions.None, false,
+                LSLLibraryDataLoadOptions.Events);
+
+            //only the events found in the enum are implemented by OpenSim for sure.
+            var implementedEvents = new HashSet<string>(Enum.GetNames(typeof(ScriptBase.Executor.scriptEvents)));
+
+            //define them, we need to reset the subsets defined in the standard library data, so they match the ones we have defined in our 
+            //data provider.
+            _libLslccMainLibraryDataProvider.DefineEventHandlers(ev.SupportedEventHandlers
+                .Where(x=>implementedEvents.Contains(x.Name)).Select(x =>
+                {
+                    //LSLDefaultLibraryDataProvider will yell at us if we try to change the subsets of one of its signatures out from underneath it. 
+                    //it tracks changes to the signatures it owns and will throw an exception if we change the subsets of one without cloning it first.
+                    var clone = new LSLLibraryEventSignature(x);
+
+                    //set the subsets of the function signature so it can be added to our provider.
+                    //the default library data provider attaches an 'lsl' subset to events that both OpenSim and 
+                    //SecondLife implement.  Since we have not defined that subset in our provider, a missing subset error
+                    //would be thrown when we tried to add an event which contained an 'lsl' subset on it.
+                    clone.Subsets.SetSubsets("os-lsl");
+                    return clone;
+                }));
         }
 
 

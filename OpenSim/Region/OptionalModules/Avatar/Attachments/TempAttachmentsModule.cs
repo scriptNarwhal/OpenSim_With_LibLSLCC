@@ -31,6 +31,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using log4net;
+using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.LibraryData.Reflection;
 using Mono.Addins;
 using Nini.Config;
 using OpenMetaverse;
@@ -131,7 +133,9 @@ namespace OpenSim.Region.OptionalModules.Avatar.Attachments
             SendConsoleOutput(agentID, String.Format("auto_grant_attach_perms set to {0}", val));
         }
 
-        private int llAttachToAvatarTemp(UUID host, UUID script, int attachmentPoint)
+        [ScriptInvocation]
+        [LSLFunction(LSLType.Integer)]
+        private int llAttachToAvatarTemp(UUID host, UUID script, [LSLParam(LSLType.Integer)] int attachmentPoint)
         {
             SceneObjectPart hostPart = m_scene.GetSceneObjectPart(host);
 

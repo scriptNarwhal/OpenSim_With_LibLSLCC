@@ -40,6 +40,8 @@ using OpenSim.Region.PhysicsModules.SharedBase;
 using Mono.Addins;
 using Nini.Config;
 using log4net;
+using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.LibraryData.Reflection;
 using OpenMetaverse;
 
 namespace OpenSim.Region.PhysicsModule.BulletS
@@ -161,9 +163,11 @@ namespace OpenSim.Region.PhysicsModule.BulletS
         }
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_CENTER_OF_MASS =     1 << 0;
 
         [ScriptInvocation]
+        [LSLFunction(LSLType.String)]
         public string physGetEngineType(UUID hostID, UUID scriptID)
         {
             string ret = string.Empty;
@@ -179,54 +183,101 @@ namespace OpenSim.Region.PhysicsModule.BulletS
         // Code for specifying params.
         // The choice if 14700 is arbitrary and only serves to catch parameter code misuse.
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LOCK_LINEAR     = 14700;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LOCK_LINEAR_X   = 14701;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LIMIT_LINEAR_X  = 14702;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LOCK_LINEAR_Y   = 14703;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LIMIT_LINEAR_Y  = 14704;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LOCK_LINEAR_Z   = 14705;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LIMIT_LINEAR_Z  = 14706;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LOCK_ANGULAR    = 14707;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LOCK_ANGULAR_X  = 14708;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LIMIT_ANGULAR_X = 14709;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LOCK_ANGULAR_Y  = 14710;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LIMIT_ANGULAR_Y = 14711;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LOCK_ANGULAR_Z  = 14712;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LIMIT_ANGULAR_Z = 14713;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK_LINEAR   = 14714;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK_LINEAR_X = 14715;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK_LINEAR_Y = 14716;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK_LINEAR_Z = 14717;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK_ANGULAR  = 14718;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK_ANGULAR_X = 14719;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK_ANGULAR_Y = 14720;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK_ANGULAR_Z = 14721;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_UNLOCK           = 14722;
+
         // physAxisLockLimits()
         [ScriptInvocation]
-        public int physAxisLock(UUID hostID, UUID scriptID, object[] parms)
+        [LSLFunction(LSLType.Integer)]
+        public int physAxisLock(UUID hostID, UUID scriptID, [LSLParam(LSLType.List)] object[] parms)
         {
             int ret = -1;
             if (!Enabled) return ret;
@@ -242,14 +293,23 @@ namespace OpenSim.Region.PhysicsModule.BulletS
         }
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
+
         public const int PHYS_LINKSET_TYPE_CONSTRAINT  = 0;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_LINKSET_TYPE_COMPOUND    = 1;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_LINKSET_TYPE_MANUAL      = 2;
 
+
+
         [ScriptInvocation]
-        public int physSetLinksetType(UUID hostID, UUID scriptID, int linksetType)
+        [LSLFunction(LSLType.Integer)]
+        public int physSetLinksetType(UUID hostID, UUID scriptID, [LSLParam(LSLType.Integer)] int linksetType)
         {
             int ret = -1;
             if (!Enabled) return ret;
@@ -318,6 +378,7 @@ namespace OpenSim.Region.PhysicsModule.BulletS
         }
 
         [ScriptInvocation]
+        [LSLFunction(LSLType.Integer)]
         public int physGetLinksetType(UUID hostID, UUID scriptID)
         {
             int ret = -1;
@@ -337,19 +398,29 @@ namespace OpenSim.Region.PhysicsModule.BulletS
         }
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_LINK_TYPE_FIXED  = 1234;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_LINK_TYPE_HINGE  = 4;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_LINK_TYPE_SPRING = 9;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_LINK_TYPE_6DOF   = 6;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_LINK_TYPE_SLIDER = 7;
 
         // physChangeLinkType(integer linkNum, integer typeCode)
         [ScriptInvocation]
-        public int physChangeLinkType(UUID hostID, UUID scriptID, int linkNum, int typeCode)
+        [LSLFunction(LSLType.Integer)]
+        public int physChangeLinkType(UUID hostID, UUID scriptID, [LSLParam(LSLType.Integer)] int linkNum, [LSLParam(LSLType.Integer)] int typeCode)
         {
             int ret = -1;
             if (!Enabled) return ret;
@@ -368,7 +439,8 @@ namespace OpenSim.Region.PhysicsModule.BulletS
 
         // physGetLinkType(integer linkNum)
         [ScriptInvocation]
-        public int physGetLinkType(UUID hostID, UUID scriptID, int linkNum)
+        [LSLFunction(LSLType.Integer)]
+        public int physGetLinkType(UUID hostID, UUID scriptID, [LSLParam(LSLType.Integer)] int linkNum)
         {
             int ret = -1;
             if (!Enabled) return ret;
@@ -388,7 +460,8 @@ namespace OpenSim.Region.PhysicsModule.BulletS
         // physChangeLinkFixed(integer linkNum)
         // Change the link between the root and the linkNum into a fixed, static physical connection.
         [ScriptInvocation]
-        public int physChangeLinkFixed(UUID hostID, UUID scriptID, int linkNum)
+        [LSLFunction(LSLType.Integer)]
+        public int physChangeLinkFixed(UUID hostID, UUID scriptID, [LSLParam(LSLType.Integer)] int linkNum)
         {
             int ret = -1;
             if (!Enabled) return ret;
@@ -410,73 +483,134 @@ namespace OpenSim.Region.PhysicsModule.BulletS
         public const int PHYS_PARAM_MIN                    = 14401;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_FRAMEINA_LOC           = 14401;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_FRAMEINA_ROT           = 14402;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_FRAMEINB_LOC           = 14403;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_FRAMEINB_ROT           = 14404;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_LINEAR_LIMIT_LOW       = 14405;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_LINEAR_LIMIT_HIGH      = 14406;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_ANGULAR_LIMIT_LOW      = 14407;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_ANGULAR_LIMIT_HIGH     = 14408;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_USE_FRAME_OFFSET       = 14409;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_ENABLE_TRANSMOTOR      = 14410;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_TRANSMOTOR_MAXVEL      = 14411;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_TRANSMOTOR_MAXFORCE    = 14412;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_CFM                    = 14413;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_ERP                    = 14414;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_SOLVER_ITERATIONS      = 14415;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_SPRING_AXIS_ENABLE     = 14416;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_SPRING_DAMPING         = 14417;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_SPRING_STIFFNESS       = 14418;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_LINK_TYPE              = 14419;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_USE_LINEAR_FRAMEA      = 14420;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_PARAM_SPRING_EQUILIBRIUM_POINT = 14421;
+
 
         public const int PHYS_PARAM_MAX                    = 14421;
 
         // Used when specifying a parameter that has settings for the three linear and three angular axis
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_ALL = -1;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LINEAR_ALL = -2;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_ANGULAR_ALL = -3;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LINEAR_X  = 0;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LINEAR_Y  = 1;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_LINEAR_Z  = 2;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_ANGULAR_X = 3;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_ANGULAR_Y = 4;
+
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public const int PHYS_AXIS_ANGULAR_Z = 5;
+
 
         // physChangeLinkParams(integer linkNum, [ PHYS_PARAM_*, value, PHYS_PARAM_*, value, ...])
         [ScriptInvocation]
-        public int physChangeLinkParams(UUID hostID, UUID scriptID, int linkNum, object[] parms)
+        [LSLFunction(LSLType.Integer)]
+        public int physChangeLinkParams(UUID hostID, UUID scriptID, [LSLParam(LSLType.Integer)] int linkNum, [LSLParam(LSLType.List)] object[] parms)
         {
             int ret = -1;
             if (!Enabled) return ret;
@@ -492,6 +626,7 @@ namespace OpenSim.Region.PhysicsModule.BulletS
 
             return ret;
         }
+
 
         private bool GetRootPhysActor(UUID hostID, out PhysicsActor rootPhysActor)
         {
@@ -592,7 +727,7 @@ namespace OpenSim.Region.PhysicsModule.BulletS
         }
 
         // Return an array of objects with the passed object as the first object of a new array
-        private object[] AddToBeginningOfArray(object firstOne, object secondOne, object[] prevArray)
+        private object[] AddToBeginningOfArray(object firstOne, object secondOne, [LSLParam(LSLType.Void)] object[] prevArray)
         {
             object[] newArray = new object[2 + prevArray.Length];
             newArray[0] = firstOne;

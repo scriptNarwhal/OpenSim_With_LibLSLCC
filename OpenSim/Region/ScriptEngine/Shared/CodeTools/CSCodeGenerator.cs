@@ -932,7 +932,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.CodeTools
         {
             if (m_comms != null)
             {
-                object value = m_comms.LookupModConstant(id);
+                object value = m_comms.LookupModConstant(id).ConstantValue;
                 if (value != null)
                 {
                     string retval = null;

@@ -31,6 +31,8 @@ using System.Threading;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.LibraryData.Reflection;
 using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.ScriptEngine.Interfaces;
@@ -62,47 +64,63 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_MOD_Functions = (IMOD_Api)api;
         }
 
-        public void modInvokeN(string fname, params object[] parms)
+
+        //[LSLParam(LSLType.Void)] only works on variadic parameters, it specifies 'any'
+        //you can use the LSLParam attributes on other types of variadic parameters as well, the fact that they are variadic
+        //will be detected by the serializer.  LibLSLCC implements type checked variadic parameters in its compiler.
+
+
+        [LSLFunction(LSLType.Void)]
+        public void modInvokeN([LSLParam(LSLType.String)] string fname, [LSLParam(LSLType.Void)] params object[] parms)
         {
+
             m_MOD_Functions.modInvokeN(fname, parms);
         }
 
-        public LSL_String modInvokeS(string fname, params object[] parms)
+        [LSLFunction(LSLType.String)]
+        public LSL_String modInvokeS([LSLParam(LSLType.String)] string fname, [LSLParam(LSLType.Void)] params object[] parms)
         {
             return m_MOD_Functions.modInvokeS(fname, parms);
         }
 
-        public LSL_Integer modInvokeI(string fname, params object[] parms)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer modInvokeI([LSLParam(LSLType.String)] string fname, [LSLParam(LSLType.Void)] params object[] parms)
         {
             return m_MOD_Functions.modInvokeI(fname, parms);
         }
 
-        public LSL_Float modInvokeF(string fname, params object[] parms)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float modInvokeF([LSLParam(LSLType.String)] string fname, [LSLParam(LSLType.Void)] params object[] parms)
         {
             return m_MOD_Functions.modInvokeF(fname, parms);
         }
 
-        public LSL_Key modInvokeK(string fname, params object[] parms)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key modInvokeK([LSLParam(LSLType.String)] string fname, [LSLParam(LSLType.Void)] params object[] parms)
         {
             return m_MOD_Functions.modInvokeK(fname, parms);
         }
 
-        public LSL_Vector modInvokeV(string fname, params object[] parms)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector modInvokeV([LSLParam(LSLType.String)] string fname, [LSLParam(LSLType.Void)] params object[] parms)
         {
             return m_MOD_Functions.modInvokeV(fname, parms);
         }
 
-        public LSL_Rotation modInvokeR(string fname, params object[] parms)
+        [LSLFunction(LSLType.Rotation)]
+        public LSL_Rotation modInvokeR([LSLParam(LSLType.String)] string fname, [LSLParam(LSLType.Void)] params object[] parms)
         {
             return m_MOD_Functions.modInvokeR(fname, parms);
         }
 
-        public LSL_List modInvokeL(string fname, params object[] parms)
+        [LSLFunction(LSLType.List)]
+        public LSL_List modInvokeL([LSLParam(LSLType.String)] string fname, [LSLParam(LSLType.Void)] params object[] parms)
         {
             return m_MOD_Functions.modInvokeL(fname, parms);
         }
 
-        public string modSendCommand(string module, string command, string k)
+        [LSLFunction(LSLType.String)]
+        public string modSendCommand([LSLParam(LSLType.String)] string module, [LSLParam(LSLType.String)] string command, [LSLParam(LSLType.String)] string k)
         {
             return m_MOD_Functions.modSendCommand(module, command, k);
         }

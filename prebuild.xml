@@ -1686,6 +1686,7 @@
       <Reference name="OpenSim.Region.PhysicsModules.SharedBase"/>
       <Reference name="OpenSim.Region.PhysicsModules.Meshing" path="../../../../bin/"/>
       <Reference name="OpenSim.Region.PhysicsModule.ConvexDecompositionDotNet"/>
+	  <Reference name="LibLSLCC" path="../../../../bin/"/>
       <Reference name="Mono.Addins" path="../../../../bin/"/>
       <Reference name="BulletXNA.dll" path="../../../../bin/"/>
       <Reference name="log4net.dll" path="../../../../bin/"/>
@@ -2021,6 +2022,7 @@
       <Reference name="OpenSim.Region.ScriptEngine.Shared"/>
       <Reference name="Nini" path="../../../../../../bin/"/>
       <Reference name="log4net" path="../../../../../../bin/"/>
+	  <Reference name="LibLSLCC" path="../../../../../../bin/"/>
 
       <Files>
         <Match pattern="*.cs" recurse="false"/>
@@ -2919,6 +2921,7 @@
       <Reference name="Nini" path="../../../bin/"/>
       <Reference name="log4net" path="../../../bin/"/>
       <Reference name="DotNetOpenMail" path="../../../bin/"/>
+	  <Reference name="LibLSLCC" path="../../../bin/"/>
 
       <!--
            TODO: this is kind of lame, we basically build a duplicate

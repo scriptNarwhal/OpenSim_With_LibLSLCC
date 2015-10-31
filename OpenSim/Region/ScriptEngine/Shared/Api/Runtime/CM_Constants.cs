@@ -26,6 +26,8 @@
  */
 
 using System;
+using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.LibraryData.Reflection;
 using vector = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Vector3;
 using rotation = OpenSim.Region.ScriptEngine.Shared.LSL_Types.Quaternion;
 using LSLInteger = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLInteger;
@@ -35,43 +37,43 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
     public partial class ScriptBaseClass
     {
         // Constants for cmWindlight*
-        public const int WL_WATER_COLOR = 0;
-        public const int WL_WATER_FOG_DENSITY_EXPONENT = 1;
-        public const int WL_UNDERWATER_FOG_MODIFIER = 2;
-        public const int WL_REFLECTION_WAVELET_SCALE = 3;
-        public const int WL_FRESNEL_SCALE = 4;
-        public const int WL_FRESNEL_OFFSET = 5;
-        public const int WL_REFRACT_SCALE_ABOVE = 6;
-        public const int WL_REFRACT_SCALE_BELOW = 7;
-        public const int WL_BLUR_MULTIPLIER = 8;
-        public const int WL_BIG_WAVE_DIRECTION = 9;
-        public const int WL_LITTLE_WAVE_DIRECTION = 10;
-        public const int WL_NORMAL_MAP_TEXTURE = 11;
-        public const int WL_HORIZON = 12;
-        public const int WL_HAZE_HORIZON = 13;
-        public const int WL_BLUE_DENSITY = 14;
-        public const int WL_HAZE_DENSITY = 15;
-        public const int WL_DENSITY_MULTIPLIER = 16;
-        public const int WL_DISTANCE_MULTIPLIER = 17;
-        public const int WL_MAX_ALTITUDE = 18;
-        public const int WL_SUN_MOON_COLOR = 19;
-        public const int WL_AMBIENT = 20;
-        public const int WL_EAST_ANGLE = 21;
-        public const int WL_SUN_GLOW_FOCUS = 22;
-        public const int WL_SUN_GLOW_SIZE = 23;
-        public const int WL_SCENE_GAMMA = 24;
-        public const int WL_STAR_BRIGHTNESS = 25;
-        public const int WL_CLOUD_COLOR = 26;
-        public const int WL_CLOUD_XY_DENSITY = 27;
-        public const int WL_CLOUD_COVERAGE = 28;
-        public const int WL_CLOUD_SCALE = 29;
-        public const int WL_CLOUD_DETAIL_XY_DENSITY = 30;
-        public const int WL_CLOUD_SCROLL_X = 31;
-        public const int WL_CLOUD_SCROLL_Y = 32;
-        public const int WL_CLOUD_SCROLL_Y_LOCK = 33;
-        public const int WL_CLOUD_SCROLL_X_LOCK = 34;
-        public const int WL_DRAW_CLASSIC_CLOUDS = 35;
-        public const int WL_SUN_MOON_POSITION = 36;
+        [LSLConstant(LSLType.Integer)] public const int WL_WATER_COLOR = 0;
+        [LSLConstant(LSLType.Integer)] public const int WL_WATER_FOG_DENSITY_EXPONENT = 1;
+        [LSLConstant(LSLType.Integer)] public const int WL_UNDERWATER_FOG_MODIFIER = 2;
+        [LSLConstant(LSLType.Integer)] public const int WL_REFLECTION_WAVELET_SCALE = 3;
+        [LSLConstant(LSLType.Integer)] public const int WL_FRESNEL_SCALE = 4;
+        [LSLConstant(LSLType.Integer)] public const int WL_FRESNEL_OFFSET = 5;
+        [LSLConstant(LSLType.Integer)] public const int WL_REFRACT_SCALE_ABOVE = 6;
+        [LSLConstant(LSLType.Integer)] public const int WL_REFRACT_SCALE_BELOW = 7;
+        [LSLConstant(LSLType.Integer)] public const int WL_BLUR_MULTIPLIER = 8;
+        [LSLConstant(LSLType.Integer)] public const int WL_BIG_WAVE_DIRECTION = 9;
+        [LSLConstant(LSLType.Integer)] public const int WL_LITTLE_WAVE_DIRECTION = 10;
+        [LSLConstant(LSLType.Integer)] public const int WL_NORMAL_MAP_TEXTURE = 11;
+        [LSLConstant(LSLType.Integer)] public const int WL_HORIZON = 12;
+        [LSLConstant(LSLType.Integer)] public const int WL_HAZE_HORIZON = 13;
+        [LSLConstant(LSLType.Integer)] public const int WL_BLUE_DENSITY = 14;
+        [LSLConstant(LSLType.Integer)] public const int WL_HAZE_DENSITY = 15;
+        [LSLConstant(LSLType.Integer)] public const int WL_DENSITY_MULTIPLIER = 16;
+        [LSLConstant(LSLType.Integer)] public const int WL_DISTANCE_MULTIPLIER = 17;
+        [LSLConstant(LSLType.Integer)] public const int WL_MAX_ALTITUDE = 18;
+        [LSLConstant(LSLType.Integer)] public const int WL_SUN_MOON_COLOR = 19;
+        [LSLConstant(LSLType.Integer)] public const int WL_AMBIENT = 20;
+        [LSLConstant(LSLType.Integer)] public const int WL_EAST_ANGLE = 21;
+        [LSLConstant(LSLType.Integer)] public const int WL_SUN_GLOW_FOCUS = 22;
+        [LSLConstant(LSLType.Integer)] public const int WL_SUN_GLOW_SIZE = 23;
+        [LSLConstant(LSLType.Integer)] public const int WL_SCENE_GAMMA = 24;
+        [LSLConstant(LSLType.Integer)] public const int WL_STAR_BRIGHTNESS = 25;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_COLOR = 26;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_XY_DENSITY = 27;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_COVERAGE = 28;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_SCALE = 29;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_DETAIL_XY_DENSITY = 30;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_SCROLL_X = 31;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_SCROLL_Y = 32;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_SCROLL_Y_LOCK = 33;
+        [LSLConstant(LSLType.Integer)] public const int WL_CLOUD_SCROLL_X_LOCK = 34;
+        [LSLConstant(LSLType.Integer)] public const int WL_DRAW_CLASSIC_CLOUDS = 35;
+        [LSLConstant(LSLType.Integer)] public const int WL_SUN_MOON_POSITION = 36;
 
     }
 }

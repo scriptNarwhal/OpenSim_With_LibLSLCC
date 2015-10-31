@@ -31,9 +31,10 @@ using System.Threading;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.LibraryData.Reflection;
 using OpenSim.Region.ScriptEngine.Interfaces;
 using OpenSim.Region.ScriptEngine.Shared.Api.Interfaces;
-
 using LSL_Float = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLFloat;
 using LSL_Integer = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLInteger;
 using LSL_Key = OpenSim.Region.ScriptEngine.Shared.LSL_Types.LSLString;
@@ -53,8 +54,9 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             if (!(api is ILSL_Api))
                 return;
 
-            m_LSL_Functions = (ILSL_Api)api;
+            m_LSL_Functions = (ILSL_Api) api;
         }
+
 
         public void state(string newState)
         {
@@ -64,1951 +66,2466 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         //
         // Script functions
         //
-        public LSL_Integer llAbs(int i)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llAbs([LSLParam(LSLType.Integer)] int i)
         {
             return m_LSL_Functions.llAbs(i);
         }
 
-        public LSL_Float llAcos(double val)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llAcos([LSLParam(LSLType.Float)] double val)
         {
             return m_LSL_Functions.llAcos(val);
         }
 
-        public void llAddToLandBanList(string avatar, double hours)
+        [LSLFunction(LSLType.Void)]
+        public void llAddToLandBanList([LSLParam(LSLType.String)] string avatar, [LSLParam(LSLType.Float)] double hours)
         {
             m_LSL_Functions.llAddToLandBanList(avatar, hours);
         }
 
-        public void llAddToLandPassList(string avatar, double hours)
+        [LSLFunction(LSLType.Void)]
+        public void llAddToLandPassList([LSLParam(LSLType.String)] string avatar, [LSLParam(LSLType.Float)] double hours)
         {
             m_LSL_Functions.llAddToLandPassList(avatar, hours);
         }
 
-        public void llAdjustSoundVolume(double volume)
+        [LSLFunction(LSLType.Void)]
+        public void llAdjustSoundVolume([LSLParam(LSLType.Float)] double volume)
         {
             m_LSL_Functions.llAdjustSoundVolume(volume);
         }
 
-        public void llAllowInventoryDrop(int add)
+        [LSLFunction(LSLType.Void)]
+        public void llAllowInventoryDrop([LSLParam(LSLType.Integer)] int add)
         {
             m_LSL_Functions.llAllowInventoryDrop(add);
         }
 
-        public LSL_Float llAngleBetween(LSL_Rotation a, LSL_Rotation b)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llAngleBetween([LSLParam(LSLType.Rotation)] LSL_Rotation a,
+            [LSLParam(LSLType.Rotation)] LSL_Rotation b)
         {
             return m_LSL_Functions.llAngleBetween(a, b);
         }
 
-        public void llApplyImpulse(LSL_Vector force, int local)
+        [LSLFunction(LSLType.Void)]
+        public void llApplyImpulse([LSLParam(LSLType.Vector)] LSL_Vector force, [LSLParam(LSLType.Integer)] int local)
         {
             m_LSL_Functions.llApplyImpulse(force, local);
         }
 
-        public void llApplyRotationalImpulse(LSL_Vector force, int local)
+        [LSLFunction(LSLType.Void)]
+        public void llApplyRotationalImpulse([LSLParam(LSLType.Vector)] LSL_Vector force,
+            [LSLParam(LSLType.Integer)] int local)
         {
             m_LSL_Functions.llApplyRotationalImpulse(force, local);
         }
 
-        public LSL_Float llAsin(double val)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llAsin([LSLParam(LSLType.Float)] double val)
         {
             return m_LSL_Functions.llAsin(val);
         }
 
-        public LSL_Float llAtan2(double x, double y)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llAtan2([LSLParam(LSLType.Float)] double x, [LSLParam(LSLType.Float)] double y)
         {
             return m_LSL_Functions.llAtan2(x, y);
         }
 
-        public void llAttachToAvatar(int attachment)
+        [LSLFunction(LSLType.Void)]
+        public void llAttachToAvatar([LSLParam(LSLType.Integer)] int attachment)
         {
             m_LSL_Functions.llAttachToAvatar(attachment);
         }
 
+        [LSLFunction(LSLType.Key)]
         public LSL_Key llAvatarOnSitTarget()
         {
             return m_LSL_Functions.llAvatarOnSitTarget();
         }
 
-        public LSL_Key llAvatarOnLinkSitTarget(int linknum)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llAvatarOnLinkSitTarget([LSLParam(LSLType.Integer)] int linknum)
         {
             return m_LSL_Functions.llAvatarOnLinkSitTarget(linknum);
         }
 
-        public LSL_Rotation llAxes2Rot(LSL_Vector fwd, LSL_Vector left, LSL_Vector up)
+        [LSLFunction(LSLType.Rotation)]
+        public LSL_Rotation llAxes2Rot([LSLParam(LSLType.Vector)] LSL_Vector fwd,
+            [LSLParam(LSLType.Vector)] LSL_Vector left, [LSLParam(LSLType.Vector)] LSL_Vector up)
         {
             return m_LSL_Functions.llAxes2Rot(fwd, left, up);
         }
 
-        public LSL_Rotation llAxisAngle2Rot(LSL_Vector axis, double angle)
+        [LSLFunction(LSLType.Rotation)]
+        public LSL_Rotation llAxisAngle2Rot([LSLParam(LSLType.Vector)] LSL_Vector axis,
+            [LSLParam(LSLType.Float)] double angle)
         {
             return m_LSL_Functions.llAxisAngle2Rot(axis, angle);
         }
 
-        public LSL_Integer llBase64ToInteger(string str)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llBase64ToInteger([LSLParam(LSLType.String)] string str)
         {
             return m_LSL_Functions.llBase64ToInteger(str);
         }
 
-        public LSL_String llBase64ToString(string str)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llBase64ToString([LSLParam(LSLType.String)] string str)
         {
             return m_LSL_Functions.llBase64ToString(str);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llBreakAllLinks()
         {
             m_LSL_Functions.llBreakAllLinks();
         }
 
-        public void llBreakLink(int linknum)
+        [LSLFunction(LSLType.Void)]
+        public void llBreakLink([LSLParam(LSLType.Integer)] int linknum)
         {
             m_LSL_Functions.llBreakLink(linknum);
         }
 
-        public LSL_Integer llCeil(double f)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llCeil([LSLParam(LSLType.Float)] double f)
         {
             return m_LSL_Functions.llCeil(f);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llClearCameraParams()
         {
             m_LSL_Functions.llClearCameraParams();
         }
 
-        public void llCloseRemoteDataChannel(string channel)
+        [LSLFunction(LSLType.Void)]
+        public void llCloseRemoteDataChannel([LSLParam(LSLType.String)] string channel)
         {
             m_LSL_Functions.llCloseRemoteDataChannel(channel);
         }
 
-        public LSL_Float llCloud(LSL_Vector offset)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llCloud([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             return m_LSL_Functions.llCloud(offset);
         }
 
-        public void llCollisionFilter(string name, string id, int accept)
+        [LSLFunction(LSLType.Void)]
+        public void llCollisionFilter([LSLParam(LSLType.String)] string name, [LSLParam(LSLType.String)] string id,
+            [LSLParam(LSLType.Integer)] int accept)
         {
             m_LSL_Functions.llCollisionFilter(name, id, accept);
         }
 
-        public void llCollisionSound(string impact_sound, double impact_volume)
+        [LSLFunction(LSLType.Void)]
+        public void llCollisionSound([LSLParam(LSLType.String)] string impact_sound,
+            [LSLParam(LSLType.Float)] double impact_volume)
         {
             m_LSL_Functions.llCollisionSound(impact_sound, impact_volume);
         }
 
-        public void llCollisionSprite(string impact_sprite)
+        [LSLFunction(LSLType.Void)]
+        public void llCollisionSprite([LSLParam(LSLType.String)] string impact_sprite)
         {
             m_LSL_Functions.llCollisionSprite(impact_sprite);
         }
 
-        public LSL_Float llCos(double f)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llCos([LSLParam(LSLType.Float)] double f)
         {
             return m_LSL_Functions.llCos(f);
         }
 
-        public void llCreateLink(string target, int parent)
+        [LSLFunction(LSLType.Void)]
+        public void llCreateLink([LSLParam(LSLType.String)] string target, [LSLParam(LSLType.Integer)] int parent)
         {
             m_LSL_Functions.llCreateLink(target, parent);
         }
 
-        public LSL_List llCSV2List(string src)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llCSV2List([LSLParam(LSLType.String)] string src)
         {
             return m_LSL_Functions.llCSV2List(src);
         }
 
-        public LSL_List llDeleteSubList(LSL_List src, int start, int end)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llDeleteSubList([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int start,
+            [LSLParam(LSLType.Integer)] int end)
         {
             return m_LSL_Functions.llDeleteSubList(src, start, end);
         }
 
-        public LSL_String llDeleteSubString(string src, int start, int end)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llDeleteSubString([LSLParam(LSLType.String)] string src, [LSLParam(LSLType.Integer)] int start,
+            [LSLParam(LSLType.Integer)] int end)
         {
             return m_LSL_Functions.llDeleteSubString(src, start, end);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llDetachFromAvatar()
         {
             m_LSL_Functions.llDetachFromAvatar();
         }
 
-        public LSL_Vector llDetectedGrab(int number)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llDetectedGrab([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedGrab(number);
         }
 
-        public LSL_Integer llDetectedGroup(int number)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llDetectedGroup([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedGroup(number);
         }
 
-        public LSL_Key llDetectedKey(int number)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llDetectedKey([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedKey(number);
         }
 
-        public LSL_Integer llDetectedLinkNumber(int number)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llDetectedLinkNumber([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedLinkNumber(number);
         }
 
-        public LSL_String llDetectedName(int number)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llDetectedName([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedName(number);
         }
 
-        public LSL_Key llDetectedOwner(int number)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llDetectedOwner([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedOwner(number);
         }
 
-        public LSL_Vector llDetectedPos(int number)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llDetectedPos([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedPos(number);
         }
 
-        public LSL_Rotation llDetectedRot(int number)
+        [LSLFunction(LSLType.Rotation)]
+        public LSL_Rotation llDetectedRot([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedRot(number);
         }
 
-        public LSL_Integer llDetectedType(int number)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llDetectedType([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedType(number);
         }
 
-        public LSL_Vector llDetectedTouchBinormal(int index)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llDetectedTouchBinormal([LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llDetectedTouchBinormal(index);
         }
 
-        public LSL_Integer llDetectedTouchFace(int index)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llDetectedTouchFace([LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llDetectedTouchFace(index);
         }
 
-        public LSL_Vector llDetectedTouchNormal(int index)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llDetectedTouchNormal([LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llDetectedTouchNormal(index);
         }
 
-        public LSL_Vector llDetectedTouchPos(int index)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llDetectedTouchPos([LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llDetectedTouchPos(index);
         }
 
-        public LSL_Vector llDetectedTouchST(int index)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llDetectedTouchST([LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llDetectedTouchST(index);
         }
 
-        public LSL_Vector llDetectedTouchUV(int index)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llDetectedTouchUV([LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llDetectedTouchUV(index);
         }
 
-        public LSL_Vector llDetectedVel(int number)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llDetectedVel([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llDetectedVel(number);
         }
 
-        public void llDialog(string avatar, string message, LSL_List buttons, int chat_channel)
+        [LSLFunction(LSLType.Void)]
+        public void llDialog([LSLParam(LSLType.String)] string avatar, [LSLParam(LSLType.String)] string message,
+            [LSLParam(LSLType.List)] LSL_List buttons, [LSLParam(LSLType.Integer)] int chat_channel)
         {
             m_LSL_Functions.llDialog(avatar, message, buttons, chat_channel);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llDie()
         {
             m_LSL_Functions.llDie();
         }
 
-        public LSL_String llDumpList2String(LSL_List src, string seperator)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llDumpList2String([LSLParam(LSLType.List)] LSL_List src,
+            [LSLParam(LSLType.String)] string seperator)
         {
             return m_LSL_Functions.llDumpList2String(src, seperator);
         }
 
-        public LSL_Integer llEdgeOfWorld(LSL_Vector pos, LSL_Vector dir)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llEdgeOfWorld([LSLParam(LSLType.Vector)] LSL_Vector pos,
+            [LSLParam(LSLType.Vector)] LSL_Vector dir)
         {
             return m_LSL_Functions.llEdgeOfWorld(pos, dir);
         }
 
-        public void llEjectFromLand(string pest)
+        [LSLFunction(LSLType.Void)]
+        public void llEjectFromLand([LSLParam(LSLType.String)] string pest)
         {
             m_LSL_Functions.llEjectFromLand(pest);
         }
 
-        public void llEmail(string address, string subject, string message)
+        [LSLFunction(LSLType.Void)]
+        public void llEmail([LSLParam(LSLType.String)] string address, [LSLParam(LSLType.String)] string subject,
+            [LSLParam(LSLType.String)] string message)
         {
             m_LSL_Functions.llEmail(address, subject, message);
         }
 
-        public LSL_String llEscapeURL(string url)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llEscapeURL([LSLParam(LSLType.String)] string url)
         {
             return m_LSL_Functions.llEscapeURL(url);
         }
 
-        public LSL_Rotation llEuler2Rot(LSL_Vector v)
+        [LSLFunction(LSLType.Rotation)]
+        public LSL_Rotation llEuler2Rot([LSLParam(LSLType.Vector)] LSL_Vector v)
         {
             return m_LSL_Functions.llEuler2Rot(v);
         }
 
-        public LSL_Float llFabs(double f)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llFabs([LSLParam(LSLType.Float)] double f)
         {
             return m_LSL_Functions.llFabs(f);
         }
 
-        public LSL_Integer llFloor(double f)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llFloor([LSLParam(LSLType.Float)] double f)
         {
             return m_LSL_Functions.llFloor(f);
         }
 
-        public void llForceMouselook(int mouselook)
+        [LSLFunction(LSLType.Void)]
+        public void llForceMouselook([LSLParam(LSLType.Integer)] int mouselook)
         {
             m_LSL_Functions.llForceMouselook(mouselook);
         }
 
-        public LSL_Float llFrand(double mag)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llFrand([LSLParam(LSLType.Float)] double mag)
         {
             return m_LSL_Functions.llFrand(mag);
         }
 
+        [LSLFunction(LSLType.Key)]
         public LSL_Key llGenerateKey()
         {
             return m_LSL_Functions.llGenerateKey();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetAccel()
         {
             return m_LSL_Functions.llGetAccel();
         }
 
-        public LSL_Integer llGetAgentInfo(string id)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetAgentInfo([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetAgentInfo(id);
         }
 
-        public LSL_String llGetAgentLanguage(string id)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetAgentLanguage([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetAgentLanguage(id);
         }
 
-        public LSL_List llGetAgentList(LSL_Integer scope, LSL_List options)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetAgentList([LSLParam(LSLType.Integer)] LSL_Integer scope,
+            [LSLParam(LSLType.List)] LSL_List options)
         {
             return m_LSL_Functions.llGetAgentList(scope, options);
         }
 
-        public LSL_Vector llGetAgentSize(string id)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llGetAgentSize([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetAgentSize(id);
         }
 
-        public LSL_Float llGetAlpha(int face)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llGetAlpha([LSLParam(LSLType.Integer)] int face)
         {
             return m_LSL_Functions.llGetAlpha(face);
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetAndResetTime()
         {
             return m_LSL_Functions.llGetAndResetTime();
         }
 
-        public LSL_String llGetAnimation(string id)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetAnimation([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetAnimation(id);
         }
 
-        public LSL_List llGetAnimationList(string id)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetAnimationList([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetAnimationList(id);
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetAttached()
         {
             return m_LSL_Functions.llGetAttached();
         }
 
-        public LSL_List llGetBoundingBox(string obj)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetBoundingBox([LSLParam(LSLType.String)] string obj)
         {
             return m_LSL_Functions.llGetBoundingBox(obj);
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetCameraPos()
         {
             return m_LSL_Functions.llGetCameraPos();
         }
 
+        [LSLFunction(LSLType.Rotation)]
         public LSL_Rotation llGetCameraRot()
         {
             return m_LSL_Functions.llGetCameraRot();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetCenterOfMass()
         {
             return m_LSL_Functions.llGetCenterOfMass();
         }
 
-        public LSL_Vector llGetColor(int face)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llGetColor([LSLParam(LSLType.Integer)] int face)
         {
             return m_LSL_Functions.llGetColor(face);
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetCreator()
         {
             return m_LSL_Functions.llGetCreator();
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetDate()
         {
             return m_LSL_Functions.llGetDate();
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetEnergy()
         {
             return m_LSL_Functions.llGetEnergy();
         }
 
-        public LSL_String llGetEnv(LSL_String name)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetEnv([LSLParam(LSLType.String)] LSL_String name)
         {
             return m_LSL_Functions.llGetEnv(name);
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetForce()
         {
             return m_LSL_Functions.llGetForce();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetFreeMemory()
         {
             return m_LSL_Functions.llGetFreeMemory();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetFreeURLs()
         {
             return m_LSL_Functions.llGetFreeURLs();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetGeometricCenter()
         {
             return m_LSL_Functions.llGetGeometricCenter();
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetGMTclock()
         {
             return m_LSL_Functions.llGetGMTclock();
         }
 
-        public LSL_String llGetHTTPHeader(LSL_Key request_id, string header)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetHTTPHeader([LSLParam(LSLType.Key)] LSL_Key request_id,
+            [LSLParam(LSLType.String)] string header)
         {
             return m_LSL_Functions.llGetHTTPHeader(request_id, header);
         }
 
-        public LSL_Key llGetInventoryCreator(string item)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llGetInventoryCreator([LSLParam(LSLType.String)] string item)
         {
             return m_LSL_Functions.llGetInventoryCreator(item);
         }
 
-        public LSL_Key llGetInventoryKey(string name)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llGetInventoryKey([LSLParam(LSLType.String)] string name)
         {
             return m_LSL_Functions.llGetInventoryKey(name);
         }
 
-        public LSL_String llGetInventoryName(int type, int number)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetInventoryName([LSLParam(LSLType.Integer)] int type,
+            [LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llGetInventoryName(type, number);
         }
 
-        public LSL_Integer llGetInventoryNumber(int type)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetInventoryNumber([LSLParam(LSLType.Integer)] int type)
         {
             return m_LSL_Functions.llGetInventoryNumber(type);
         }
 
-        public LSL_Integer llGetInventoryPermMask(string item, int mask)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetInventoryPermMask([LSLParam(LSLType.String)] string item,
+            [LSLParam(LSLType.Integer)] int mask)
         {
             return m_LSL_Functions.llGetInventoryPermMask(item, mask);
         }
 
-        public LSL_Integer llGetInventoryType(string name)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetInventoryType([LSLParam(LSLType.String)] string name)
         {
             return m_LSL_Functions.llGetInventoryType(name);
         }
 
+        [LSLFunction(LSLType.Key)]
         public LSL_Key llGetKey()
         {
             return m_LSL_Functions.llGetKey();
         }
 
-        public LSL_Key llGetLandOwnerAt(LSL_Vector pos)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llGetLandOwnerAt([LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             return m_LSL_Functions.llGetLandOwnerAt(pos);
         }
 
-        public LSL_Key llGetLinkKey(int linknum)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llGetLinkKey([LSLParam(LSLType.Integer)] int linknum)
         {
             return m_LSL_Functions.llGetLinkKey(linknum);
         }
 
-        public LSL_String llGetLinkName(int linknum)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetLinkName([LSLParam(LSLType.Integer)] int linknum)
         {
             return m_LSL_Functions.llGetLinkName(linknum);
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetLinkNumber()
         {
             return m_LSL_Functions.llGetLinkNumber();
         }
 
-        public LSL_Integer llGetLinkNumberOfSides(int link)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetLinkNumberOfSides([LSLParam(LSLType.Integer)] int link)
         {
             return m_LSL_Functions.llGetLinkNumberOfSides(link);
         }
 
-        public void llSetKeyframedMotion(LSL_List frames, LSL_List options)
+        [LSLFunction(LSLType.Void)]
+        public void llSetKeyframedMotion([LSLParam(LSLType.List)] LSL_List frames,
+            [LSLParam(LSLType.List)] LSL_List options)
         {
             m_LSL_Functions.llSetKeyframedMotion(frames, options);
         }
 
-        public LSL_Integer llGetListEntryType(LSL_List src, int index)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetListEntryType([LSLParam(LSLType.List)] LSL_List src,
+            [LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llGetListEntryType(src, index);
         }
 
-        public LSL_Integer llGetListLength(LSL_List src)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetListLength([LSLParam(LSLType.List)] LSL_List src)
         {
             return m_LSL_Functions.llGetListLength(src);
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetLocalPos()
         {
             return m_LSL_Functions.llGetLocalPos();
         }
 
+        [LSLFunction(LSLType.Rotation)]
         public LSL_Rotation llGetLocalRot()
         {
             return m_LSL_Functions.llGetLocalRot();
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetMass()
         {
             return m_LSL_Functions.llGetMass();
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetMassMKS()
         {
             return m_LSL_Functions.llGetMassMKS();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetMemoryLimit()
         {
             return m_LSL_Functions.llGetMemoryLimit();
         }
 
-        public void llGetNextEmail(string address, string subject)
+        [LSLFunction(LSLType.Void)]
+        public void llGetNextEmail([LSLParam(LSLType.String)] string address, [LSLParam(LSLType.String)] string subject)
         {
             m_LSL_Functions.llGetNextEmail(address, subject);
         }
 
-        public LSL_String llGetNotecardLine(string name, int line)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetNotecardLine([LSLParam(LSLType.String)] string name, [LSLParam(LSLType.Integer)] int line)
         {
             return m_LSL_Functions.llGetNotecardLine(name, line);
         }
 
-        public LSL_Key llGetNumberOfNotecardLines(string name)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llGetNumberOfNotecardLines([LSLParam(LSLType.String)] string name)
         {
             return m_LSL_Functions.llGetNumberOfNotecardLines(name);
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetNumberOfPrims()
         {
             return m_LSL_Functions.llGetNumberOfPrims();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetNumberOfSides()
         {
             return m_LSL_Functions.llGetNumberOfSides();
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetObjectDesc()
         {
             return m_LSL_Functions.llGetObjectDesc();
         }
 
-        public LSL_List llGetObjectDetails(string id, LSL_List args)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetObjectDetails([LSLParam(LSLType.String)] string id, [LSLParam(LSLType.List)] LSL_List args)
         {
             return m_LSL_Functions.llGetObjectDetails(id, args);
         }
 
-        public LSL_Float llGetObjectMass(string id)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llGetObjectMass([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetObjectMass(id);
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetObjectName()
         {
             return m_LSL_Functions.llGetObjectName();
         }
 
-        public LSL_Integer llGetObjectPermMask(int mask)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetObjectPermMask([LSLParam(LSLType.Integer)] int mask)
         {
             return m_LSL_Functions.llGetObjectPermMask(mask);
         }
 
-        public LSL_Integer llGetObjectPrimCount(string object_id)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetObjectPrimCount([LSLParam(LSLType.String)] string object_id)
         {
             return m_LSL_Functions.llGetObjectPrimCount(object_id);
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetOmega()
         {
             return m_LSL_Functions.llGetOmega();
         }
 
+        [LSLFunction(LSLType.Key)]
         public LSL_Key llGetOwner()
         {
             return m_LSL_Functions.llGetOwner();
         }
 
-        public LSL_Key llGetOwnerKey(string id)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llGetOwnerKey([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetOwnerKey(id);
         }
 
-        public LSL_List llGetParcelDetails(LSL_Vector pos, LSL_List param)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetParcelDetails([LSLParam(LSLType.Vector)] LSL_Vector pos,
+            [LSLParam(LSLType.List)] LSL_List param)
         {
             return m_LSL_Functions.llGetParcelDetails(pos, param);
         }
 
-        public LSL_Integer llGetParcelFlags(LSL_Vector pos)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetParcelFlags([LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             return m_LSL_Functions.llGetParcelFlags(pos);
         }
 
-        public LSL_Integer llGetParcelMaxPrims(LSL_Vector pos, int sim_wide)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetParcelMaxPrims([LSLParam(LSLType.Vector)] LSL_Vector pos,
+            [LSLParam(LSLType.Integer)] int sim_wide)
         {
             return m_LSL_Functions.llGetParcelMaxPrims(pos, sim_wide);
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetParcelMusicURL()
         {
             return m_LSL_Functions.llGetParcelMusicURL();
         }
 
-        public LSL_Integer llGetParcelPrimCount(LSL_Vector pos, int category, int sim_wide)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetParcelPrimCount([LSLParam(LSLType.Vector)] LSL_Vector pos,
+            [LSLParam(LSLType.Integer)] int category, [LSLParam(LSLType.Integer)] int sim_wide)
         {
             return m_LSL_Functions.llGetParcelPrimCount(pos, category, sim_wide);
         }
 
-        public LSL_List llGetParcelPrimOwners(LSL_Vector pos)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetParcelPrimOwners([LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             return m_LSL_Functions.llGetParcelPrimOwners(pos);
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetPermissions()
         {
             return m_LSL_Functions.llGetPermissions();
         }
 
+        [LSLFunction(LSLType.Key)]
         public LSL_Key llGetPermissionsKey()
         {
             return m_LSL_Functions.llGetPermissionsKey();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetPos()
         {
             return m_LSL_Functions.llGetPos();
         }
 
-        public LSL_List llGetPrimitiveParams(LSL_List rules)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetPrimitiveParams([LSLParam(LSLType.List)] LSL_List rules)
         {
             return m_LSL_Functions.llGetPrimitiveParams(rules);
         }
 
-        public LSL_List llGetLinkPrimitiveParams(int linknum, LSL_List rules)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetLinkPrimitiveParams([LSLParam(LSLType.Integer)] int linknum,
+            [LSLParam(LSLType.List)] LSL_List rules)
         {
             return m_LSL_Functions.llGetLinkPrimitiveParams(linknum, rules);
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetRegionAgentCount()
         {
             return m_LSL_Functions.llGetRegionAgentCount();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetRegionCorner()
         {
             return m_LSL_Functions.llGetRegionCorner();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetRegionFlags()
         {
             return m_LSL_Functions.llGetRegionFlags();
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetRegionFPS()
         {
             return m_LSL_Functions.llGetRegionFPS();
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetRegionName()
         {
             return m_LSL_Functions.llGetRegionName();
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetRegionTimeDilation()
         {
             return m_LSL_Functions.llGetRegionTimeDilation();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetRootPosition()
         {
             return m_LSL_Functions.llGetRootPosition();
         }
 
+        [LSLFunction(LSLType.Rotation)]
         public LSL_Rotation llGetRootRotation()
         {
             return m_LSL_Functions.llGetRootRotation();
         }
 
+        [LSLFunction(LSLType.Rotation)]
         public LSL_Rotation llGetRot()
         {
             return m_LSL_Functions.llGetRot();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetScale()
         {
             return m_LSL_Functions.llGetScale();
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetScriptName()
         {
             return m_LSL_Functions.llGetScriptName();
         }
 
-        public LSL_Integer llGetScriptState(string name)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetScriptState([LSLParam(LSLType.String)] string name)
         {
             return m_LSL_Functions.llGetScriptState(name);
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetSimulatorHostname()
         {
             return m_LSL_Functions.llGetSimulatorHostname();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetSPMaxMemory()
         {
             return m_LSL_Functions.llGetSPMaxMemory();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetStartParameter()
         {
             return m_LSL_Functions.llGetStartParameter();
         }
 
-        public LSL_Integer llGetStatus(int status)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llGetStatus([LSLParam(LSLType.Integer)] int status)
         {
             return m_LSL_Functions.llGetStatus(status);
         }
 
-        public LSL_String llGetSubString(string src, int start, int end)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetSubString([LSLParam(LSLType.String)] string src, [LSLParam(LSLType.Integer)] int start,
+            [LSLParam(LSLType.Integer)] int end)
         {
             return m_LSL_Functions.llGetSubString(src, start, end);
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetSunDirection()
         {
             return m_LSL_Functions.llGetSunDirection();
         }
 
-        public LSL_String llGetTexture(int face)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetTexture([LSLParam(LSLType.Integer)] int face)
         {
             return m_LSL_Functions.llGetTexture(face);
         }
 
-        public LSL_Vector llGetTextureOffset(int face)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llGetTextureOffset([LSLParam(LSLType.Integer)] int face)
         {
             return m_LSL_Functions.llGetTextureOffset(face);
         }
 
-        public LSL_Float llGetTextureRot(int side)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llGetTextureRot([LSLParam(LSLType.Integer)] int side)
         {
             return m_LSL_Functions.llGetTextureRot(side);
         }
 
-        public LSL_Vector llGetTextureScale(int side)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llGetTextureScale([LSLParam(LSLType.Integer)] int side)
         {
             return m_LSL_Functions.llGetTextureScale(side);
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetTime()
         {
             return m_LSL_Functions.llGetTime();
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetTimeOfDay()
         {
             return m_LSL_Functions.llGetTimeOfDay();
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llGetTimestamp()
         {
             return m_LSL_Functions.llGetTimestamp();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetTorque()
         {
             return m_LSL_Functions.llGetTorque();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetUnixTime()
         {
             return m_LSL_Functions.llGetUnixTime();
         }
 
+        [LSLFunction(LSLType.Integer)]
         public LSL_Integer llGetUsedMemory()
         {
             return m_LSL_Functions.llGetUsedMemory();
         }
 
+        [LSLFunction(LSLType.Vector)]
         public LSL_Vector llGetVel()
         {
             return m_LSL_Functions.llGetVel();
         }
 
+        [LSLFunction(LSLType.Float)]
         public LSL_Float llGetWallclock()
         {
             return m_LSL_Functions.llGetWallclock();
         }
 
-        public void llGiveInventory(string destination, string inventory)
+        [LSLFunction(LSLType.Void)]
+        public void llGiveInventory([LSLParam(LSLType.String)] string destination,
+            [LSLParam(LSLType.String)] string inventory)
         {
             m_LSL_Functions.llGiveInventory(destination, inventory);
         }
 
-        public void llGiveInventoryList(string destination, string category, LSL_List inventory)
+        [LSLFunction(LSLType.Void)]
+        public void llGiveInventoryList([LSLParam(LSLType.String)] string destination,
+            [LSLParam(LSLType.String)] string category, [LSLParam(LSLType.List)] LSL_List inventory)
         {
             m_LSL_Functions.llGiveInventoryList(destination, category, inventory);
         }
 
-        public void llGiveMoney(string destination, int amount)
+        [LSLFunction(LSLType.Void)]
+        public void llGiveMoney([LSLParam(LSLType.String)] string destination, [LSLParam(LSLType.Integer)] int amount)
         {
             m_LSL_Functions.llGiveMoney(destination, amount);
         }
 
-        public LSL_String llTransferLindenDollars(string destination, int amount)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llTransferLindenDollars([LSLParam(LSLType.String)] string destination,
+            [LSLParam(LSLType.Integer)] int amount)
         {
             return m_LSL_Functions.llTransferLindenDollars(destination, amount);
         }
 
-        public void llGodLikeRezObject(string inventory, LSL_Vector pos)
+        [LSLFunction(LSLType.Void)]
+        public void llGodLikeRezObject([LSLParam(LSLType.String)] string inventory,
+            [LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             m_LSL_Functions.llGodLikeRezObject(inventory, pos);
         }
 
-        public LSL_Float llGround(LSL_Vector offset)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llGround([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             return m_LSL_Functions.llGround(offset);
         }
 
-        public LSL_Vector llGroundContour(LSL_Vector offset)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llGroundContour([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             return m_LSL_Functions.llGroundContour(offset);
         }
 
-        public LSL_Vector llGroundNormal(LSL_Vector offset)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llGroundNormal([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             return m_LSL_Functions.llGroundNormal(offset);
         }
 
-        public void llGroundRepel(double height, int water, double tau)
+        [LSLFunction(LSLType.Void)]
+        public void llGroundRepel([LSLParam(LSLType.Float)] double height, [LSLParam(LSLType.Integer)] int water,
+            [LSLParam(LSLType.Float)] double tau)
         {
             m_LSL_Functions.llGroundRepel(height, water, tau);
         }
 
-        public LSL_Vector llGroundSlope(LSL_Vector offset)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llGroundSlope([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             return m_LSL_Functions.llGroundSlope(offset);
         }
 
-        public LSL_String llHTTPRequest(string url, LSL_List parameters, string body)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llHTTPRequest([LSLParam(LSLType.String)] string url,
+            [LSLParam(LSLType.List)] LSL_List parameters, [LSLParam(LSLType.String)] string body)
         {
             return m_LSL_Functions.llHTTPRequest(url, parameters, body);
         }
 
-        public void llHTTPResponse(LSL_Key id, int status, string body)
+        [LSLFunction(LSLType.Void)]
+        public void llHTTPResponse([LSLParam(LSLType.Key)] LSL_Key id, [LSLParam(LSLType.Integer)] int status,
+            [LSLParam(LSLType.String)] string body)
         {
             m_LSL_Functions.llHTTPResponse(id, status, body);
         }
 
-        public LSL_String llInsertString(string dst, int position, string src)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llInsertString([LSLParam(LSLType.String)] string dst, [LSLParam(LSLType.Integer)] int position,
+            [LSLParam(LSLType.String)] string src)
         {
             return m_LSL_Functions.llInsertString(dst, position, src);
         }
 
-        public void llInstantMessage(string user, string message)
+        [LSLFunction(LSLType.Void)]
+        public void llInstantMessage([LSLParam(LSLType.String)] string user, [LSLParam(LSLType.String)] string message)
         {
             m_LSL_Functions.llInstantMessage(user, message);
         }
 
-        public LSL_String llIntegerToBase64(int number)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llIntegerToBase64([LSLParam(LSLType.Integer)] int number)
         {
             return m_LSL_Functions.llIntegerToBase64(number);
         }
 
-        public LSL_String llKey2Name(string id)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llKey2Name([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llKey2Name(id);
         }
 
-        public LSL_String llGetUsername(string id)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetUsername([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetUsername(id);
         }
 
-        public LSL_String llRequestUsername(string id)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llRequestUsername([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llRequestUsername(id);
         }
 
-        public LSL_String llGetDisplayName(string id)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llGetDisplayName([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llGetDisplayName(id);
         }
 
-        public LSL_String llRequestDisplayName(string id)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llRequestDisplayName([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llRequestDisplayName(id);
         }
 
-        public LSL_List llCastRay(LSL_Vector start, LSL_Vector end, LSL_List options)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llCastRay([LSLParam(LSLType.Vector)] LSL_Vector start, [LSLParam(LSLType.Vector)] LSL_Vector end,
+            [LSLParam(LSLType.List)] LSL_List options)
         {
             return m_LSL_Functions.llCastRay(start, end, options);
         }
 
-        public void llLinkParticleSystem(int linknum, LSL_List rules)
+        [LSLFunction(LSLType.Void)]
+        public void llLinkParticleSystem([LSLParam(LSLType.Integer)] int linknum,
+            [LSLParam(LSLType.List)] LSL_List rules)
         {
             m_LSL_Functions.llLinkParticleSystem(linknum, rules);
         }
 
-        public LSL_String llList2CSV(LSL_List src)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llList2CSV([LSLParam(LSLType.List)] LSL_List src)
         {
             return m_LSL_Functions.llList2CSV(src);
         }
 
-        public LSL_Float llList2Float(LSL_List src, int index)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llList2Float([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llList2Float(src, index);
         }
 
-        public LSL_Integer llList2Integer(LSL_List src, int index)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llList2Integer([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llList2Integer(src, index);
         }
 
-        public LSL_Key llList2Key(LSL_List src, int index)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llList2Key([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llList2Key(src, index);
         }
 
-        public LSL_List llList2List(LSL_List src, int start, int end)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llList2List([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int start,
+            [LSLParam(LSLType.Integer)] int end)
         {
             return m_LSL_Functions.llList2List(src, start, end);
         }
 
-        public LSL_List llList2ListStrided(LSL_List src, int start, int end, int stride)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llList2ListStrided([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int start,
+            [LSLParam(LSLType.Integer)] int end, [LSLParam(LSLType.Integer)] int stride)
         {
             return m_LSL_Functions.llList2ListStrided(src, start, end, stride);
         }
 
-        public LSL_Rotation llList2Rot(LSL_List src, int index)
+        [LSLFunction(LSLType.Rotation)]
+        public LSL_Rotation llList2Rot([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llList2Rot(src, index);
         }
 
-        public LSL_String llList2String(LSL_List src, int index)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llList2String([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llList2String(src, index);
         }
 
-        public LSL_Vector llList2Vector(LSL_List src, int index)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llList2Vector([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int index)
         {
             return m_LSL_Functions.llList2Vector(src, index);
         }
 
-        public LSL_Integer llListen(int channelID, string name, string ID, string msg)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llListen([LSLParam(LSLType.Integer)] int channelID, [LSLParam(LSLType.String)] string name,
+            [LSLParam(LSLType.String)] string ID, [LSLParam(LSLType.String)] string msg)
         {
             return m_LSL_Functions.llListen(channelID, name, ID, msg);
         }
 
-        public void llListenControl(int number, int active)
+        [LSLFunction(LSLType.Void)]
+        public void llListenControl([LSLParam(LSLType.Integer)] int number, [LSLParam(LSLType.Integer)] int active)
         {
             m_LSL_Functions.llListenControl(number, active);
         }
 
-        public void llListenRemove(int number)
+        [LSLFunction(LSLType.Void)]
+        public void llListenRemove([LSLParam(LSLType.Integer)] int number)
         {
             m_LSL_Functions.llListenRemove(number);
         }
 
-        public LSL_Integer llListFindList(LSL_List src, LSL_List test)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llListFindList([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.List)] LSL_List test)
         {
             return m_LSL_Functions.llListFindList(src, test);
         }
 
-        public LSL_List llListInsertList(LSL_List dest, LSL_List src, int start)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llListInsertList([LSLParam(LSLType.List)] LSL_List dest, [LSLParam(LSLType.List)] LSL_List src,
+            [LSLParam(LSLType.Integer)] int start)
         {
             return m_LSL_Functions.llListInsertList(dest, src, start);
         }
 
-        public LSL_List llListRandomize(LSL_List src, int stride)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llListRandomize([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int stride)
         {
             return m_LSL_Functions.llListRandomize(src, stride);
         }
 
-        public LSL_List llListReplaceList(LSL_List dest, LSL_List src, int start, int end)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llListReplaceList([LSLParam(LSLType.List)] LSL_List dest, [LSLParam(LSLType.List)] LSL_List src,
+            [LSLParam(LSLType.Integer)] int start, [LSLParam(LSLType.Integer)] int end)
         {
             return m_LSL_Functions.llListReplaceList(dest, src, start, end);
         }
 
-        public LSL_List llListSort(LSL_List src, int stride, int ascending)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llListSort([LSLParam(LSLType.List)] LSL_List src, [LSLParam(LSLType.Integer)] int stride,
+            [LSLParam(LSLType.Integer)] int ascending)
         {
             return m_LSL_Functions.llListSort(src, stride, ascending);
         }
 
-        public LSL_Float llListStatistics(int operation, LSL_List src)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llListStatistics([LSLParam(LSLType.Integer)] int operation,
+            [LSLParam(LSLType.List)] LSL_List src)
         {
             return m_LSL_Functions.llListStatistics(operation, src);
         }
 
-        public void llLoadURL(string avatar_id, string message, string url)
+        [LSLFunction(LSLType.Void)]
+        public void llLoadURL([LSLParam(LSLType.String)] string avatar_id, [LSLParam(LSLType.String)] string message,
+            [LSLParam(LSLType.String)] string url)
         {
             m_LSL_Functions.llLoadURL(avatar_id, message, url);
         }
 
-        public LSL_Float llLog(double val)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llLog([LSLParam(LSLType.Float)] double val)
         {
             return m_LSL_Functions.llLog(val);
         }
 
-        public LSL_Float llLog10(double val)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llLog10([LSLParam(LSLType.Float)] double val)
         {
             return m_LSL_Functions.llLog10(val);
         }
 
-        public void llLookAt(LSL_Vector target, double strength, double damping)
+        [LSLFunction(LSLType.Void)]
+        public void llLookAt([LSLParam(LSLType.Vector)] LSL_Vector target, [LSLParam(LSLType.Float)] double strength,
+            [LSLParam(LSLType.Float)] double damping)
         {
             m_LSL_Functions.llLookAt(target, strength, damping);
         }
 
-        public void llLoopSound(string sound, double volume)
+        [LSLFunction(LSLType.Void)]
+        public void llLoopSound([LSLParam(LSLType.String)] string sound, [LSLParam(LSLType.Float)] double volume)
         {
             m_LSL_Functions.llLoopSound(sound, volume);
         }
 
-        public void llLoopSoundMaster(string sound, double volume)
+        [LSLFunction(LSLType.Void)]
+        public void llLoopSoundMaster([LSLParam(LSLType.String)] string sound, [LSLParam(LSLType.Float)] double volume)
         {
             m_LSL_Functions.llLoopSoundMaster(sound, volume);
         }
 
-        public void llLoopSoundSlave(string sound, double volume)
+        [LSLFunction(LSLType.Void)]
+        public void llLoopSoundSlave([LSLParam(LSLType.String)] string sound, [LSLParam(LSLType.Float)] double volume)
         {
             m_LSL_Functions.llLoopSoundSlave(sound, volume);
         }
 
-        public LSL_Integer llManageEstateAccess(int action, string avatar)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llManageEstateAccess([LSLParam(LSLType.Integer)] int action,
+            [LSLParam(LSLType.String)] string avatar)
         {
             return m_LSL_Functions.llManageEstateAccess(action, avatar);
         }
 
-        public void llMakeExplosion(int particles, double scale, double vel, double lifetime, double arc, string texture, LSL_Vector offset)
+        [LSLFunction(LSLType.Void)]
+        public void llMakeExplosion([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
+            [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
+            [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
+            LSL_Vector offset)
         {
             m_LSL_Functions.llMakeExplosion(particles, scale, vel, lifetime, arc, texture, offset);
         }
 
-        public void llMakeFire(int particles, double scale, double vel, double lifetime, double arc, string texture, LSL_Vector offset)
+        [LSLFunction(LSLType.Void)]
+        public void llMakeFire([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
+            [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
+            [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
+            LSL_Vector offset)
         {
             m_LSL_Functions.llMakeFire(particles, scale, vel, lifetime, arc, texture, offset);
         }
 
-        public void llMakeFountain(int particles, double scale, double vel, double lifetime, double arc, int bounce, string texture, LSL_Vector offset, double bounce_offset)
+        [LSLFunction(LSLType.Void)]
+        public void llMakeFountain([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
+            [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
+            [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.Integer)] int bounce,
+            string texture, [LSLParam(LSLType.Vector)] LSL_Vector offset, [LSLParam(LSLType.Float)] double bounce_offset)
         {
             m_LSL_Functions.llMakeFountain(particles, scale, vel, lifetime, arc, bounce, texture, offset, bounce_offset);
         }
 
-        public void llMakeSmoke(int particles, double scale, double vel, double lifetime, double arc, string texture, LSL_Vector offset)
+        [LSLFunction(LSLType.Void)]
+        public void llMakeSmoke([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
+            [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
+            [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
+            LSL_Vector offset)
         {
             m_LSL_Functions.llMakeSmoke(particles, scale, vel, lifetime, arc, texture, offset);
         }
 
-        public void llMapDestination(string simname, LSL_Vector pos, LSL_Vector look_at)
+        [LSLFunction(LSLType.Void)]
+        public void llMapDestination([LSLParam(LSLType.String)] string simname,
+            [LSLParam(LSLType.Vector)] LSL_Vector pos, [LSLParam(LSLType.Vector)] LSL_Vector look_at)
         {
             m_LSL_Functions.llMapDestination(simname, pos, look_at);
         }
 
-        public LSL_String llMD5String(string src, int nonce)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llMD5String([LSLParam(LSLType.String)] string src, [LSLParam(LSLType.Integer)] int nonce)
         {
             return m_LSL_Functions.llMD5String(src, nonce);
         }
 
-        public LSL_String llSHA1String(string src)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llSHA1String([LSLParam(LSLType.String)] string src)
         {
             return m_LSL_Functions.llSHA1String(src);
         }
 
-        public void llMessageLinked(int linknum, int num, string str, string id)
+        [LSLFunction(LSLType.Void)]
+        public void llMessageLinked([LSLParam(LSLType.Integer)] int linknum, [LSLParam(LSLType.Integer)] int num,
+            [LSLParam(LSLType.String)] string str, [LSLParam(LSLType.String)] string id)
         {
             m_LSL_Functions.llMessageLinked(linknum, num, str, id);
         }
 
-        public void llMinEventDelay(double delay)
+        [LSLFunction(LSLType.Void)]
+        public void llMinEventDelay([LSLParam(LSLType.Float)] double delay)
         {
             m_LSL_Functions.llMinEventDelay(delay);
         }
 
-        public void llModifyLand(int action, int brush)
+        [LSLFunction(LSLType.Void)]
+        public void llModifyLand([LSLParam(LSLType.Integer)] int action, [LSLParam(LSLType.Integer)] int brush)
         {
             m_LSL_Functions.llModifyLand(action, brush);
         }
 
-        public LSL_Integer llModPow(int a, int b, int c)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llModPow([LSLParam(LSLType.Integer)] int a, [LSLParam(LSLType.Integer)] int b,
+            [LSLParam(LSLType.Integer)] int c)
         {
             return m_LSL_Functions.llModPow(a, b, c);
         }
 
-        public void llMoveToTarget(LSL_Vector target, double tau)
+        [LSLFunction(LSLType.Void)]
+        public void llMoveToTarget([LSLParam(LSLType.Vector)] LSL_Vector target, [LSLParam(LSLType.Float)] double tau)
         {
             m_LSL_Functions.llMoveToTarget(target, tau);
         }
 
-        public void llOffsetTexture(double u, double v, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llOffsetTexture([LSLParam(LSLType.Float)] double u, [LSLParam(LSLType.Float)] double v,
+            [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llOffsetTexture(u, v, face);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llOpenRemoteDataChannel()
         {
             m_LSL_Functions.llOpenRemoteDataChannel();
         }
 
-        public LSL_Integer llOverMyLand(string id)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llOverMyLand([LSLParam(LSLType.String)] string id)
         {
             return m_LSL_Functions.llOverMyLand(id);
         }
 
-        public void llOwnerSay(string msg)
+        [LSLFunction(LSLType.Void)]
+        public void llOwnerSay([LSLParam(LSLType.String)] string msg)
         {
             m_LSL_Functions.llOwnerSay(msg);
         }
 
-        public void llParcelMediaCommandList(LSL_List commandList)
+        [LSLFunction(LSLType.Void)]
+        public void llParcelMediaCommandList([LSLParam(LSLType.List)] LSL_List commandList)
         {
             m_LSL_Functions.llParcelMediaCommandList(commandList);
         }
 
-        public LSL_List llParcelMediaQuery(LSL_List aList)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llParcelMediaQuery([LSLParam(LSLType.List)] LSL_List aList)
         {
             return m_LSL_Functions.llParcelMediaQuery(aList);
         }
 
-        public LSL_List llParseString2List(string str, LSL_List separators, LSL_List spacers)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llParseString2List([LSLParam(LSLType.String)] string str,
+            [LSLParam(LSLType.List)] LSL_List separators, [LSLParam(LSLType.List)] LSL_List spacers)
         {
             return m_LSL_Functions.llParseString2List(str, separators, spacers);
         }
 
-        public LSL_List llParseStringKeepNulls(string src, LSL_List seperators, LSL_List spacers)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llParseStringKeepNulls([LSLParam(LSLType.String)] string src,
+            [LSLParam(LSLType.List)] LSL_List seperators, [LSLParam(LSLType.List)] LSL_List spacers)
         {
             return m_LSL_Functions.llParseStringKeepNulls(src, seperators, spacers);
         }
 
-        public void llParticleSystem(LSL_List rules)
+        [LSLFunction(LSLType.Void)]
+        public void llParticleSystem([LSLParam(LSLType.List)] LSL_List rules)
         {
             m_LSL_Functions.llParticleSystem(rules);
         }
 
-        public void llPassCollisions(int pass)
+        [LSLFunction(LSLType.Void)]
+        public void llPassCollisions([LSLParam(LSLType.Integer)] int pass)
         {
             m_LSL_Functions.llPassCollisions(pass);
         }
 
-        public void llPassTouches(int pass)
+        [LSLFunction(LSLType.Void)]
+        public void llPassTouches([LSLParam(LSLType.Integer)] int pass)
         {
             m_LSL_Functions.llPassTouches(pass);
         }
 
-        public void llPlaySound(string sound, double volume)
+        [LSLFunction(LSLType.Void)]
+        public void llPlaySound([LSLParam(LSLType.String)] string sound, [LSLParam(LSLType.Float)] double volume)
         {
             m_LSL_Functions.llPlaySound(sound, volume);
         }
 
-        public void llPlaySoundSlave(string sound, double volume)
+        [LSLFunction(LSLType.Void)]
+        public void llPlaySoundSlave([LSLParam(LSLType.String)] string sound, [LSLParam(LSLType.Float)] double volume)
         {
             m_LSL_Functions.llPlaySoundSlave(sound, volume);
         }
 
-        public void llPointAt(LSL_Vector pos)
+        [LSLFunction(LSLType.Void)]
+        public void llPointAt([LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             m_LSL_Functions.llPointAt(pos);
         }
 
-        public LSL_Float llPow(double fbase, double fexponent)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llPow([LSLParam(LSLType.Float)] double fbase, [LSLParam(LSLType.Float)] double fexponent)
         {
             return m_LSL_Functions.llPow(fbase, fexponent);
         }
 
-        public void llPreloadSound(string sound)
+        [LSLFunction(LSLType.Void)]
+        public void llPreloadSound([LSLParam(LSLType.String)] string sound)
         {
             m_LSL_Functions.llPreloadSound(sound);
         }
 
-        public void llPushObject(string target, LSL_Vector impulse, LSL_Vector ang_impulse, int local)
+        [LSLFunction(LSLType.Void)]
+        public void llPushObject([LSLParam(LSLType.String)] string target, [LSLParam(LSLType.Vector)] LSL_Vector impulse,
+            [LSLParam(LSLType.Vector)] LSL_Vector ang_impulse, [LSLParam(LSLType.Integer)] int local)
         {
             m_LSL_Functions.llPushObject(target, impulse, ang_impulse, local);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llRefreshPrimURL()
         {
             m_LSL_Functions.llRefreshPrimURL();
         }
 
-        public void llRegionSay(int channelID, string text)
+        [LSLFunction(LSLType.Void)]
+        public void llRegionSay([LSLParam(LSLType.Integer)] int channelID, [LSLParam(LSLType.String)] string text)
         {
             m_LSL_Functions.llRegionSay(channelID, text);
         }
 
-        public void llRegionSayTo(string key, int channelID, string text)
+        [LSLFunction(LSLType.Void)]
+        public void llRegionSayTo([LSLParam(LSLType.String)] string key, [LSLParam(LSLType.Integer)] int channelID,
+            [LSLParam(LSLType.String)] string text)
         {
             m_LSL_Functions.llRegionSayTo(key, channelID, text);
         }
 
-        public void llReleaseCamera(string avatar)
+        [LSLFunction(LSLType.Void)]
+        public void llReleaseCamera([LSLParam(LSLType.String)] string avatar)
         {
             m_LSL_Functions.llReleaseCamera(avatar);
         }
 
-        public void llReleaseURL(string url)
+        [LSLFunction(LSLType.Void)]
+        public void llReleaseURL([LSLParam(LSLType.String)] string url)
         {
             m_LSL_Functions.llReleaseURL(url);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llReleaseControls()
         {
             m_LSL_Functions.llReleaseControls();
         }
 
-        public void llRemoteDataReply(string channel, string message_id, string sdata, int idata)
+        [LSLFunction(LSLType.Void)]
+        public void llRemoteDataReply([LSLParam(LSLType.String)] string channel,
+            [LSLParam(LSLType.String)] string message_id, [LSLParam(LSLType.String)] string sdata,
+            [LSLParam(LSLType.Integer)] int idata)
         {
             m_LSL_Functions.llRemoteDataReply(channel, message_id, sdata, idata);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llRemoteDataSetRegion()
         {
             m_LSL_Functions.llRemoteDataSetRegion();
         }
 
-        public void llRemoteLoadScript(string target, string name, int running, int start_param)
+        [LSLFunction(LSLType.Void)]
+        public void llRemoteLoadScript([LSLParam(LSLType.String)] string target, [LSLParam(LSLType.String)] string name,
+            [LSLParam(LSLType.Integer)] int running, [LSLParam(LSLType.Integer)] int start_param)
         {
             m_LSL_Functions.llRemoteLoadScript(target, name, running, start_param);
         }
 
-        public void llRemoteLoadScriptPin(string target, string name, int pin, int running, int start_param)
+        [LSLFunction(LSLType.Void)]
+        public void llRemoteLoadScriptPin([LSLParam(LSLType.String)] string target,
+            [LSLParam(LSLType.String)] string name, [LSLParam(LSLType.Integer)] int pin,
+            [LSLParam(LSLType.Integer)] int running, [LSLParam(LSLType.Integer)] int start_param)
         {
             m_LSL_Functions.llRemoteLoadScriptPin(target, name, pin, running, start_param);
         }
 
-        public void llRemoveFromLandBanList(string avatar)
+        [LSLFunction(LSLType.Void)]
+        public void llRemoveFromLandBanList([LSLParam(LSLType.String)] string avatar)
         {
             m_LSL_Functions.llRemoveFromLandBanList(avatar);
         }
 
-        public void llRemoveFromLandPassList(string avatar)
+        [LSLFunction(LSLType.Void)]
+        public void llRemoveFromLandPassList([LSLParam(LSLType.String)] string avatar)
         {
             m_LSL_Functions.llRemoveFromLandPassList(avatar);
         }
 
-        public void llRemoveInventory(string item)
+        [LSLFunction(LSLType.Void)]
+        public void llRemoveInventory([LSLParam(LSLType.String)] string item)
         {
             m_LSL_Functions.llRemoveInventory(item);
         }
 
-        public void llRemoveVehicleFlags(int flags)
+        [LSLFunction(LSLType.Void)]
+        public void llRemoveVehicleFlags([LSLParam(LSLType.Integer)] int flags)
         {
             m_LSL_Functions.llRemoveVehicleFlags(flags);
         }
 
-        public LSL_Key llRequestAgentData(string id, int data)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llRequestAgentData([LSLParam(LSLType.String)] string id, [LSLParam(LSLType.Integer)] int data)
         {
             return m_LSL_Functions.llRequestAgentData(id, data);
         }
 
-        public LSL_Key llRequestInventoryData(string name)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llRequestInventoryData([LSLParam(LSLType.String)] string name)
         {
             return m_LSL_Functions.llRequestInventoryData(name);
         }
 
-        public void llRequestPermissions(string agent, int perm)
+        [LSLFunction(LSLType.Void)]
+        public void llRequestPermissions([LSLParam(LSLType.String)] string agent, [LSLParam(LSLType.Integer)] int perm)
         {
             m_LSL_Functions.llRequestPermissions(agent, perm);
         }
 
+        [LSLFunction(LSLType.String)]
         public LSL_String llRequestSecureURL()
         {
             return m_LSL_Functions.llRequestSecureURL();
         }
 
-        public LSL_Key llRequestSimulatorData(string simulator, int data)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llRequestSimulatorData([LSLParam(LSLType.String)] string simulator,
+            [LSLParam(LSLType.Integer)] int data)
         {
             return m_LSL_Functions.llRequestSimulatorData(simulator, data);
         }
+
+        [LSLFunction(LSLType.Key)]
         public LSL_Key llRequestURL()
         {
             return m_LSL_Functions.llRequestURL();
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llResetLandBanList()
         {
             m_LSL_Functions.llResetLandBanList();
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llResetLandPassList()
         {
             m_LSL_Functions.llResetLandPassList();
         }
 
-        public void llResetOtherScript(string name)
+        [LSLFunction(LSLType.Void)]
+        public void llResetOtherScript([LSLParam(LSLType.String)] string name)
         {
             m_LSL_Functions.llResetOtherScript(name);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llResetScript()
         {
             m_LSL_Functions.llResetScript();
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llResetTime()
         {
             m_LSL_Functions.llResetTime();
         }
 
-        public void llRezAtRoot(string inventory, LSL_Vector position, LSL_Vector velocity, LSL_Rotation rot, int param)
+        [LSLFunction(LSLType.Void)]
+        public void llRezAtRoot([LSLParam(LSLType.String)] string inventory,
+            [LSLParam(LSLType.Vector)] LSL_Vector position, [LSLParam(LSLType.Vector)] LSL_Vector velocity,
+            [LSLParam(LSLType.Rotation)] LSL_Rotation rot, [LSLParam(LSLType.Integer)] int param)
         {
             m_LSL_Functions.llRezAtRoot(inventory, position, velocity, rot, param);
         }
 
-        public void llRezObject(string inventory, LSL_Vector pos, LSL_Vector vel, LSL_Rotation rot, int param)
+        [LSLFunction(LSLType.Void)]
+        public void llRezObject([LSLParam(LSLType.String)] string inventory, [LSLParam(LSLType.Vector)] LSL_Vector pos,
+            [LSLParam(LSLType.Vector)] LSL_Vector vel, [LSLParam(LSLType.Rotation)] LSL_Rotation rot,
+            [LSLParam(LSLType.Integer)] int param)
         {
             m_LSL_Functions.llRezObject(inventory, pos, vel, rot, param);
         }
 
-        public LSL_Float llRot2Angle(LSL_Rotation rot)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llRot2Angle([LSLParam(LSLType.Rotation)] LSL_Rotation rot)
         {
             return m_LSL_Functions.llRot2Angle(rot);
         }
 
-        public LSL_Vector llRot2Axis(LSL_Rotation rot)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llRot2Axis([LSLParam(LSLType.Rotation)] LSL_Rotation rot)
         {
             return m_LSL_Functions.llRot2Axis(rot);
         }
 
-        public LSL_Vector llRot2Euler(LSL_Rotation r)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llRot2Euler([LSLParam(LSLType.Rotation)] LSL_Rotation r)
         {
             return m_LSL_Functions.llRot2Euler(r);
         }
 
-        public LSL_Vector llRot2Fwd(LSL_Rotation r)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llRot2Fwd([LSLParam(LSLType.Rotation)] LSL_Rotation r)
         {
             return m_LSL_Functions.llRot2Fwd(r);
         }
 
-        public LSL_Vector llRot2Left(LSL_Rotation r)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llRot2Left([LSLParam(LSLType.Rotation)] LSL_Rotation r)
         {
             return m_LSL_Functions.llRot2Left(r);
         }
 
-        public LSL_Vector llRot2Up(LSL_Rotation r)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llRot2Up([LSLParam(LSLType.Rotation)] LSL_Rotation r)
         {
             return m_LSL_Functions.llRot2Up(r);
         }
 
-        public void llRotateTexture(double rotation, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llRotateTexture([LSLParam(LSLType.Float)] double rotation, [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llRotateTexture(rotation, face);
         }
 
-        public LSL_Rotation llRotBetween(LSL_Vector start, LSL_Vector end)
+        [LSLFunction(LSLType.Rotation)]
+        public LSL_Rotation llRotBetween([LSLParam(LSLType.Vector)] LSL_Vector start,
+            [LSLParam(LSLType.Vector)] LSL_Vector end)
         {
             return m_LSL_Functions.llRotBetween(start, end);
         }
 
-        public void llRotLookAt(LSL_Rotation target, double strength, double damping)
+        [LSLFunction(LSLType.Void)]
+        public void llRotLookAt([LSLParam(LSLType.Rotation)] LSL_Rotation target,
+            [LSLParam(LSLType.Float)] double strength, [LSLParam(LSLType.Float)] double damping)
         {
             m_LSL_Functions.llRotLookAt(target, strength, damping);
         }
 
-        public LSL_Integer llRotTarget(LSL_Rotation rot, double error)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llRotTarget([LSLParam(LSLType.Rotation)] LSL_Rotation rot,
+            [LSLParam(LSLType.Float)] double error)
         {
             return m_LSL_Functions.llRotTarget(rot, error);
         }
 
-        public void llRotTargetRemove(int number)
+        [LSLFunction(LSLType.Void)]
+        public void llRotTargetRemove([LSLParam(LSLType.Integer)] int number)
         {
             m_LSL_Functions.llRotTargetRemove(number);
         }
 
-        public LSL_Integer llRound(double f)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llRound([LSLParam(LSLType.Float)] double f)
         {
             return m_LSL_Functions.llRound(f);
         }
 
-        public LSL_Integer llSameGroup(string agent)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llSameGroup([LSLParam(LSLType.String)] string agent)
         {
             return m_LSL_Functions.llSameGroup(agent);
         }
 
-        public void llSay(int channelID, string text)
+        [LSLFunction(LSLType.Void)]
+        public void llSay([LSLParam(LSLType.Integer)] int channelID, [LSLParam(LSLType.String)] string text)
         {
             m_LSL_Functions.llSay(channelID, text);
         }
 
-        public void llScaleTexture(double u, double v, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llScaleTexture([LSLParam(LSLType.Float)] double u, [LSLParam(LSLType.Float)] double v,
+            [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llScaleTexture(u, v, face);
         }
 
-        public LSL_Integer llScriptDanger(LSL_Vector pos)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llScriptDanger([LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             return m_LSL_Functions.llScriptDanger(pos);
         }
 
-        public void llScriptProfiler(LSL_Integer flags)
+        [LSLFunction(LSLType.Void)]
+        public void llScriptProfiler([LSLParam(LSLType.Integer)] LSL_Integer flags)
         {
             m_LSL_Functions.llScriptProfiler(flags);
         }
 
-        public LSL_Key llSendRemoteData(string channel, string dest, int idata, string sdata)
+        [LSLFunction(LSLType.Key)]
+        public LSL_Key llSendRemoteData([LSLParam(LSLType.String)] string channel,
+            [LSLParam(LSLType.String)] string dest, [LSLParam(LSLType.Integer)] int idata,
+            [LSLParam(LSLType.String)] string sdata)
         {
             return m_LSL_Functions.llSendRemoteData(channel, dest, idata, sdata);
         }
 
-        public void llSensor(string name, string id, int type, double range, double arc)
+        [LSLFunction(LSLType.Void)]
+        public void llSensor([LSLParam(LSLType.String)] string name, [LSLParam(LSLType.String)] string id,
+            [LSLParam(LSLType.Integer)] int type, [LSLParam(LSLType.Float)] double range,
+            [LSLParam(LSLType.Float)] double arc)
         {
             m_LSL_Functions.llSensor(name, id, type, range, arc);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llSensorRemove()
         {
             m_LSL_Functions.llSensorRemove();
         }
 
-        public void llSensorRepeat(string name, string id, int type, double range, double arc, double rate)
+        [LSLFunction(LSLType.Void)]
+        public void llSensorRepeat([LSLParam(LSLType.String)] string name, [LSLParam(LSLType.String)] string id,
+            [LSLParam(LSLType.Integer)] int type, [LSLParam(LSLType.Float)] double range,
+            [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.Float)] double rate)
         {
             m_LSL_Functions.llSensorRepeat(name, id, type, range, arc, rate);
         }
 
-        public void llSetAlpha(double alpha, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llSetAlpha([LSLParam(LSLType.Float)] double alpha, [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llSetAlpha(alpha, face);
         }
 
-        public void llSetBuoyancy(double buoyancy)
+        [LSLFunction(LSLType.Void)]
+        public void llSetBuoyancy([LSLParam(LSLType.Float)] double buoyancy)
         {
             m_LSL_Functions.llSetBuoyancy(buoyancy);
         }
 
-        public void llSetCameraAtOffset(LSL_Vector offset)
+        [LSLFunction(LSLType.Void)]
+        public void llSetCameraAtOffset([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             m_LSL_Functions.llSetCameraAtOffset(offset);
         }
 
-        public void llSetCameraEyeOffset(LSL_Vector offset)
+        [LSLFunction(LSLType.Void)]
+        public void llSetCameraEyeOffset([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             m_LSL_Functions.llSetCameraEyeOffset(offset);
         }
 
-        public void llSetLinkCamera(LSL_Integer link, LSL_Vector eye, LSL_Vector at)
+        [LSLFunction(LSLType.Void)]
+        public void llSetLinkCamera([LSLParam(LSLType.Integer)] LSL_Integer link,
+            [LSLParam(LSLType.Vector)] LSL_Vector eye, [LSLParam(LSLType.Vector)] LSL_Vector at)
         {
             m_LSL_Functions.llSetLinkCamera(link, eye, at);
         }
 
-        public void llSetCameraParams(LSL_List rules)
+        [LSLFunction(LSLType.Void)]
+        public void llSetCameraParams([LSLParam(LSLType.List)] LSL_List rules)
         {
             m_LSL_Functions.llSetCameraParams(rules);
         }
 
-        public void llSetClickAction(int action)
+        [LSLFunction(LSLType.Void)]
+        public void llSetClickAction([LSLParam(LSLType.Integer)] int action)
         {
             m_LSL_Functions.llSetClickAction(action);
         }
 
-        public void llSetColor(LSL_Vector color, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llSetColor([LSLParam(LSLType.Vector)] LSL_Vector color, [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llSetColor(color, face);
         }
 
-        public void llSetContentType(LSL_Key id, LSL_Integer type)
+        [LSLFunction(LSLType.Void)]
+        public void llSetContentType([LSLParam(LSLType.Key)] LSL_Key id, [LSLParam(LSLType.Integer)] LSL_Integer type)
         {
             m_LSL_Functions.llSetContentType(id, type);
         }
 
-        public void llSetDamage(double damage)
+        [LSLFunction(LSLType.Void)]
+        public void llSetDamage([LSLParam(LSLType.Float)] double damage)
         {
             m_LSL_Functions.llSetDamage(damage);
         }
 
-        public void llSetForce(LSL_Vector force, int local)
+        [LSLFunction(LSLType.Void)]
+        public void llSetForce([LSLParam(LSLType.Vector)] LSL_Vector force, [LSLParam(LSLType.Integer)] int local)
         {
             m_LSL_Functions.llSetForce(force, local);
         }
 
-        public void llSetForceAndTorque(LSL_Vector force, LSL_Vector torque, int local)
+        [LSLFunction(LSLType.Void)]
+        public void llSetForceAndTorque([LSLParam(LSLType.Vector)] LSL_Vector force,
+            [LSLParam(LSLType.Vector)] LSL_Vector torque, [LSLParam(LSLType.Integer)] int local)
         {
             m_LSL_Functions.llSetForceAndTorque(force, torque, local);
         }
 
-        public void llSetVelocity(LSL_Vector force, int local)
+        [LSLFunction(LSLType.Void)]
+        public void llSetVelocity([LSLParam(LSLType.Vector)] LSL_Vector force, [LSLParam(LSLType.Integer)] int local)
         {
             m_LSL_Functions.llSetVelocity(force, local);
         }
 
-        public void llSetAngularVelocity(LSL_Vector force, int local)
+        [LSLFunction(LSLType.Void)]
+        public void llSetAngularVelocity([LSLParam(LSLType.Vector)] LSL_Vector force,
+            [LSLParam(LSLType.Integer)] int local)
         {
             m_LSL_Functions.llSetAngularVelocity(force, local);
         }
 
-        public void llSetHoverHeight(double height, int water, double tau)
+        [LSLFunction(LSLType.Void)]
+        public void llSetHoverHeight([LSLParam(LSLType.Float)] double height, [LSLParam(LSLType.Integer)] int water,
+            [LSLParam(LSLType.Float)] double tau)
         {
             m_LSL_Functions.llSetHoverHeight(height, water, tau);
         }
 
-        public void llSetInventoryPermMask(string item, int mask, int value)
+        [LSLFunction(LSLType.Void)]
+        public void llSetInventoryPermMask([LSLParam(LSLType.String)] string item, [LSLParam(LSLType.Integer)] int mask,
+            [LSLParam(LSLType.Integer)] int value)
         {
             m_LSL_Functions.llSetInventoryPermMask(item, mask, value);
         }
 
-        public void llSetLinkAlpha(int linknumber, double alpha, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llSetLinkAlpha([LSLParam(LSLType.Integer)] int linknumber, [LSLParam(LSLType.Float)] double alpha,
+            [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llSetLinkAlpha(linknumber, alpha, face);
         }
 
-        public void llSetLinkColor(int linknumber, LSL_Vector color, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llSetLinkColor([LSLParam(LSLType.Integer)] int linknumber,
+            [LSLParam(LSLType.Vector)] LSL_Vector color, [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llSetLinkColor(linknumber, color, face);
         }
 
-        public void llSetLinkPrimitiveParams(int linknumber, LSL_List rules)
+        [LSLFunction(LSLType.Void)]
+        public void llSetLinkPrimitiveParams([LSLParam(LSLType.Integer)] int linknumber,
+            [LSLParam(LSLType.List)] LSL_List rules)
         {
             m_LSL_Functions.llSetLinkPrimitiveParams(linknumber, rules);
         }
 
-        public void llSetLinkTexture(int linknumber, string texture, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llSetLinkTexture([LSLParam(LSLType.Integer)] int linknumber,
+            [LSLParam(LSLType.String)] string texture, [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llSetLinkTexture(linknumber, texture, face);
         }
 
-        public void llSetLinkTextureAnim(int linknum, int mode, int face, int sizex, int sizey, double start, double length, double rate)
+        [LSLFunction(LSLType.Void)]
+        public void llSetLinkTextureAnim([LSLParam(LSLType.Integer)] int linknum, [LSLParam(LSLType.Integer)] int mode,
+            [LSLParam(LSLType.Integer)] int face, [LSLParam(LSLType.Integer)] int sizex,
+            [LSLParam(LSLType.Integer)] int sizey, [LSLParam(LSLType.Float)] double start,
+            double length, [LSLParam(LSLType.Float)] double rate)
         {
             m_LSL_Functions.llSetLinkTextureAnim(linknum, mode, face, sizex, sizey, start, length, rate);
         }
 
-        public void llSetLocalRot(LSL_Rotation rot)
+        [LSLFunction(LSLType.Void)]
+        public void llSetLocalRot([LSLParam(LSLType.Rotation)] LSL_Rotation rot)
         {
             m_LSL_Functions.llSetLocalRot(rot);
         }
 
-        public LSL_Integer llSetMemoryLimit(LSL_Integer limit)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llSetMemoryLimit([LSLParam(LSLType.Integer)] LSL_Integer limit)
         {
             return m_LSL_Functions.llSetMemoryLimit(limit);
         }
 
-        public void llSetObjectDesc(string desc)
+        [LSLFunction(LSLType.Void)]
+        public void llSetObjectDesc([LSLParam(LSLType.String)] string desc)
         {
             m_LSL_Functions.llSetObjectDesc(desc);
         }
 
-        public void llSetObjectName(string name)
+        [LSLFunction(LSLType.Void)]
+        public void llSetObjectName([LSLParam(LSLType.String)] string name)
         {
             m_LSL_Functions.llSetObjectName(name);
         }
 
-        public void llSetObjectPermMask(int mask, int value)
+        [LSLFunction(LSLType.Void)]
+        public void llSetObjectPermMask([LSLParam(LSLType.Integer)] int mask, [LSLParam(LSLType.Integer)] int value)
         {
             m_LSL_Functions.llSetObjectPermMask(mask, value);
         }
 
-        public void llSetParcelMusicURL(string url)
+        [LSLFunction(LSLType.Void)]
+        public void llSetParcelMusicURL([LSLParam(LSLType.String)] string url)
         {
             m_LSL_Functions.llSetParcelMusicURL(url);
         }
 
-        public void llSetPayPrice(int price, LSL_List quick_pay_buttons)
+        [LSLFunction(LSLType.Void)]
+        public void llSetPayPrice([LSLParam(LSLType.Integer)] int price,
+            [LSLParam(LSLType.List)] LSL_List quick_pay_buttons)
         {
             m_LSL_Functions.llSetPayPrice(price, quick_pay_buttons);
         }
 
-        public void llSetPos(LSL_Vector pos)
+        [LSLFunction(LSLType.Void)]
+        public void llSetPos([LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             m_LSL_Functions.llSetPos(pos);
         }
 
-        public void llSetPrimitiveParams(LSL_List rules)
+        [LSLFunction(LSLType.Void)]
+        public void llSetPrimitiveParams([LSLParam(LSLType.List)] LSL_List rules)
         {
             m_LSL_Functions.llSetPrimitiveParams(rules);
         }
 
-        public void llSetLinkPrimitiveParamsFast(int linknum, LSL_List rules)
+        [LSLFunction(LSLType.Void)]
+        public void llSetLinkPrimitiveParamsFast([LSLParam(LSLType.Integer)] int linknum,
+            [LSLParam(LSLType.List)] LSL_List rules)
         {
             m_LSL_Functions.llSetLinkPrimitiveParamsFast(linknum, rules);
         }
 
-        public void llSetPrimURL(string url)
+        [LSLFunction(LSLType.Void)]
+        public void llSetPrimURL([LSLParam(LSLType.String)] string url)
         {
             m_LSL_Functions.llSetPrimURL(url);
         }
 
-        public LSL_Integer llSetRegionPos(LSL_Vector pos)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llSetRegionPos([LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             return m_LSL_Functions.llSetRegionPos(pos);
         }
 
-        public void llSetRemoteScriptAccessPin(int pin)
+        [LSLFunction(LSLType.Void)]
+        public void llSetRemoteScriptAccessPin([LSLParam(LSLType.Integer)] int pin)
         {
             m_LSL_Functions.llSetRemoteScriptAccessPin(pin);
         }
 
-        public void llSetRot(LSL_Rotation rot)
+        [LSLFunction(LSLType.Void)]
+        public void llSetRot([LSLParam(LSLType.Rotation)] LSL_Rotation rot)
         {
             m_LSL_Functions.llSetRot(rot);
         }
 
-        public void llSetScale(LSL_Vector scale)
+        [LSLFunction(LSLType.Void)]
+        public void llSetScale([LSLParam(LSLType.Vector)] LSL_Vector scale)
         {
             m_LSL_Functions.llSetScale(scale);
         }
 
-        public void llSetScriptState(string name, int run)
+        [LSLFunction(LSLType.Void)]
+        public void llSetScriptState([LSLParam(LSLType.String)] string name, [LSLParam(LSLType.Integer)] int run)
         {
             m_LSL_Functions.llSetScriptState(name, run);
         }
 
-        public void llSetSitText(string text)
+        [LSLFunction(LSLType.Void)]
+        public void llSetSitText([LSLParam(LSLType.String)] string text)
         {
             m_LSL_Functions.llSetSitText(text);
         }
 
-        public void llSetSoundQueueing(int queue)
+        [LSLFunction(LSLType.Void)]
+        public void llSetSoundQueueing([LSLParam(LSLType.Integer)] int queue)
         {
             m_LSL_Functions.llSetSoundQueueing(queue);
         }
 
-        public void llSetSoundRadius(double radius)
+        [LSLFunction(LSLType.Void)]
+        public void llSetSoundRadius([LSLParam(LSLType.Float)] double radius)
         {
             m_LSL_Functions.llSetSoundRadius(radius);
         }
 
-        public void llSetStatus(int status, int value)
+        [LSLFunction(LSLType.Void)]
+        public void llSetStatus([LSLParam(LSLType.Integer)] int status, [LSLParam(LSLType.Integer)] int value)
         {
             m_LSL_Functions.llSetStatus(status, value);
         }
 
-        public void llSetText(string text, LSL_Vector color, double alpha)
+        [LSLFunction(LSLType.Void)]
+        public void llSetText([LSLParam(LSLType.String)] string text, [LSLParam(LSLType.Vector)] LSL_Vector color,
+            [LSLParam(LSLType.Float)] double alpha)
         {
             m_LSL_Functions.llSetText(text, color, alpha);
         }
 
-        public void llSetTexture(string texture, int face)
+        [LSLFunction(LSLType.Void)]
+        public void llSetTexture([LSLParam(LSLType.String)] string texture, [LSLParam(LSLType.Integer)] int face)
         {
             m_LSL_Functions.llSetTexture(texture, face);
         }
 
-        public void llSetTextureAnim(int mode, int face, int sizex, int sizey, double start, double length, double rate)
+        [LSLFunction(LSLType.Void)]
+        public void llSetTextureAnim([LSLParam(LSLType.Integer)] int mode, [LSLParam(LSLType.Integer)] int face,
+            [LSLParam(LSLType.Integer)] int sizex, [LSLParam(LSLType.Integer)] int sizey,
+            [LSLParam(LSLType.Float)] double start, [LSLParam(LSLType.Float)] double length,
+            [LSLParam(LSLType.Float)] double rate)
         {
             m_LSL_Functions.llSetTextureAnim(mode, face, sizex, sizey, start, length, rate);
         }
 
-        public void llSetTimerEvent(double sec)
+        [LSLFunction(LSLType.Void)]
+        public void llSetTimerEvent([LSLParam(LSLType.Float)] double sec)
         {
             m_LSL_Functions.llSetTimerEvent(sec);
         }
 
-        public void llSetTorque(LSL_Vector torque, int local)
+        [LSLFunction(LSLType.Void)]
+        public void llSetTorque([LSLParam(LSLType.Vector)] LSL_Vector torque, [LSLParam(LSLType.Integer)] int local)
         {
             m_LSL_Functions.llSetTorque(torque, local);
         }
 
-        public void llSetTouchText(string text)
+        [LSLFunction(LSLType.Void)]
+        public void llSetTouchText([LSLParam(LSLType.String)] string text)
         {
             m_LSL_Functions.llSetTouchText(text);
         }
 
-        public void llSetVehicleFlags(int flags)
+        [LSLFunction(LSLType.Void)]
+        public void llSetVehicleFlags([LSLParam(LSLType.Integer)] int flags)
         {
             m_LSL_Functions.llSetVehicleFlags(flags);
         }
 
-        public void llSetVehicleFloatParam(int param, LSL_Float value)
+        [LSLFunction(LSLType.Void)]
+        public void llSetVehicleFloatParam([LSLParam(LSLType.Integer)] int param,
+            [LSLParam(LSLType.Float)] LSL_Float value)
         {
             m_LSL_Functions.llSetVehicleFloatParam(param, value);
         }
 
-        public void llSetVehicleRotationParam(int param, LSL_Rotation rot)
+        [LSLFunction(LSLType.Void)]
+        public void llSetVehicleRotationParam([LSLParam(LSLType.Integer)] int param,
+            [LSLParam(LSLType.Rotation)] LSL_Rotation rot)
         {
             m_LSL_Functions.llSetVehicleRotationParam(param, rot);
         }
 
-        public void llSetVehicleType(int type)
+        [LSLFunction(LSLType.Void)]
+        public void llSetVehicleType([LSLParam(LSLType.Integer)] int type)
         {
             m_LSL_Functions.llSetVehicleType(type);
         }
 
-        public void llSetVehicleVectorParam(int param, LSL_Vector vec)
+        [LSLFunction(LSLType.Void)]
+        public void llSetVehicleVectorParam([LSLParam(LSLType.Integer)] int param,
+            [LSLParam(LSLType.Vector)] LSL_Vector vec)
         {
             m_LSL_Functions.llSetVehicleVectorParam(param, vec);
         }
 
-        public void llShout(int channelID, string text)
+        [LSLFunction(LSLType.Void)]
+        public void llShout([LSLParam(LSLType.Integer)] int channelID, [LSLParam(LSLType.String)] string text)
         {
             m_LSL_Functions.llShout(channelID, text);
         }
 
-        public LSL_Float llSin(double f)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llSin([LSLParam(LSLType.Float)] double f)
         {
             return m_LSL_Functions.llSin(f);
         }
 
-        public void llSitTarget(LSL_Vector offset, LSL_Rotation rot)
+        [LSLFunction(LSLType.Void)]
+        public void llSitTarget([LSLParam(LSLType.Vector)] LSL_Vector offset,
+            [LSLParam(LSLType.Rotation)] LSL_Rotation rot)
         {
             m_LSL_Functions.llSitTarget(offset, rot);
         }
 
-        public void llLinkSitTarget(LSL_Integer link, LSL_Vector offset, LSL_Rotation rot)
+        [LSLFunction(LSLType.Void)]
+        public void llLinkSitTarget([LSLParam(LSLType.Integer)] LSL_Integer link,
+            [LSLParam(LSLType.Vector)] LSL_Vector offset, [LSLParam(LSLType.Rotation)] LSL_Rotation rot)
         {
             m_LSL_Functions.llLinkSitTarget(link, offset, rot);
         }
 
-        public void llSleep(double sec)
+        [LSLFunction(LSLType.Void)]
+        public void llSleep([LSLParam(LSLType.Float)] double sec)
         {
             m_LSL_Functions.llSleep(sec);
         }
 
-        public void llSound(string sound, double volume, int queue, int loop)
+        [LSLFunction(LSLType.Void)]
+        public void llSound([LSLParam(LSLType.String)] string sound, [LSLParam(LSLType.Float)] double volume,
+            [LSLParam(LSLType.Integer)] int queue, [LSLParam(LSLType.Integer)] int loop)
         {
             m_LSL_Functions.llSound(sound, volume, queue, loop);
         }
 
-        public void llSoundPreload(string sound)
+        [LSLFunction(LSLType.Void)]
+        public void llSoundPreload([LSLParam(LSLType.String)] string sound)
         {
             m_LSL_Functions.llSoundPreload(sound);
         }
 
-        public LSL_Float llSqrt(double f)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llSqrt([LSLParam(LSLType.Float)] double f)
         {
             return m_LSL_Functions.llSqrt(f);
         }
 
-        public void llStartAnimation(string anim)
+        [LSLFunction(LSLType.Void)]
+        public void llStartAnimation([LSLParam(LSLType.String)] string anim)
         {
             m_LSL_Functions.llStartAnimation(anim);
         }
 
-        public void llStopAnimation(string anim)
+        [LSLFunction(LSLType.Void)]
+        public void llStopAnimation([LSLParam(LSLType.String)] string anim)
         {
             m_LSL_Functions.llStopAnimation(anim);
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llStopHover()
         {
             m_LSL_Functions.llStopHover();
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llStopLookAt()
         {
             m_LSL_Functions.llStopLookAt();
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llStopMoveToTarget()
         {
             m_LSL_Functions.llStopMoveToTarget();
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llStopPointAt()
         {
             m_LSL_Functions.llStopPointAt();
         }
 
+        [LSLFunction(LSLType.Void)]
         public void llStopSound()
         {
             m_LSL_Functions.llStopSound();
         }
 
-        public LSL_Integer llStringLength(string str)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llStringLength([LSLParam(LSLType.String)] string str)
         {
             return m_LSL_Functions.llStringLength(str);
         }
 
-        public LSL_String llStringToBase64(string str)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llStringToBase64([LSLParam(LSLType.String)] string str)
         {
             return m_LSL_Functions.llStringToBase64(str);
         }
 
-        public LSL_String llStringTrim(string src, int type)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llStringTrim([LSLParam(LSLType.String)] string src, [LSLParam(LSLType.Integer)] int type)
         {
             return m_LSL_Functions.llStringTrim(src, type);
         }
 
-        public LSL_Integer llSubStringIndex(string source, string pattern)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llSubStringIndex([LSLParam(LSLType.String)] string source,
+            [LSLParam(LSLType.String)] string pattern)
         {
             return m_LSL_Functions.llSubStringIndex(source, pattern);
         }
 
-        public void llTakeCamera(string avatar)
+        [LSLFunction(LSLType.Void)]
+        public void llTakeCamera([LSLParam(LSLType.String)] string avatar)
         {
             m_LSL_Functions.llTakeCamera(avatar);
         }
 
-        public void llTakeControls(int controls, int accept, int pass_on)
+        [LSLFunction(LSLType.Void)]
+        public void llTakeControls([LSLParam(LSLType.Integer)] int controls, [LSLParam(LSLType.Integer)] int accept,
+            [LSLParam(LSLType.Integer)] int pass_on)
         {
             m_LSL_Functions.llTakeControls(controls, accept, pass_on);
         }
 
-        public LSL_Float llTan(double f)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llTan([LSLParam(LSLType.Float)] double f)
         {
             return m_LSL_Functions.llTan(f);
         }
 
-        public LSL_Integer llTarget(LSL_Vector position, double range)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llTarget([LSLParam(LSLType.Vector)] LSL_Vector position,
+            [LSLParam(LSLType.Float)] double range)
         {
             return m_LSL_Functions.llTarget(position, range);
         }
 
-        public void llTargetOmega(LSL_Vector axis, double spinrate, double gain)
+        [LSLFunction(LSLType.Void)]
+        public void llTargetOmega([LSLParam(LSLType.Vector)] LSL_Vector axis, [LSLParam(LSLType.Float)] double spinrate,
+            [LSLParam(LSLType.Float)] double gain)
         {
             m_LSL_Functions.llTargetOmega(axis, spinrate, gain);
         }
 
-        public void llTargetRemove(int number)
+        [LSLFunction(LSLType.Void)]
+        public void llTargetRemove([LSLParam(LSLType.Integer)] int number)
         {
             m_LSL_Functions.llTargetRemove(number);
         }
 
-        public void llTeleportAgent(string agent, string simname, LSL_Vector pos, LSL_Vector lookAt)
+        [LSLFunction(LSLType.Void)]
+        public void llTeleportAgent([LSLParam(LSLType.String)] string agent, [LSLParam(LSLType.String)] string simname,
+            [LSLParam(LSLType.Vector)] LSL_Vector pos, [LSLParam(LSLType.Vector)] LSL_Vector lookAt)
         {
             m_LSL_Functions.llTeleportAgent(agent, simname, pos, lookAt);
         }
 
-        public void llTeleportAgentGlobalCoords(string agent, LSL_Vector global, LSL_Vector pos, LSL_Vector lookAt)
+        [LSLFunction(LSLType.Void)]
+        public void llTeleportAgentGlobalCoords([LSLParam(LSLType.String)] string agent,
+            [LSLParam(LSLType.Vector)] LSL_Vector global, [LSLParam(LSLType.Vector)] LSL_Vector pos,
+            [LSLParam(LSLType.Vector)] LSL_Vector lookAt)
         {
             m_LSL_Functions.llTeleportAgentGlobalCoords(agent, global, pos, lookAt);
         }
 
-        public void llTeleportAgentHome(string agent)
+        [LSLFunction(LSLType.Void)]
+        public void llTeleportAgentHome([LSLParam(LSLType.String)] string agent)
         {
             m_LSL_Functions.llTeleportAgentHome(agent);
         }
 
-        public void llTextBox(string avatar, string message, int chat_channel)
+        [LSLFunction(LSLType.Void)]
+        public void llTextBox([LSLParam(LSLType.String)] string avatar, [LSLParam(LSLType.String)] string message,
+            [LSLParam(LSLType.Integer)] int chat_channel)
         {
             m_LSL_Functions.llTextBox(avatar, message, chat_channel);
         }
 
-        public LSL_String llToLower(string source)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llToLower([LSLParam(LSLType.String)] string source)
         {
             return m_LSL_Functions.llToLower(source);
         }
 
-        public LSL_String llToUpper(string source)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llToUpper([LSLParam(LSLType.String)] string source)
         {
             return m_LSL_Functions.llToUpper(source);
         }
 
-        public void llTriggerSound(string sound, double volume)
+        [LSLFunction(LSLType.Void)]
+        public void llTriggerSound([LSLParam(LSLType.String)] string sound, [LSLParam(LSLType.Float)] double volume)
         {
             m_LSL_Functions.llTriggerSound(sound, volume);
         }
 
-        public void llTriggerSoundLimited(string sound, double volume, LSL_Vector top_north_east, LSL_Vector bottom_south_west)
+        [LSLFunction(LSLType.Void)]
+        public void llTriggerSoundLimited([LSLParam(LSLType.String)] string sound,
+            [LSLParam(LSLType.Float)] double volume, [LSLParam(LSLType.Vector)] LSL_Vector top_north_east,
+            LSL_Vector bottom_south_west)
         {
             m_LSL_Functions.llTriggerSoundLimited(sound, volume, top_north_east, bottom_south_west);
         }
 
-        public LSL_String llUnescapeURL(string url)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llUnescapeURL([LSLParam(LSLType.String)] string url)
         {
             return m_LSL_Functions.llUnescapeURL(url);
         }
 
-        public void llUnSit(string id)
+        [LSLFunction(LSLType.Void)]
+        public void llUnSit([LSLParam(LSLType.String)] string id)
         {
             m_LSL_Functions.llUnSit(id);
         }
 
-        public LSL_Float llVecDist(LSL_Vector a, LSL_Vector b)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llVecDist([LSLParam(LSLType.Vector)] LSL_Vector a, [LSLParam(LSLType.Vector)] LSL_Vector b)
         {
             return m_LSL_Functions.llVecDist(a, b);
         }
 
-        public LSL_Float llVecMag(LSL_Vector v)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llVecMag([LSLParam(LSLType.Vector)] LSL_Vector v)
         {
             return m_LSL_Functions.llVecMag(v);
         }
 
-        public LSL_Vector llVecNorm(LSL_Vector v)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llVecNorm([LSLParam(LSLType.Vector)] LSL_Vector v)
         {
             return m_LSL_Functions.llVecNorm(v);
         }
 
-        public void llVolumeDetect(int detect)
+        [LSLFunction(LSLType.Void)]
+        public void llVolumeDetect([LSLParam(LSLType.Integer)] int detect)
         {
             m_LSL_Functions.llVolumeDetect(detect);
         }
 
-        public LSL_Float llWater(LSL_Vector offset)
+        [LSLFunction(LSLType.Float)]
+        public LSL_Float llWater([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             return m_LSL_Functions.llWater(offset);
         }
 
-        public void llWhisper(int channelID, string text)
+        [LSLFunction(LSLType.Void)]
+        public void llWhisper([LSLParam(LSLType.Integer)] int channelID, [LSLParam(LSLType.String)] string text)
         {
             m_LSL_Functions.llWhisper(channelID, text);
         }
 
-        public LSL_Vector llWind(LSL_Vector offset)
+        [LSLFunction(LSLType.Vector)]
+        public LSL_Vector llWind([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             return m_LSL_Functions.llWind(offset);
         }
 
-        public LSL_String llXorBase64Strings(string str1, string str2)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llXorBase64Strings([LSLParam(LSLType.String)] string str1,
+            [LSLParam(LSLType.String)] string str2)
         {
             return m_LSL_Functions.llXorBase64Strings(str1, str2);
         }
 
-        public LSL_String llXorBase64StringsCorrect(string str1, string str2)
+        [LSLFunction(LSLType.String)]
+        public LSL_String llXorBase64StringsCorrect([LSLParam(LSLType.String)] string str1,
+            [LSLParam(LSLType.String)] string str2)
         {
             return m_LSL_Functions.llXorBase64StringsCorrect(str1, str2);
         }
-        
-        public LSL_List llGetPrimMediaParams(int face, LSL_List rules)
+
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetPrimMediaParams([LSLParam(LSLType.Integer)] int face,
+            [LSLParam(LSLType.List)] LSL_List rules)
         {
             return m_LSL_Functions.llGetPrimMediaParams(face, rules);
         }
 
-        public LSL_List llGetLinkMedia(LSL_Integer link, LSL_Integer face, LSL_List rules)
+        [LSLFunction(LSLType.List)]
+        public LSL_List llGetLinkMedia([LSLParam(LSLType.Integer)] LSL_Integer link,
+            [LSLParam(LSLType.Integer)] LSL_Integer face, [LSLParam(LSLType.List)] LSL_List rules)
         {
             return m_LSL_Functions.llGetLinkMedia(link, face, rules);
         }
 
-        public LSL_Integer llSetPrimMediaParams(int face, LSL_List rules)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llSetPrimMediaParams([LSLParam(LSLType.Integer)] int face,
+            [LSLParam(LSLType.List)] LSL_List rules)
         {
             return m_LSL_Functions.llSetPrimMediaParams(face, rules);
         }
 
-        public LSL_Integer llSetLinkMedia(LSL_Integer link, LSL_Integer face, LSL_List rules)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llSetLinkMedia([LSLParam(LSLType.Integer)] LSL_Integer link,
+            [LSLParam(LSLType.Integer)] LSL_Integer face, [LSLParam(LSLType.List)] LSL_List rules)
         {
             return m_LSL_Functions.llSetLinkMedia(link, face, rules);
         }
 
-        public LSL_Integer llClearPrimMedia(LSL_Integer face)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llClearPrimMedia([LSLParam(LSLType.Integer)] LSL_Integer face)
         {
             return m_LSL_Functions.llClearPrimMedia(face);
         }
 
-        public LSL_Integer llClearLinkMedia(LSL_Integer link, LSL_Integer face)
+        [LSLFunction(LSLType.Integer)]
+        public LSL_Integer llClearLinkMedia([LSLParam(LSLType.Integer)] LSL_Integer link,
+            [LSLParam(LSLType.Integer)] LSL_Integer face)
         {
             return m_LSL_Functions.llClearLinkMedia(link, face);
         }
 
-        public void print(string str)
+        [LSLFunction(LSLType.Void)]
+        public void print([LSLParam(LSLType.String)] string str)
         {
             m_LSL_Functions.print(str);
         }

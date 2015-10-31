@@ -42,6 +42,8 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Region.Framework.Scenes.Scripting;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.LibraryData.Reflection;
 using PermissionMask = OpenSim.Framework.PermissionMask;
 
 namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
@@ -219,30 +221,39 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
 #region ScriptConstantsInterface
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_NODETYPE_UNDEF = (int)JsonStoreNodeType.Undefined;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_NODETYPE_OBJECT = (int)JsonStoreNodeType.Object;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_NODETYPE_ARRAY = (int)JsonStoreNodeType.Array;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_NODETYPE_VALUE = (int)JsonStoreNodeType.Value;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_VALUETYPE_UNDEF = (int)JsonStoreValueType.Undefined;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_VALUETYPE_BOOLEAN = (int)JsonStoreValueType.Boolean;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_VALUETYPE_INTEGER = (int)JsonStoreValueType.Integer;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_VALUETYPE_FLOAT = (int)JsonStoreValueType.Float;
 
         [ScriptConstant]
+        [LSLConstant(LSLType.Integer)]
         public static readonly int JSON_VALUETYPE_STRING = (int)JsonStoreValueType.String;
 
 
@@ -255,6 +266,7 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
+        [LSLFunction(LSLType.Key)]
         public UUID JsonAttachObjectStore(UUID hostID, UUID scriptID)
         {
             UUID uuid = UUID.Zero;
@@ -270,7 +282,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public UUID JsonCreateStore(UUID hostID, UUID scriptID, string value)
+        [LSLFunction(LSLType.Key)]
+        public UUID JsonCreateStore(UUID hostID, UUID scriptID, [LSLParam(LSLType.String)] string value)
         {
             UUID uuid = UUID.Zero;
             if (! m_store.CreateStore(value, ref uuid))
@@ -292,7 +305,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public int JsonDestroyStore(UUID hostID, UUID scriptID, UUID storeID)
+        [LSLFunction(LSLType.Integer)]
+        public int JsonDestroyStore(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID)
         {
             lock(m_scriptStores)
             {
@@ -309,7 +323,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public int JsonTestStore(UUID hostID, UUID scriptID, UUID storeID)
+        [LSLFunction(LSLType.Integer)]
+        public int JsonTestStore(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID)
         {
             return m_store.TestStore(storeID) ? 1 : 0;
         }
@@ -320,7 +335,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public UUID JsonRezAtRoot(UUID hostID, UUID scriptID, string item, Vector3 pos, Vector3 vel, Quaternion rot, string param)
+        [LSLFunction(LSLType.Key)]
+        public UUID JsonRezAtRoot(UUID hostID, UUID scriptID, [LSLParam(LSLType.String)] string item, [LSLParam(LSLType.Vector)] Vector3 pos, [LSLParam(LSLType.Vector)] Vector3 vel, [LSLParam(LSLType.Rotation)] Quaternion rot, [LSLParam(LSLType.String)] string param)
         {
             UUID reqID = UUID.Random();
             Util.FireAndForget(
@@ -334,7 +350,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public UUID JsonReadNotecard(UUID hostID, UUID scriptID, UUID storeID, string path, string notecardIdentifier)
+        [LSLFunction(LSLType.Key)]
+        public UUID JsonReadNotecard(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path, [LSLParam(LSLType.String)] string notecardIdentifier)
         {
             UUID reqID = UUID.Random();
             Util.FireAndForget(
@@ -348,7 +365,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public UUID JsonWriteNotecard(UUID hostID, UUID scriptID, UUID storeID, string path, string name)
+        [LSLFunction(LSLType.Key)]
+        public UUID JsonWriteNotecard(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path, [LSLParam(LSLType.String)] string name)
         {
             UUID reqID = UUID.Random();
             Util.FireAndForget(
@@ -362,7 +380,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public string JsonList2Path(UUID hostID, UUID scriptID, object[] pathlist)
+        [LSLFunction(LSLType.String)]
+        public string JsonList2Path(UUID hostID, UUID scriptID, [LSLParam(LSLType.List)] object[] pathlist)
         {
             string ipath = ConvertList2Path(pathlist);
             string opath;
@@ -382,7 +401,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public int JsonGetNodeType(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.Integer)]
+        public int JsonGetNodeType(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             return (int)m_store.GetNodeType(storeID,path);
         }
@@ -393,7 +413,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public int JsonGetValueType(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.Integer)]
+        public int JsonGetValueType(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             return (int)m_store.GetValueType(storeID,path);
         }
@@ -404,13 +425,15 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public int JsonSetValue(UUID hostID, UUID scriptID, UUID storeID, string path, string value)
+        [LSLFunction(LSLType.Integer)]
+        public int JsonSetValue(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path, [LSLParam(LSLType.String)] string value)
         {
             return m_store.SetValue(storeID,path,value,false) ? 1 : 0;
         }
 
         [ScriptInvocation]
-        public int JsonSetJson(UUID hostID, UUID scriptID, UUID storeID, string path, string value)
+        [LSLFunction(LSLType.Integer)]
+        public int JsonSetJson(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path, [LSLParam(LSLType.String)] string value)
         {
             return m_store.SetValue(storeID,path,value,true) ? 1 : 0;
         }
@@ -421,7 +444,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public int JsonRemoveValue(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.Integer)]
+        public int JsonRemoveValue(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             return m_store.RemoveValue(storeID,path) ? 1 : 0;
         }
@@ -432,7 +456,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public int JsonGetArrayLength(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.Integer)]
+        public int JsonGetArrayLength(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             return m_store.GetArrayLength(storeID,path);
         }
@@ -443,7 +468,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public string JsonGetValue(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.String)]
+        public string JsonGetValue(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             string value = String.Empty;
             m_store.GetValue(storeID,path,false,out value);
@@ -451,7 +477,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         }
 
         [ScriptInvocation]
-        public string JsonGetJson(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.String)]
+        public string JsonGetJson(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             string value = String.Empty;
             m_store.GetValue(storeID,path,true, out value);
@@ -464,7 +491,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public UUID JsonTakeValue(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.Key)]
+        public UUID JsonTakeValue(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             UUID reqID = UUID.Random();
             Util.FireAndForget(
@@ -473,7 +501,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         }
 
         [ScriptInvocation]
-        public UUID JsonTakeValueJson(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.Key)]
+        public UUID JsonTakeValueJson(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             UUID reqID = UUID.Random();
             Util.FireAndForget(
@@ -487,7 +516,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         /// </summary>
         // -----------------------------------------------------------------
         [ScriptInvocation]
-        public UUID JsonReadValue(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.Key)]
+        public UUID JsonReadValue(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             UUID reqID = UUID.Random();
             Util.FireAndForget(
@@ -496,7 +526,8 @@ namespace OpenSim.Region.OptionalModules.Scripting.JsonStore
         }
 
         [ScriptInvocation]
-        public UUID JsonReadValueJson(UUID hostID, UUID scriptID, UUID storeID, string path)
+        [LSLFunction(LSLType.Key)]
+        public UUID JsonReadValueJson(UUID hostID, UUID scriptID, [LSLParam(LSLType.Key)] UUID storeID, [LSLParam(LSLType.String)] string path)
         {
             UUID reqID = UUID.Random();
             Util.FireAndForget(
