@@ -1414,6 +1414,7 @@
       <Reference name="Ionic.Zip" path="../../../bin/"/>
 
       <Reference name="GlynnTucker.Cache" path="../../../bin/"/>
+	  <Reference name="LibLSLCC" path="../../../bin/"/>
 
       <!-- For scripting in funny languages by default -->
       <Reference name="XMLRPC" path="../../../bin/"/>
@@ -1475,6 +1476,7 @@
       <Reference name="OpenSim.Services.Base"/>
       <Reference name="OpenSim.Services.Interfaces"/>
       <Reference name="Mono.Addins" path="../../../bin/"/>
+	  <Reference name="LibLSLCC" path="../../../bin/"/>
 
       <!-- For scripting in funny languages by default -->
       <Reference name="XMLRPC" path="../../../bin/"/>
@@ -2911,6 +2913,7 @@
       <Reference name="OpenSim.Services.AvatarService"/>
       <Reference name="OpenSim.Services.Interfaces"/>
 
+
       <!-- Unit tests -->
       <Reference name="OpenSim.Tests.Common"/>
       <Reference name="Nini" path="../../../bin/"/>
@@ -3307,6 +3310,7 @@
       <Reference name="OpenMetaverseTypes" path="../../../bin/"/>
       <Reference name="OpenMetaverse.StructuredData" path="../../../bin/"/>
       <Reference name="XMLRPC" path="../../../bin/"/>
+
       <Reference name="OpenSim.Framework"/>
       <Reference name="OpenSim.Framework.Console"/>
       <Reference name="OpenSim.Framework.Servers.HttpServer"/>
