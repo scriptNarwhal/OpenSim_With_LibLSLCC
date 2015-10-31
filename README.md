@@ -143,7 +143,7 @@ attributes.
 LibLSLCC has the ability to use 'type converters' in its serializer to convert the types
 of a .NET signature (either a property/field or method) into a corrisponding LSLType that
 is consumeable by the library,  however I chose to attribute each constant, method and parameter
-of every module with LibLSLCC attributes.
+of every module explicitly with LibLSLCC attributes.
 
 I think it is better for the serializer not to be guessing for modules that are provided with 
 OpenSim.   
