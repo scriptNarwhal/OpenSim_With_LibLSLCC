@@ -68,7 +68,7 @@ just run OpenSim.exe and set up your region and region owner by answering the qu
 asks you in the command prompt.
 
 
-# Dependencies
+# Dependencies I Have Added
 
 
 The LibLSLCC Library depends on the CSharp ANTLR 4.5.1 Runtime, and thus it has been
