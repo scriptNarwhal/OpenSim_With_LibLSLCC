@@ -88,7 +88,7 @@ http://www.antlr.org/index.html
 
 
 
-# OpenSim Changes <br/> (New Build Project: LibLSLCCCompiler)
+# OpenSim Changes:<br/> (New Project: LibLSLCCCompiler)
 
 
 The location for the new compiler project that does all
@@ -110,7 +110,7 @@ You can configure OpenSim.ini to use either one of these implementations
 under the **[XEngine]** configuration section.
 
 
-# OpenSim Changes <br/> (IScriptModuleComms)
+# OpenSim Changes:<br/> (IScriptModuleComms)
 
 
 I have modified the **IScriptModuleComms** interface to return more information about the origin of registered script constants.
@@ -210,7 +210,7 @@ It was for a single call to: **LookupModConstant(string cname);**
 
 
 
-# OpenSim Changes <br/> (Module/ScriptBaseClass Attributes)
+# OpenSim Changes:<br/> (Module/ScriptBaseClass Attributes)
 
 
 
