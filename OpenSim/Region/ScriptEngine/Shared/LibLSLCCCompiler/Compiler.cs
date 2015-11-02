@@ -35,20 +35,17 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using log4net;
-using LibLSLCC.CodeValidator.Components;
 using LibLSLCC.CodeValidator.Enums;
-using LibLSLCC.CodeValidator.Primitives;
 using LibLSLCC.LibraryData;
 using LibLSLCC.LibraryData.Reflection;
 using Microsoft.CSharp;
 using Microsoft.VisualBasic;
+using Nini.Config;
 using OpenMetaverse;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.ScriptEngine.Interfaces;
 using OpenSim.Region.ScriptEngine.Shared.CodeTools;
 using OpenSim.Region.ScriptEngine.Shared.ScriptBase;
-using Tools;
-using liblslcc = LibLSLCC;
 using Path = System.IO.Path;
 
 namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
@@ -105,6 +102,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         private readonly IScriptEngine m_scriptEngine;
 
         private bool in_startup = true;
+
+        private bool EnableCompilerWarnings;
 
 
         public Compiler(IScriptEngine scriptEngine)
@@ -186,11 +185,6 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
-
-
-            
-
-
             //we need to tell the serializer to discard the first two parameters in registered
             //module functions, since modInvoke fills them out.
             reflectionSerializer.ParameterFilter = parameterInfo => parameterInfo.Position < 2; 
@@ -269,6 +263,19 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         public void ReadConfig()
         {
             // Get some config
+            var configSource = m_scriptEngine.Config.ConfigSource;
+
+            IConfig libLslccConfig;
+            if ((libLslccConfig = configSource.Configs["LibLSLCC"]) != null)
+            {
+                EnableCompilerWarnings = libLslccConfig.GetBoolean("EnableCompilerWarnings", true);
+            }
+            else
+            {
+                EnableCompilerWarnings = true;
+            }
+
+
 
             WriteScriptSourceToDebugFile = m_scriptEngine.Config.GetBoolean("WriteScriptSourceToDebugFile", false);
             CompileWithDebugInformation = m_scriptEngine.Config.GetBoolean("CompileWithDebugInformation", true);
@@ -532,8 +539,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             if (language == CompileLanguage.lsl)
             {
                 // Its LSL, convert it to C#
-                LSL_Converter = new LibLSLCCCodeGenerator(_libLslccMainLibraryDataProvider, comms,
-                    m_insertCoopTerminationCalls);
+                var converter = new LibLSLCCCodeGenerator(_libLslccMainLibraryDataProvider);
+
+                converter.EmitCompilerWarnings = EnableCompilerWarnings;
+                converter.InsertCoopTerminationCalls = m_insertCoopTerminationCalls;
+
+
+                LSL_Converter = converter;
                 compileScript = LSL_Converter.Convert(source);
 
                 // copy converter warnings into our warnings.

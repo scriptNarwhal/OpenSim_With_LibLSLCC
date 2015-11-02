@@ -7,7 +7,6 @@ using LibLSLCC.LibraryData;
 using LibLSLCC.CodeValidator.Components;
 using LibLSLCC.CodeValidator.Components.Interfaces;
 using LibLSLCC.CodeValidator.Nodes.Interfaces;
-using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.ScriptEngine.Shared.CodeTools;
 
 namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
@@ -16,17 +15,11 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
     public class LibLSLCCCodeGenerator : ICodeConverter
     {
         private readonly ILSLLibraryDataProvider _libraryData;
-        private readonly bool _insertCoopTerminationCalls;
 
-        public LibLSLCCCodeGenerator()
-        {
 
-        }
-
-        public LibLSLCCCodeGenerator(ILSLLibraryDataProvider libraryData, IScriptModuleComms comms, bool insertCoopTerminationCalls)
+        public LibLSLCCCodeGenerator(ILSLLibraryDataProvider libraryData)
         {
             _libraryData = libraryData;
-            _insertCoopTerminationCalls = insertCoopTerminationCalls;
         }
 
 
@@ -35,10 +28,21 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             get { return new Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>>(); }
         }
 
+        public bool InsertCoopTerminationCalls { get; set; }
+
+        public bool EmitCompilerWarnings { get; set; }
+
 
         private class ErrorListener : LSLDefaultSyntaxErrorListener
         {
-            protected override void OnError(global::LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
+            private LibLSLCCCodeGenerator _libLslccCodeGenerator;
+
+            public ErrorListener(LibLSLCCCodeGenerator libLslccCodeGenerator)
+            {
+                _libLslccCodeGenerator = libLslccCodeGenerator;
+            }
+
+            protected override void OnError(LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
             {
                 int line = MapLineNumber(location.LineStart);
 
@@ -56,9 +60,18 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         private class WarningListener : LSLDefaultSyntaxWarningListener
         {
             public readonly List<string> Warnings = new List<string>();
+            private readonly LibLSLCCCodeGenerator _libLSLCCCodeGenerator;
 
-            protected override void OnWarning(global::LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
+            public WarningListener(LibLSLCCCodeGenerator libLslccCodeGenerator)
             {
+                _libLSLCCCodeGenerator = libLslccCodeGenerator;
+            }
+
+            protected override void OnWarning(LibLSLCC.CodeValidator.Primitives.LSLSourceCodeRange location, string message)
+            {
+                if (!_libLSLCCCodeGenerator.EmitCompilerWarnings) return;
+
+
                 int line = MapLineNumber(location.LineStart);
 
                 Warnings.Add(string.Format("({0},{1}): WARNING, {2}", line, location.ColumnStart, message));
@@ -80,8 +93,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var validatorServices = new LSLCustomValidatorServiceProvider();
 
 
-            var errorListener = new ErrorListener();
-            var warningListener = new WarningListener();
+            var errorListener = new ErrorListener(this);
+            var warningListener = new WarningListener(this);
 
             validatorServices.ExpressionValidator = ExpressionValidator;
             validatorServices.LibraryDataProvider = _libraryData;
@@ -109,7 +122,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var outStream = new MemoryStream();
 
             var compilerSettings = LSLOpenSimCSCompilerSettings.OpenSimClientUploadable(_libraryData);
-            compilerSettings.InsertCoOpTerminationCalls = _insertCoopTerminationCalls;
+            compilerSettings.InsertCoOpTerminationCalls = InsertCoopTerminationCalls;
 
             var compiler = new LSLOpenSimCSCompiler(compilerSettings);
 

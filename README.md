@@ -27,6 +27,21 @@ set to the "LibLSLCCCompiler.dll" so that LibLSLCC is used as the default compil
 # Configuration I Have Added
 
 
+There is a new section in OpenSim.ini for LibLSLCC related settings called [LibLSLCC].
+currently the only option is for turning extended compiler warnings on and off:
+
+	[LibLSLCC]
+	
+		; Disable or enable LibLSLCC extended compiler warnings.
+		; This is set to true by default, but you can set it to false if you think
+		; LibLSLCC's extended warnings are too pedantic.
+		;
+		; In the future I will probably implement warning codes that can be disabled
+		; selectively from this configuration file.
+		EnableCompilerWarnings = true
+
+
+
 Under [XEngine] in OpenSim.ini you will find these new settings:
 
 
