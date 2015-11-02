@@ -208,7 +208,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llCloseRemoteDataChannel(channel);
         }
 
-        [LSLFunction(LSLType.Float)]
+        [LSLFunction(LSLType.Float, Deprecated = true)]
         public LSL_Float llCloud([LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             return m_LSL_Functions.llCloud(offset);
@@ -1369,7 +1369,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             return m_LSL_Functions.llManageEstateAccess(action, avatar);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llMakeExplosion([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
             [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
             [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
@@ -1378,7 +1378,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llMakeExplosion(particles, scale, vel, lifetime, arc, texture, offset);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llMakeFire([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
             [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
             [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
@@ -1387,7 +1387,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llMakeFire(particles, scale, vel, lifetime, arc, texture, offset);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llMakeFountain([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
             [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
             [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.Integer)] int bounce,
@@ -1396,7 +1396,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llMakeFountain(particles, scale, vel, lifetime, arc, bounce, texture, offset, bounce_offset);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llMakeSmoke([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
             [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
             [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
@@ -1537,7 +1537,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llPlaySoundSlave(sound, volume);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llPointAt([LSLParam(LSLType.Vector)] LSL_Vector pos)
         {
             m_LSL_Functions.llPointAt(pos);
@@ -1562,7 +1562,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llPushObject(target, impulse, ang_impulse, local);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llRefreshPrimURL()
         {
             m_LSL_Functions.llRefreshPrimURL();
@@ -1581,7 +1581,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llRegionSayTo(key, channelID, text);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llReleaseCamera([LSLParam(LSLType.String)] string avatar)
         {
             m_LSL_Functions.llReleaseCamera(avatar);
@@ -1607,13 +1607,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llRemoteDataReply(channel, message_id, sdata, idata);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llRemoteDataSetRegion()
         {
             m_LSL_Functions.llRemoteDataSetRegion();
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llRemoteLoadScript([LSLParam(LSLType.String)] string target, [LSLParam(LSLType.String)] string name,
             [LSLParam(LSLType.Integer)] int running, [LSLParam(LSLType.Integer)] int start_param)
         {
@@ -2071,7 +2071,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llSetLinkPrimitiveParamsFast(linknum, rules);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llSetPrimURL([LSLParam(LSLType.String)] string url)
         {
             m_LSL_Functions.llSetPrimURL(url);
@@ -2236,14 +2236,14 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llSleep(sec);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llSound([LSLParam(LSLType.String)] string sound, [LSLParam(LSLType.Float)] double volume,
             [LSLParam(LSLType.Integer)] int queue, [LSLParam(LSLType.Integer)] int loop)
         {
             m_LSL_Functions.llSound(sound, volume, queue, loop);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llSoundPreload([LSLParam(LSLType.String)] string sound)
         {
             m_LSL_Functions.llSoundPreload(sound);
@@ -2285,7 +2285,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             m_LSL_Functions.llStopMoveToTarget();
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llStopPointAt()
         {
             m_LSL_Functions.llStopPointAt();
@@ -2322,7 +2322,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             return m_LSL_Functions.llSubStringIndex(source, pattern);
         }
 
-        [LSLFunction(LSLType.Void)]
+        [LSLFunction(LSLType.Void, Deprecated = true)]
         public void llTakeCamera([LSLParam(LSLType.String)] string avatar)
         {
             m_LSL_Functions.llTakeCamera(avatar);
@@ -2469,14 +2469,14 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
             return m_LSL_Functions.llWind(offset);
         }
 
-        [LSLFunction(LSLType.String)]
+        [LSLFunction(LSLType.String, Deprecated = true)]
         public LSL_String llXorBase64Strings([LSLParam(LSLType.String)] string str1,
             [LSLParam(LSLType.String)] string str2)
         {
             return m_LSL_Functions.llXorBase64Strings(str1, str2);
         }
 
-        [LSLFunction(LSLType.String)]
+        [LSLFunction(LSLType.String, Deprecated = true)]
         public LSL_String llXorBase64StringsCorrect([LSLParam(LSLType.String)] string str1,
             [LSLParam(LSLType.String)] string str2)
         {
