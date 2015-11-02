@@ -84,8 +84,12 @@ This is so you can reflect attributes off the 'MemberInfo' if needed.
 LibLSLCC uses this with its attribute framework to generate library data for registered module constants
 that it can use for syntax checking.  
 
-It was already able to do so for methods/script invocations without any changes to the 'IScriptModuleComms' interface;
-But not for registered constants, so a change was needed.
+LibLSLCC was already able generate library data for methods/script invocations without any changes to the 'IScriptModuleComms' interface.
+This is because the 'Delegate' class has a property named 'Method' which points to the class method the delegate was created from.
+Attributes from the original class method are reflected off 'Delegate.Method'.
+
+These delegate's are taken directly from 'IScriptModuleCommsGetScriptInvocationList()' and library data is generated for each method.
+
 
 ScriptConstantInfo's public members are defined as:
 
@@ -115,7 +119,7 @@ ScriptConstantInfo's public members are defined as:
 ```
 
 
-LookupModConstant now also returns a ScriptConstantInfo object instead of just the constants value:
+LookupModConstant now also returns a ScriptConstantInfo object as well, instead of just the constants value:
 
 
 ```C#
@@ -131,8 +135,8 @@ LookupModConstant now also returns a ScriptConstantInfo object instead of just t
 
 
 
-RegisterConstant(string cname, object value); has been removed as it was not used in any module and did not support the idea
-behind the new interface:
+RegisterConstant(string cname, object value); has been removed as it was not used in any module that comes with OpenSim by default,
+and did not support the idea behind the new interface:
 
 
 ```C#
