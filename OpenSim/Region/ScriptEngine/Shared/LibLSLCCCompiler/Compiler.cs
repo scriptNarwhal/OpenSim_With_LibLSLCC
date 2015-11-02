@@ -152,6 +152,14 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var reflectionSerializer = new LSLLibraryDataReflectionSerializer();
 
 
+
+            reflectionSerializer.FieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+
+            reflectionSerializer.PropertyBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+
+            reflectionSerializer.MethodBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+
+
             //all the functions in the ScriptBaseClass have been given LibLSLCC library data
             //attributes from the LibLSLCC.LibraryData.Reflection namespace.  they do not need a type mapper.
 
@@ -178,11 +186,6 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
-            reflectionSerializer.FieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
-
-            reflectionSerializer.PropertyBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
-
-            reflectionSerializer.MethodBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
 
 
             reflectionSerializer.ValueStringConverter = new ConstantValueStringConverter();
