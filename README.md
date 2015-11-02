@@ -148,7 +148,7 @@ and did not support the idea behind the new interface:
 ```
 
 	
-All refactorings have been made to make this new interface work with the old OpenSim
+All refactoring’s have been made to make this new interface work with the old OpenSim
 compiler, there was only one change made to the old compiler.
 
 It was for a single call to: **LookupModConstant(string cname);**
@@ -163,7 +163,7 @@ Each core/optional module containing script invocations, as well as **ScriptBase
 have been given attributes from LibLSLCC's method/constant namespace **LibLSLCC.LibraryData.Reflection**.
 
 This is so LibLSLCC can use its built in class serializer to generate library data for OpenSim's base LSL implementation 
-as well as loaded modules;  instead of loading it off the disk from a seperate configuration file.
+as well as loaded modules;  instead of loading it off the disk from a separate configuration file.
 
 
 None of the old **[ScriptConstant]** and **[ScriptConstantInfo]** attributes were removed,
@@ -177,8 +177,8 @@ if you want the LibLSLCC Compiler to see your module method/constant, you should
 
 
 LibLSLCC has the ability to use 'type converters' in its class serializer to convert the types
-in a .NET signature (either a property/field or method) into a corrisponding **LSLType** that
-is consumeable by the library.  
+in a .NET signature (either a property/field or method) into a corresponding **LSLType** that
+is consumable by the library.  
 
 
 However, I chose to attribute each constant, method and parameter of **ScriptBaseClass** and the modules
@@ -195,35 +195,182 @@ class level **LSLLibraryDataSerializableAttribute** from **LibLSLCC.LibraryData.
 They can also supply them to the  member level attributes **LSLFunctionAttribute** and **LSLConstantAttribute**.
 
 Converters supplied to class/member level attributes will indeed be honored by the class serializer and used to
-convert the Types used withen the class or specific to a certain method/constant.  This is okay since the person 
-writting the module is the one who decides how .NET types convert into corresponding **LSLType's**.
+convert the Types used within the class or specific to a certain method/constant.  This is okay since the person 
+writing the module is the one who decides how .NET types convert into corresponding **LSLType's**.
 
 
-# More about LibLSLCC Attributes
+
+# More About LibLSLCC Attributes
 
 
-LibLSLCC's attribute system allows a class to provide its own type converter for when you
-do not want to explicitly attribute each method.
+LibLSLCC's attribute system allows a class to provide its own type converters for when you
+do not want to explicitly attribute each method.  You can also explicitly set the type converters
+used per method/constant.
+
+Constants require a ValueStringConverter to convert their raw value into a string that 
+**LSLLibraryFunctionSignature.ValueString** can parse for the given type, the serializer in the compiler
+sets a default one that just (ToString()'s) the constant value.  
+
+This works for OpenSim, OpenMetaverse and CSharp built in types that may be used to define a constant, 
+since **LSLLibraryFunctionSignature.ValueString** is able to parse their (ToString()) output.  
+
+But module implementors may need to implement their own ValueStringConverter if they are using strange types to define constants.
+
 
 Type converters are required to implement the interface: **LibLSLCC.LibraryData.Reflection.ILSLTypeConverter**
 
-Each **[LSLFunctionAttribute]** and **[LSLConstantAttribute]** can also provide a prefered type converter
-for the field/property or method they are applied to.
+And ValueStringConverter's are required to implement the interface: **LibLSLCC.LibraryData.Reflection.ILSLValueStringConverter**
 
 
-If no type converter is found, the job of type converting the types in a field/property or signature
-falls back to the **LSLLibraryDataReflectionSerializer** used in the new compiler.
+Here are some examples of the Attributes in use:
 
-The serializer does not define any converters so it will throw an exception if the module does not
-define one, and there are types that need to be converted because the types in a signature were not explicitly attributed.
 
-The serializer will only attempt to serialize fields/properties and methods with an **[LSLConstantAttribute]**
-or **[LSLFunctionAttribute]**.  Currently, the serializer's settings specify that parameters that are not attributed
-with **[LSLParamAttribute]** are to be left out of the signature generated for library data. 
+```C#
 
-This is so the first two parameters of each module script invocation can be left out of the signature used by LibLSLCC 
-for syntax checking.  This is because registered module functions are called via a generated delegate and a modInvoke*
-function call which fills out the first two parameters with the **hostID** and **scriptID**.
+
+//
+// You can explicitly attribute the constant...
+//
+[LSLConstant(LSLType.Integer))]
+public const int MY_CONSTANT = 42;
+
+
+//
+// Or use the ILSLTypeConverter implementation "MyTypeConverter" to convert the field
+// type of this specific field into the corresponding "LSLType".
+//
+[LSLConstant(TypeConverter = typeof(MyTypeConverter))]
+public const int MY_CONSTANT = 42;
+
+
+
+//
+// Optionally you can set a value string converter for your type, to convert the value
+// of the field into a value that can be assigned to LSLLibraryFunctionSignature.ValueString.
+//
+// The LSLLibraryFunctionSignature.ValueString is format checked, and will throw an exception
+// if an improper value string is supplied for the constant type.
+//
+// The serializer in the compiler has the default ValueStringConverter implementation set an object that simply calls 'ToString()'
+// on the value.  
+//
+// Since LSLLibraryFunctionSignature.ValueString can parse the 'ToString()' output of
+// every OpenSim type used as a constant so far in OpenSim's code base (including Vectors and Rotations),
+// its not a problem for the existing code.
+//
+// However, if a module implementor wants to use some strange type as an LSL constant, they will need to implement
+// the 'LibLSLCC.LibraryData.Reflection.ILSLValueStringConverter' interface, and pass the implementation to the [LSLConstantAttribute]
+// in the named parameter 'ValueStringConverter'.
+//
+[LSLConstant(LSLType.Integer, ValueStringConverter = typeof(MyValueStringConverter))]
+public const int MY_CONSTANT = 42;
+
+
+
+//
+// You can also just explicitly specify the value string as "42"
+//
+// LSLLibraryFunctionSignature.ValueString's parsing rules are still in effect.
+//
+[LSLConstant(LSLType.Integer, ValueString = "42")]
+public const int MY_CONSTANT = 42;
+
+
+
+```
+
+
+
+```C#
+
+
+//
+// You can explicitly attribute everything...
+//
+[LSLFunction(LSLType.Integer))]
+int hello_world([LSLParam(LSLType.String)] string param){
+
+}
+
+
+//
+// Or use the ILSLTypeConverter implementation "MyReturnTypeConverter" to convert the parameter
+// types of this specific method into their corresponding "LSLType".
+//
+[LSLFunction(LSLType.Integer, ParamTypeConverter = typeof(MyParamTypeConverter))]
+int hello_world(string param){
+
+}
+
+//
+// Or use it to convert the return type, and explicitly attribute the parameters
+//
+[LSLFunction(ReturnTypeConverter = typeof(MyParamTypeConverter))]
+int hello_world([LSLParam(LSLType.String)] string param){
+
+}
+
+
+//
+// Or use it to convert all types
+//
+[LSLFunction(
+	ReturnTypeConverter = typeof(MyParamTypeConverter), 
+	ParamTypeConverter = typeof(MyParamTypeConverter))]
+int hello_world(string param){
+
+}
+
+
+```
+
+
+
+At the class level (IE, module level in OpenSim's case) you can use the **[LSLLibraryDataSerializable]**:
+
+```C#
+
+
+//
+// You can set type/ValueString converter implementations class wide, and they will only be overridden
+// if the field/property/method explicitly overrides them. 
+//
+[LSLLibraryDataSerializable(
+	ReturnTypeConverter = typeof(MyReturnTypeConverter),     //Set the default return type converter for every method in the class
+	ParamTypeConverter = typeof(MyParamTypeConverter),       //Set the default parameter type converter for every parameter of method's in the class
+	ConstantTypeConverter = typeof(MyConstantTypeConverter), //Set the default type converter for every field/property in the class
+	ValueStringConverter = typeof(MyValueStringConverter)	 //Set the default ValueStringConverter for every field/property in the class
+)]
+public class MyModule {
+
+
+
+}
+
+```
+
+
+
+Additionally, The first two parameters of each Attributed module script invocation are left 
+out of the de-serialized signature that is used by LibLSLCC for syntax checking.  
+
+
+This is accomplished in the new compiler with the use of **LSLLibraryDataReflectionSerializer.ParameterFilter**.
+
+
+```C#
+
+reflectionSerializer.ParameterFilter = parameterInfo => parameterInfo.Position < 2; 
+
+```
+
+
+A lambda is used to set **LSLLibraryDataReflectionSerializer.ParameterFilter** to a function that
+returns **true** for parameters with a Position less than 2.  Take note that **ParameterInfo.Position** is a Zero based index.
+
+
+This is required because registered module functions are called via a modInvoke*
+function call, which fills out the first two parameters with the **hostID** and **scriptID**.
 
 
 
