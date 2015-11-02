@@ -205,6 +205,8 @@ writting the module is the one who decides how .NET types convert into correspon
 LibLSLCC's attribute system allows a class to provide its own type converter for when you
 do not want to explicitly attribute each method.
 
+Type converters are required to implement the interface: **LibLSLCC.LibraryData.Reflection.ILSLTypeConverter**
+
 Each **[LSLFunctionAttribute]** and **[LSLConstantAttribute]** can also provide a prefered type converter
 for the field/property or method they are applied to.
 
