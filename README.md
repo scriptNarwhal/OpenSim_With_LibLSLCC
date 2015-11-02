@@ -91,10 +91,10 @@ http://www.antlr.org/index.html
 # OpenSim Changes (New Project, LibLSLCCCompiler)
 
 
-The location for the new compiler project in the source code that does all
-the work is "/OpenSim/Region/ScriptEngine/Shared/LibLSLCCCompiler"
+The location for the new compiler project that does all
+the work is *"/OpenSim/Region/ScriptEngine/Shared/LibLSLCCCompiler"*
 
-XEngine has been changed so that it can dynamicly load a compiler assembly and 
+XEngine has been changed so that it can dynamically load a compiler Assembly and 
 Compiler class specified by your OpenSim.ini.
 
 
@@ -107,7 +107,7 @@ Both compiler assemblies contain a class named **Compiler** that implements
 **OpenSim.Region.ScriptEngine.Interfaces.ICompiler**.  
 
 You can configure OpenSim.ini to use either one of these implementations
-under the **[XEngine]** section.
+under the **[XEngine]** configuration section.
 
 
 # OpenSim Changes (IScriptModuleComms)
