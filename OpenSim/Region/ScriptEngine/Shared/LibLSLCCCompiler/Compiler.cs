@@ -152,9 +152,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var reflectionSerializer = new LSLLibraryDataReflectionSerializer();
 
 
-            //all the functions in the ScriptBaseClass and the OptionalModules have been given LibLSLCC library data
-            //attributes from the LibLSLCC.LibraryData.Reflection namespace.
-            //they do not need a type mapper.
+            //all the functions in the ScriptBaseClass have been given LibLSLCC library data
+            //attributes from the LibLSLCC.LibraryData.Reflection namespace.  they do not need a type mapper.
 
             //the below are all already set to true when LSLLibraryDataReflectionSerializer is created (they default to true)
             //they are just set here to illustrate whats going on.
@@ -162,11 +161,6 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             reflectionSerializer.AttributedMethodsOnly = true;
             reflectionSerializer.AttributedConstantsOnly = true;
 
-            //OptionalModules do not have attributes on the first too parameters, in this case
-            //the serializer ignores the first two parameters.
-            reflectionSerializer.AttributedParametersOnly = true;
-
-            //
 
 
 
@@ -183,6 +177,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             }
 
 
+
             reflectionSerializer.FieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
 
             reflectionSerializer.PropertyBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
@@ -193,8 +188,11 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             reflectionSerializer.ValueStringConverter = new ConstantValueStringConverter();
 
 
+            //we need to tell the serializer to discard the first two parameters in registered
+            //module functions, since modInvoke fills them out.
+            reflectionSerializer.ParameterFilter = parameterInfo => parameterInfo.Position < 2; 
 
-
+            //get the registered module functions
             foreach (var method in comms.GetScriptInvocationList().Select(x => x.Method))
             {
                 var def = reflectionSerializer.DeSerializeMethod(method);
@@ -210,6 +208,9 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
                     throw new Exception("LibLSLCC failed to reflect OpenSim runtime types!");
                 }
             }
+
+            //remove the filter, just because.
+            reflectionSerializer.ParameterFilter = null;
 
 
             foreach (var constant in comms.GetConstants())
