@@ -90,7 +90,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             validatorServices.SyntaxWarningListener = warningListener;
 
 
-            var validator = new global::LibLSLCC.CodeValidator.LSLCodeValidator(validatorServices);
+            var validator = new LibLSLCC.CodeValidator.LSLCodeValidator(validatorServices);
 
             ILSLCompilationUnitNode syntaxTree;
 
