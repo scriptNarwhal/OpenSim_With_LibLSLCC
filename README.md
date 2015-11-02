@@ -31,7 +31,6 @@ There is a new section in OpenSim.ini for LibLSLCC related settings called [LibL
 currently the only option is for turning extended compiler warnings on and off:
 
 	[LibLSLCC]
-	
 		; Disable or enable LibLSLCC extended compiler warnings.
 		; This is set to true by default, but you can set it to false if you think
 		; LibLSLCC's extended warnings are too pedantic.
