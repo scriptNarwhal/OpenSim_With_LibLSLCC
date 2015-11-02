@@ -68,51 +68,144 @@ The ScriptModuleCommsModule implementation has been updated to support this new 
 The interface can now provide MethodInfo objects pertaining to where a script
 Delegate for module method was generated from when it was registered.
 
+
+```
 	Delegate[] GetScriptInvocationList();
 
-	is now:
+	//is now:
 
 	ScriptInvocationInfo[] GetScriptInvocationList();
-	
+```	
+
 
 The ScriptInvocationInfo object encapsulates the Delegate with
 additional information about the Method the delegate was generated from.
 
-So I can reflect off the MethodInfo to generate library data for my compiler
+This is so I can reflect off the MethodInfo object to generate library data for my compiler
 using LibLSLCC's attribute framework.
 
+ScriptInvocationInfo's public members are defined as:
 
 
+```
+    public class ScriptInvocationInfo
+    {
+        /// <summary>
+        /// Gets the script invocation delegate, which is a delegate that calls the <see cref="OriginalMethod"/> with the first two parameters bound.
+        /// </summary>
+        /// <value>
+        /// The script invocation delegate.
+        /// </value>
+        public Delegate ScriptInvocationDelegate { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the function.
+        /// </summary>
+        /// <value>
+        /// The name of the function.
+        /// </value>
+        public string FunctionName { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> signature of <see cref="ScriptInvocationDelegate"/>. (The parameter <see cref="Type"/>'s)
+        /// </summary>
+        /// <value>
+        /// The <see cref="Type"/> signature of <see cref="ScriptInvocationDelegate"/>.
+        /// </value>
+        public Type[] TypeSignature { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the return type of <see cref="ScriptInvocationDelegate"/>.
+        /// </summary>
+        /// <value>
+        /// The return type of <see cref="ScriptInvocationDelegate"/>.
+        /// </value>
+        public Type ReturnType { get; private set; }
+
+        /// <summary>
+        /// Gets the original <see cref="MethodInfo"/> from the actual method in the module class that implements this script function.
+        /// </summary>
+        /// <value>
+        /// The original <see cref="MethodInfo"/> from the module class that implements this script function.
+        /// </value>
+        public MethodInfo OriginalMethod { get; private set; }
+	}
+
+```
+
+
+IScriptModuleComms.GetConstants has also been modified in much the same manner.
+
+
+```
 	Dictionary<string, object> GetConstants();
 	
-	is now:
+	//is now:
 
 	Dictionary<string, ScriptConstantInfo> GetConstants();
 	
+```	
 	
-	
+
 ScriptConstantInfo contains the reflected value of the constant from the static
 field it was defined with, as well as a MemberInfo object for the static field it came from.
 This is so you can reflect attributes off the MemberInfo if needed.  LibLSLCC uses this
 again with its attribute framework to generate library data for syntax checking.
 
 
+ScriptConstantInfo's public members are defined as:
 
+
+```
+
+    public class ScriptConstantInfo
+    {
+        /// <summary>
+        /// Gets the class member that represents the constant.
+        /// Could be a field or property.
+        /// </summary>
+        /// <value>
+        /// The class member that represents the constant.
+        /// </value>
+        public MemberInfo ClassMember { get; private set; }
+
+        /// <summary>
+        /// Gets the constants value, taken from the class member that represents it.
+        /// </summary>
+        /// <value>
+        /// The constants value, taken from the class member.
+        /// </value>
+        public object ConstantValue { get; private set; }
+    }
+	
+```
+
+
+LookupModConstant now also returns a ScriptConstantInfo object instead of just the constants value:
+
+
+```
 	object LookupModConstant LookupModConstant();
 
-	is now:
+	//is now:
 
 	ScriptConstantInfo LookupModConstant(string cname);
-	
-
-Again returning a ScriptConstantInfo here so I can grab more info about the constant definition.
+```
 
 
-This has been removed as it was not used in any module and did not support the idea
+
+
+RegisterConstant(string cname, object value); has been removed as it was not used in any module and did not support the idea
 behind the new interface:
 
+
+```
+
+	//Removed:
+	
 	void RegisterConstant(string cname, object value);
 	
+```
 
 	
 All refactorings have been made to make this new interface work with the old OpenSim
