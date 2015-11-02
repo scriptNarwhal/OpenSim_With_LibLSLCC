@@ -195,7 +195,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
-            foreach (var method in comms.GetScriptInvocationList().Select(x => x.OriginalMethod))
+            foreach (var method in comms.GetScriptInvocationList().Select(x => x.Method))
             {
                 var def = reflectionSerializer.DeSerializeMethod(method);
                 if (def != null)

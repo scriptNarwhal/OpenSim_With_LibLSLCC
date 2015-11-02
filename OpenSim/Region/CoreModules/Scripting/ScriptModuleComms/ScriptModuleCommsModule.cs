@@ -48,9 +48,28 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
             LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static string LogHeader = "[MODULE COMMS]";
 
-        private Dictionary<string, ScriptConstantInfo> m_constants = new Dictionary<string, ScriptConstantInfo>();
+        private readonly Dictionary<string, ScriptConstantInfo> m_constants = new Dictionary<string, ScriptConstantInfo>();
 
-        private Dictionary<string,ScriptInvocationInfo> m_scriptInvocation = new Dictionary<string,ScriptInvocationInfo>();
+
+        #region ScriptInvocation
+        protected class ScriptInvocationData
+        {
+            public Delegate ScriptInvocationDelegate { get; private set; }
+            public string FunctionName { get; private set; }
+            public Type[] TypeSignature { get; private set; }
+            public Type ReturnType { get; private set; }
+
+            public ScriptInvocationData(string fname, Delegate fn, Type[] callsig, Type returnsig)
+            {
+                FunctionName = fname;
+                ScriptInvocationDelegate = fn;
+                TypeSignature = callsig;
+                ReturnType = returnsig;
+            }
+        }
+
+        private readonly Dictionary<string, ScriptInvocationData> m_scriptInvocation = new Dictionary<string, ScriptInvocationData>();
+        #endregion
 
 
         private IScriptModule m_scriptModule = null;
@@ -91,9 +110,9 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
         public void Close()
         {
         }
-#endregion
+        #endregion
 
-#region ScriptModuleComms
+        #region ScriptModuleComms
 
         public void RaiseEvent(UUID script, string id, string module, string command, string k)
         {
@@ -190,7 +209,7 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
                 for (int i = 2; i < parameters.Length; i++)
                     parmTypes[i - 2] = parameters[i].ParameterType;
 
-                m_scriptInvocation[fcall.Method.Name] = new ScriptInvocationInfo(mi, fcall, parmTypes, fcall.Method.ReturnType);
+                m_scriptInvocation[fcall.Method.Name] = new ScriptInvocationData(mi.Name, fcall, parmTypes, fcall.Method.ReturnType);
             }
         }
 
@@ -230,14 +249,14 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
             }
         }
         
-        public ScriptInvocationInfo[] GetScriptInvocationList()
+        public Delegate[] GetScriptInvocationList()
         {
-            List<ScriptInvocationInfo> ret = new List<ScriptInvocationInfo>();
+            List<Delegate> ret = new List<Delegate>();
 
             lock (m_scriptInvocation)
             {
-                foreach (ScriptInvocationInfo d in m_scriptInvocation.Values)
-                    ret.Add(d);
+                foreach (ScriptInvocationData d in m_scriptInvocation.Values)
+                    ret.Add(d.ScriptInvocationDelegate);
             }
             return ret.ToArray();
         }
@@ -248,7 +267,7 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
         {
             lock (m_scriptInvocation)
             {
-                ScriptInvocationInfo sid;
+                ScriptInvocationData sid;
                 if (m_scriptInvocation.TryGetValue(fname,out sid))
                 {
                     if (sid.ReturnType == typeof(string))
@@ -274,13 +293,13 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
         }
 
 
-        public ScriptInvocationInfo LookupScriptInvocation(string fname)
+        public Delegate LookupScriptInvocation(string fname)
         {
             lock (m_scriptInvocation)
             {
-                ScriptInvocationInfo sid;
+                ScriptInvocationData sid;
                 if (m_scriptInvocation.TryGetValue(fname,out sid))
-                    return sid;
+                    return sid.ScriptInvocationDelegate;
             }
 
             return null;
@@ -290,7 +309,7 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
         {
             lock (m_scriptInvocation)
             {
-                ScriptInvocationInfo sid;
+                ScriptInvocationData sid;
                 if (m_scriptInvocation.TryGetValue(fname,out sid))
                     return sid.TypeSignature;
             }
@@ -302,7 +321,7 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
         {
             lock (m_scriptInvocation)
             {
-                ScriptInvocationInfo sid;
+                ScriptInvocationData sid;
                 if (m_scriptInvocation.TryGetValue(fname,out sid))
                     return sid.ReturnType;
             }
@@ -318,7 +337,7 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
             foreach (object o in parms)
                 olist.Add(o);
 
-            Delegate fn = LookupScriptInvocation(fname).ScriptInvocationDelegate;
+            Delegate fn = LookupScriptInvocation(fname);
 
             return fn.DynamicInvoke(olist.ToArray());
         }

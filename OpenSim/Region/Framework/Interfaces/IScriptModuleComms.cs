@@ -35,60 +35,6 @@ namespace OpenSim.Region.Framework.Interfaces
     public delegate void ScriptCommand(UUID script, string id, string module, string command, string k);
 
 
-    public class ScriptInvocationInfo
-    {
-        /// <summary>
-        /// Gets the script invocation delegate, which is a delegate that calls the <see cref="OriginalMethod"/> with the first two parameters bound.
-        /// </summary>
-        /// <value>
-        /// The script invocation delegate.
-        /// </value>
-        public Delegate ScriptInvocationDelegate { get; private set; }
-
-        /// <summary>
-        /// Gets the name of the function.
-        /// </summary>
-        /// <value>
-        /// The name of the function.
-        /// </value>
-        public string FunctionName { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="Type"/> signature of <see cref="ScriptInvocationDelegate"/>. (The parameter <see cref="Type"/>'s)
-        /// </summary>
-        /// <value>
-        /// The <see cref="Type"/> signature of <see cref="ScriptInvocationDelegate"/>.
-        /// </value>
-        public Type[] TypeSignature { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="Type"/> of the return type of <see cref="ScriptInvocationDelegate"/>.
-        /// </summary>
-        /// <value>
-        /// The return type of <see cref="ScriptInvocationDelegate"/>.
-        /// </value>
-        public Type ReturnType { get; private set; }
-
-        /// <summary>
-        /// Gets the original <see cref="MethodInfo"/> from the actual method in the module class that implements this script function.
-        /// </summary>
-        /// <value>
-        /// The original <see cref="MethodInfo"/> from the module class that implements this script function.
-        /// </value>
-        public MethodInfo OriginalMethod { get; private set; }
-
-        public ScriptInvocationInfo(MethodInfo originalMethod, Delegate functionDelegate, Type[] callSignature, Type returnType)
-        {
-            OriginalMethod = originalMethod;
-            FunctionName = originalMethod.Name;
-            ScriptInvocationDelegate = functionDelegate;
-            TypeSignature = callSignature;
-            ReturnType = returnType;
-        }
-    }
-
-
-
     public class ScriptConstantInfo
     {
         public ScriptConstantInfo(MemberInfo classMember, object constantValue)
@@ -165,12 +111,12 @@ namespace OpenSim.Region.Framework.Interfaces
         void RegisterScriptInvocations(IRegionModuleBase target);
 
         /// <summary>
-        /// Returns an array of information about all registered script calls
+        /// Returns an array of delegates for all registered script calls
         /// </summary>
         /// <returns></returns>
-        ScriptInvocationInfo[] GetScriptInvocationList();
+        Delegate[] GetScriptInvocationList();
 
-        ScriptInvocationInfo LookupScriptInvocation(string fname);
+        Delegate LookupScriptInvocation(string fname);
 
         string LookupModInvocation(string fname);
 

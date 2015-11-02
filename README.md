@@ -58,168 +58,12 @@ asks you in the command prompt.
 # OpenSim Framework Changes (IScriptModuleComms)
 
 
-I have modified the IScriptModuleComms interface to return more information
-about the origin of script constants and library methods.
+I have modified the IScriptModuleComms interface to return more information about the origin of registered script constants.
 
-The ScriptModuleCommsModule implementation has been updated to support this new interface.
-
-
-```C#
-
-    public interface IScriptModuleComms
-    {
-        event ScriptCommand OnScriptCommand;
-
-        void RegisterScriptInvocation(object target, string method);
-
-        void RegisterScriptInvocation(object target, MethodInfo method);
-
-        void RegisterScriptInvocation(object target, string[] methods);
-
-        void RegisterScriptInvocation(Type target, string[] methods);
-
-        void RegisterScriptInvocations(IRegionModuleBase target);
-
-        Delegate[] GetScriptInvocationList();
-
-        Delegate LookupScriptInvocation(string fname);
-		
-        string LookupModInvocation(string fname);
-		
-        Type[] LookupTypeSignature(string fname);
-		
-        Type LookupReturnType(string fname);
-
-        object InvokeOperation(UUID hostId, UUID scriptId, string fname, params object[] parms);
-		
-        void DispatchReply(UUID scriptId, int code, string text, string key);
-
-        void RegisterConstant(string cname, object value);
-		
-        void RegisterConstants(IRegionModuleBase target);
-		
-        object LookupModConstant(string cname);
-		
-        Dictionary<string, object> GetConstants();
-		
-        void RaiseEvent(UUID script, string id, string module, string command, string key);
-    }
-	
-	//Has changed to:
-	
-	public interface IScriptModuleComms
-    {
-        event ScriptCommand OnScriptCommand;
-
-        void RegisterScriptInvocation(object target, string method);
-
-        void RegisterScriptInvocation(object target, MethodInfo method);
-
-        void RegisterScriptInvocation(object target, string[] methods);
-
-        void RegisterScriptInvocation(Type target, string[] methods);
-
-        void RegisterScriptInvocations(IRegionModuleBase target);
-
-        ScriptInvocationInfo[] GetScriptInvocationList();
-
-        ScriptInvocationInfo LookupScriptInvocation(string fname);
-
-        string LookupModInvocation(string fname);
-
-        Type[] LookupTypeSignature(string fname);
-
-        Type LookupReturnType(string fname);
-
-        object InvokeOperation(UUID hostId, UUID scriptId, string fname, params object[] parms);
-
-        void DispatchReply(UUID scriptId, int code, string text, string key);
-
-        void RegisterConstants(IRegionModuleBase target);
-		
-        ScriptConstantInfo LookupModConstant(string cname);
-
-        Dictionary<string, ScriptConstantInfo> GetConstants();
-
-        void RaiseEvent(UUID script, string id, string module, string command, string key);
-    }
-	
-
-```
+The 'ScriptModuleCommsModule' implementation has been updated to support this new interface.
 
 
-The interface can now provide MethodInfo objects pertaining to where a script
-Delegate for a module method was generated from when it was registered.
-
-
-```C#
-
-	Delegate[] GetScriptInvocationList();
-
-	//is now:
-
-	ScriptInvocationInfo[] GetScriptInvocationList();
-```	
-
-
-The ScriptInvocationInfo object encapsulates the Delegate with
-additional information about the Method the delegate was generated from.
-
-This is so I can reflect off the MethodInfo object to generate library data for my compiler
-using LibLSLCC's attribute framework.
-
-ScriptInvocationInfo's public members are defined as:
-
-
-```C#
-
-    public class ScriptInvocationInfo
-    {
-        /// <summary>
-        /// Gets the script invocation delegate, which is a delegate that calls the <see cref="OriginalMethod"/> with the first two parameters bound.
-        /// </summary>
-        /// <value>
-        /// The script invocation delegate.
-        /// </value>
-        public Delegate ScriptInvocationDelegate { get; private set; }
-
-        /// <summary>
-        /// Gets the name of the function.
-        /// </summary>
-        /// <value>
-        /// The name of the function.
-        /// </value>
-        public string FunctionName { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="Type"/> signature of <see cref="ScriptInvocationDelegate"/>. (The parameter <see cref="Type"/>'s)
-        /// </summary>
-        /// <value>
-        /// The <see cref="Type"/> signature of <see cref="ScriptInvocationDelegate"/>.
-        /// </value>
-        public Type[] TypeSignature { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="Type"/> of the return type of <see cref="ScriptInvocationDelegate"/>.
-        /// </summary>
-        /// <value>
-        /// The return type of <see cref="ScriptInvocationDelegate"/>.
-        /// </value>
-        public Type ReturnType { get; private set; }
-
-        /// <summary>
-        /// Gets the original <see cref="MethodInfo"/> from the actual method in the module class that implements this script function.
-        /// </summary>
-        /// <value>
-        /// The original <see cref="MethodInfo"/> from the module class that implements this script function.
-        /// </value>
-        public MethodInfo OriginalMethod { get; private set; }
-	}
-
-```
-
-
-IScriptModuleComms.GetConstants has also been modified in much the same manner.
+IScriptModuleComms.GetConstants() has been modified as so:
 
 
 ```C#
@@ -233,11 +77,15 @@ IScriptModuleComms.GetConstants has also been modified in much the same manner.
 ```	
 	
 
-ScriptConstantInfo contains the reflected value of the constant from the static
-field it was defined with, as well as a MemberInfo object for the static field it came from.
-This is so you can reflect attributes off the MemberInfo if needed.  LibLSLCC uses this
-again with its attribute framework to generate library data for syntax checking.
+'ScriptConstantInfo' contains the reflected value of the constant from the static field/property 
+it was defined with, as well as a 'MemberInfo' object for the member that caused it to be defined.
+This is so you can reflect attributes off the 'MemberInfo' if needed.  
 
+LibLSLCC uses this with its attribute framework to generate library data for registered module constants
+that it can use for syntax checking.  
+
+It was already able to do so for methods/script invocations without any changes to the 'IScriptModuleComms' interface;
+But not for registered constants, so a change was needed.
 
 ScriptConstantInfo's public members are defined as:
 
@@ -277,6 +125,7 @@ LookupModConstant now also returns a ScriptConstantInfo object instead of just t
 	//is now:
 
 	ScriptConstantInfo LookupModConstant(string cname);
+	
 ```
 
 
@@ -296,7 +145,7 @@ behind the new interface:
 
 	
 All refactorings have been made to make this new interface work with the old OpenSim
-compiler, the were only two changes made to the old compiler.
+compiler, the was only one change made to the old compiler.
 
 
 
