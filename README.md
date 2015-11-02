@@ -55,7 +55,8 @@ asks you in the command prompt.
 
 
 
-# OpenSim Framework Changes (IScriptModuleComms)
+# OpenSim Framework Changes 
+# (IScriptModuleComms)
 
 
 I have modified the IScriptModuleComms interface to return more information about the origin of registered script constants.
@@ -155,7 +156,8 @@ It was for one call to: LookupModConstant(string cname);
 
 
 
-# OpenSim Framework Changes (New Module/ScriptBaseClass Attributes)
+# OpenSim Framework Changes 
+#(New Module/ScriptBaseClass Attributes)
 
 
 
