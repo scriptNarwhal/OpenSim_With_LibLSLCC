@@ -113,7 +113,7 @@ This is so you can reflect attributes off the **MemberInfo** if needed.
 LibLSLCC uses this with its attribute framework to generate library data for registered module constants
 that it can use for syntax checking.  
 
-LibLSLCC was already able generate library data for methods/script invocations without any changes to the **IScriptModuleComms** interface.
+LibLSLCC was already to able generate library data for methods/script invocations without any changes to the **IScriptModuleComms** interface.
 This is because the **Delegate** class has a property named **Method** which points to the class method the delegate was created from.
 Attributes from the original class method are reflected off **Delegate.Method**.
 
