@@ -149,7 +149,9 @@ and did not support the idea behind the new interface:
 
 	
 All refactorings have been made to make this new interface work with the old OpenSim
-compiler, the was only one change made to the old compiler.
+compiler, there was only one change made to the old compiler.
+
+It was for one call to: LookupModConstant(string cname);
 
 
 
