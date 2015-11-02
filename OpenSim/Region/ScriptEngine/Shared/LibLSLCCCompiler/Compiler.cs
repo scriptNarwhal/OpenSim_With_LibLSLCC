@@ -232,18 +232,15 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             //the following is a hack, because OpenSim does not keep information about event signatures around, just the names.
 
-            //standard LSL, no additions, just the events get loaded into memory since live filtering disabled.
+            //Open LSL, no additions, just the events get loaded into memory since live filtering disabled.
             var ev = new LSLDefaultLibraryDataProvider(
-                LSLLibraryBaseData.StandardLsl,LSLLibraryDataAdditions.None, false,
+                LSLLibraryBaseData.OpensimLsl,LSLLibraryDataAdditions.None, false,
                 LSLLibraryDataLoadOptions.Events);
 
-            //only the events found in the enum are implemented by OpenSim for sure.
-            var implementedEvents = new HashSet<string>(Enum.GetNames(typeof(ScriptBase.Executor.scriptEvents)));
 
             //define them, we need to reset the subsets defined in the standard library data, so they match the ones we have defined in our 
             //data provider.
-            _libLslccMainLibraryDataProvider.DefineEventHandlers(ev.SupportedEventHandlers
-                .Where(x=>implementedEvents.Contains(x.Name)).Select(x =>
+            _libLslccMainLibraryDataProvider.DefineEventHandlers(ev.SupportedEventHandlers.Select(x =>
                 {
                     //LSLDefaultLibraryDataProvider will yell at us if we try to change the subsets of one of its signatures out from underneath it. 
                     //it tracks changes to the signatures it owns and will throw an exception if we change the subsets of one without cloning it first.
