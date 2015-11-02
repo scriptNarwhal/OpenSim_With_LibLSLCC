@@ -49,10 +49,14 @@ Under [XEngine] in OpenSim.ini you will find these new settings:
 	; ==========================================
 	
 	; The name of the class that implements the compiler
+	; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler
+	;
 	; CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
 	  CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler"
 	
 	; The assembly to load the compiler implementation from
+	; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.dll
+	;
 	; CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
 	  CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
 	
