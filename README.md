@@ -279,6 +279,7 @@ public const int MY_CONSTANT = 42;
 
 ```
 
+And for script invocations (methods):
 
 
 ```C#
