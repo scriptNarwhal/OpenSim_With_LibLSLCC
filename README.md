@@ -88,7 +88,7 @@ http://www.antlr.org/index.html
 
 
 
-# New Build Project, LibLSLCCCompiler
+# New Project (LibLSLCCCompiler)
 
 
 The location for the new compiler project that does all
