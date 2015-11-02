@@ -149,7 +149,7 @@ The ScriptModuleCommsModule implementation has been updated to support this new 
 
 
 The interface can now provide MethodInfo objects pertaining to where a script
-Delegate for module method was generated from when it was registered.
+Delegate for a module method was generated from when it was registered.
 
 
 ```C#
