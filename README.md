@@ -88,7 +88,7 @@ http://www.antlr.org/index.html
 
 
 
-# OpenSim Changes (New Project, LibLSLCCCompiler)
+# New Build Project, LibLSLCCCompiler
 
 
 The location for the new compiler project that does all
