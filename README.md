@@ -8,11 +8,11 @@ XEngine.
 
 See:
 
-	https://github.com/EriHoss/LibLSLCC
+https://github.com/EriHoss/LibLSLCC
 
-	Or
+Or:
 	
-	https://gitlab.com/erihoss/LibLSLCC
+https://gitlab.com/erihoss/LibLSLCC
 
 
 Settings that determine the compiler Assembly (dll) and class have been added under the
