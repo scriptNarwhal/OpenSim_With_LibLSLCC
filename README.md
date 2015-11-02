@@ -192,7 +192,7 @@ They may want to implement utility types with all the correct conversions to be 
 Module implementors however can implement their own type converters, and supply their **Type** to the 
 class level **LSLLibraryDataSerializableAttribute** from **LibLSLCC.LibraryData.Reflection**.
 
-They can also supply them to the  member level attributes **LSLFunctionAttribute** and *LSLConstantAttribute*.
+They can also supply them to the  member level attributes **LSLFunctionAttribute** and **LSLConstantAttribute**.
 
 Converters supplied to class/member level attributes will indeed be honored by the class serializer and used to
 convert the Types used withen the class or specific to a certain method/constant.  This is okay since the person 
