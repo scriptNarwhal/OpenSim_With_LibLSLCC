@@ -150,7 +150,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
             var reflectionSerializer = new LSLLibraryDataReflectionSerializer();
-
+            reflectionSerializer.ValueStringConverter = new ConstantValueStringConverter();
 
 
             reflectionSerializer.FieldBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
@@ -188,7 +188,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
-            reflectionSerializer.ValueStringConverter = new ConstantValueStringConverter();
+            
 
 
             //we need to tell the serializer to discard the first two parameters in registered
