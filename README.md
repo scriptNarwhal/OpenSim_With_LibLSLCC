@@ -69,7 +69,8 @@ The interface can now provide MethodInfo objects pertaining to where a script
 Delegate for module method was generated from when it was registered.
 
 
-```
+```C#
+
 	Delegate[] GetScriptInvocationList();
 
 	//is now:
@@ -87,7 +88,8 @@ using LibLSLCC's attribute framework.
 ScriptInvocationInfo's public members are defined as:
 
 
-```
+```C#
+
     public class ScriptInvocationInfo
     {
         /// <summary>
@@ -137,7 +139,8 @@ ScriptInvocationInfo's public members are defined as:
 IScriptModuleComms.GetConstants has also been modified in much the same manner.
 
 
-```
+```C#
+
 	Dictionary<string, object> GetConstants();
 	
 	//is now:
@@ -156,7 +159,7 @@ again with its attribute framework to generate library data for syntax checking.
 ScriptConstantInfo's public members are defined as:
 
 
-```
+```C#
 
     public class ScriptConstantInfo
     {
@@ -184,7 +187,8 @@ ScriptConstantInfo's public members are defined as:
 LookupModConstant now also returns a ScriptConstantInfo object instead of just the constants value:
 
 
-```
+```C#
+
 	object LookupModConstant LookupModConstant();
 
 	//is now:
@@ -199,7 +203,7 @@ RegisterConstant(string cname, object value); has been removed as it was not use
 behind the new interface:
 
 
-```
+```C#
 
 	//Removed:
 	
