@@ -68,6 +68,21 @@ just run OpenSim.exe and set up your region and region owner by answering the qu
 asks you in the command prompt.
 
 
+# Dependencies
+
+
+The LibLSLCC Library depends on the CSharp ANTLR 4.5.1 Runtime, and thus it has been
+included with this distribution of OpenSim as a pre-built binary in the "bin" folder.
+
+You can find the license for ANTLR4 under the "ThirdPartyLicenses" folder in the 
+OpenSim build directory.
+
+
+For more information about the ANTLR parser generator, go here: 
+
+http://www.antlr.org/index.html
+
+
 
 # OpenSim Changes (IScriptModuleComms)
 
