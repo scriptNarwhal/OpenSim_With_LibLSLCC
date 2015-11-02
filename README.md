@@ -326,7 +326,10 @@ is consumeable by the library,  however I chose to attribute each constant, meth
 of every module explicitly with LibLSLCC attributes.
 
 I think it is better for the serializer not to be guessing for modules that are provided with 
-OpenSim.   
+OpenSim.
+
+
+======
 
 
 LibLSLCC's attribute system allows a class to provide its own type converter for when you
