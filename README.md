@@ -58,12 +58,12 @@ asks you in the command prompt.
 # OpenSim Changes (IScriptModuleComms)
 
 
-I have modified the IScriptModuleComms interface to return more information about the origin of registered script constants.
+I have modified the **IScriptModuleComms** interface to return more information about the origin of registered script constants.
 
-The 'ScriptModuleCommsModule' implementation has been updated to support this new interface.
+The **ScriptModuleCommsModule** implementation has been updated to support this new interface.
 
 
-IScriptModuleComms.GetConstants() has been modified as so:
+**IScriptModuleComms.GetConstants()** has been modified as so:
 
 
 ```C#
@@ -77,18 +77,18 @@ IScriptModuleComms.GetConstants() has been modified as so:
 ```	
 	
 
-'ScriptConstantInfo' contains the reflected value of the constant from the static field/property 
-it was defined with, as well as a 'MemberInfo' object for the member that caused it to be defined.
-This is so you can reflect attributes off the 'MemberInfo' if needed.  
+**ScriptConstantInfo** contains the reflected value of the constant from the static field/property 
+it was defined with, as well as a **MemberInfo** object for the member that caused it to be defined.
+This is so you can reflect attributes off the **MemberInfo** if needed.  
 
 LibLSLCC uses this with its attribute framework to generate library data for registered module constants
 that it can use for syntax checking.  
 
-LibLSLCC was already able generate library data for methods/script invocations without any changes to the 'IScriptModuleComms' interface.
-This is because the 'Delegate' class has a property named 'Method' which points to the class method the delegate was created from.
-Attributes from the original class method are reflected off 'Delegate.Method'.
+LibLSLCC was already able generate library data for methods/script invocations without any changes to the **IScriptModuleComms** interface.
+This is because the **Delegate** class has a property named **Method** which points to the class method the delegate was created from.
+Attributes from the original class method are reflected off **Delegate.Method**.
 
-These delegate's are taken directly from 'IScriptModuleCommsGetScriptInvocationList()' and library data is generated for each method.
+These delegate's are taken directly from **IScriptModuleComms.GetScriptInvocationList()** and library data is generated for each method.
 
 
 ScriptConstantInfo's public members are defined as:
@@ -119,12 +119,12 @@ ScriptConstantInfo's public members are defined as:
 ```
 
 
-LookupModConstant now also returns a ScriptConstantInfo object as well, instead of just the constants value:
+**IScriptModuleComms.LookupModConstant** now also returns a **ScriptConstantInfo** object as well, instead of just the constants value:
 
 
 ```C#
 
-	object LookupModConstant LookupModConstant();
+	object LookupModConstant(string cname);
 
 	//is now:
 
@@ -135,7 +135,7 @@ LookupModConstant now also returns a ScriptConstantInfo object as well, instead 
 
 
 
-RegisterConstant(string cname, object value); has been removed as it was not used in any module that comes with OpenSim by default,
+**IScriptModuleComms.RegisterConstant** has been removed as it was not used in any module that comes with OpenSim by default,
 and did not support the idea behind the new interface:
 
 
@@ -151,7 +151,7 @@ and did not support the idea behind the new interface:
 All refactorings have been made to make this new interface work with the old OpenSim
 compiler, there was only one change made to the old compiler.
 
-It was for one call to: LookupModConstant(string cname);
+It was for a single call to: **LookupModConstant(string cname);**
 
 
 
@@ -159,61 +159,74 @@ It was for one call to: LookupModConstant(string cname);
 
 
 
-Each core/optional module containing script invocations, as well as ScriptBaseClass
-have been given attributes from LibLSLCC's method/constant namespace LibLSLCC.LibraryData.Reflection.
+Each core/optional module containing script invocations, as well as **ScriptBaseClass**
+have been given attributes from LibLSLCC's method/constant namespace **LibLSLCC.LibraryData.Reflection**.
 
-This is so LibLSLCC can use its built in class serializer to generate library data for loaded modules
-instead of loading it off the disk from a seperate configuration file.
-
-
-None of the old [ScriptConstant] and [ScriptConstantInfo] attributes were removed
-and the IScriptModuleComms implementation ScriptModuleCommsModule will still detect them.
+This is so LibLSLCC can use its built in class serializer to generate library data for OpenSim's base LSL implementation 
+as well as loaded modules;  instead of loading it off the disk from a seperate configuration file.
 
 
-ScriptModuleCommsModule now also detects attributes from LibLSLCC's 
-LibLSLCC.LibraryData.Reflection namespace as well as the old [ScriptConstant] and [ScriptConstantInfo]
-attributes.
+None of the old **[ScriptConstant]** and **[ScriptConstantInfo]** attributes were removed,
+and the **IScriptModuleComms** implementation **ScriptModuleCommsModule** will still detect them.
 
 
-LibLSLCC has the ability to use 'type converters' in its serializer to convert the types
-of a .NET signature (either a property/field or method) into a corrisponding LSLType that
-is consumeable by the library,  however I chose to attribute each constant, method and parameter
-of every module explicitly with LibLSLCC attributes.
-
-I think it is better for the serializer not to be guessing for modules that are provided with 
-OpenSim.
+However, **ScriptModuleCommsModule** now also detects attributes from LibLSLCC's **LibLSLCC.LibraryData.Reflection** namespace 
+as well as the old **[ScriptConstant]** and **[ScriptConstantInfo]** attributes.  Either or both attributes can be used, but
+if you want the LibLSLCC Compiler to see your module method/constant, you should make sure to attribute it with the attributes from
+**LibLSLCC.LibraryData.Reflection**.
 
 
-======
+LibLSLCC has the ability to use 'type converters' in its class serializer to convert the types
+in a .NET signature (either a property/field or method) into a corrisponding **LSLType** that
+is consumeable by the library.  
+
+
+However, I chose to attribute each constant, method and parameter of **ScriptBaseClass** and the modules
+provided with OpenSim explicitly with LibLSLCC attributes.
+
+I think it is better for the class serializer not to be using type converters at the serializer level.
+
+Using type converters at the serializer level would limit module implementors to using a certain set of types for constants and method parameters.
+They may want to implement utility types with all the correct conversions to be compatible with the LSL Runtime types for example.
+
+Module implementors however can implement their own type converters, and supply their **Type** to the 
+class level **LSLLibraryDataSerializableAttribute** from **LibLSLCC.LibraryData.Reflection**.
+
+They can also supply them to the  member level attributes **LSLFunctionAttribute** and *LSLConstantAttribute*.
+
+Converters supplied to class/member level attributes will indeed be honored by the class serializer and used to
+convert the Types used withen the class or specific to a certain method/constant.  This is okay since the person 
+writting the module is the one who decides how .NET types convert into corresponding **LSLType's**.
+
+
+# More about LibLSLCC Attributes
 
 
 LibLSLCC's attribute system allows a class to provide its own type converter for when you
 do not want to explicitly attribute each method.
 
-Each [LSLFunctionAttribute] and [LSLConstantAttribute] can also provide a prefered type converter
+Each **[LSLFunctionAttribute]** and **[LSLConstantAttribute]** can also provide a prefered type converter
 for the field/property or method they are applied to.
 
 
 If no type converter is found, the job of type converting the types in a field/property or signature
-falls back to the LSLLibraryDataReflectionSerializer used in the compiler.
-(OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler)
+falls back to the **LSLLibraryDataReflectionSerializer** used in the new compiler.
 
 The serializer does not define any converters so it will throw an exception if the module does not
-define one and types need to be converted because the types in a signature were not explicitly attributed.
+define one, and there are types that need to be converted because the types in a signature were not explicitly attributed.
 
+The serializer will only attempt to serialize fields/properties and methods with an **[LSLConstantAttribute]**
+or **[LSLFunctionAttribute]**.  Currently, the serializer's settings specify that parameters that are not attributed
+with **[LSLParamAttribute]** are to be left out of the signature generated for library data. 
 
-The serializer will only attempt to serialize fields/properties and methods with an [LSLConstantAttribute]
-or [LSLFunctionAttribute]. currently, the serializer's settings specify that parameters that are not attributed
-with [LSLParamAttribute] are to be left out of the signature generated for library data. 
-
-This is so the first two parameters of each module script invocation can be left out of the signature 
-used by LibLSLCC for syntax checking, since they are called via a generated delegate and a modInvoke*
-function call.
-
+This is so the first two parameters of each module script invocation can be left out of the signature used by LibLSLCC 
+for syntax checking.  This is because registered module functions are called via a generated delegate and a modInvoke*
+function call which fills out the first two parameters with the **hostID** and **scriptID**.
 
 
 
 # Overview
+
 
 OpenSim is a BSD Licensed Open Source project to develop a functioning
 virtual worlds server platform capable of supporting multiple clients
