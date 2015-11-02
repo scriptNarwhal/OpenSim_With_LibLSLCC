@@ -251,16 +251,16 @@ public const int MY_CONSTANT = 42;
 // The LSLLibraryFunctionSignature.ValueString is format checked, and will throw an exception
 // if an improper value string is supplied for the constant type.
 //
-// The serializer in the compiler has the default ValueStringConverter implementation set an object that simply calls 'ToString()'
-// on the value.  
+// The serializer in the compiler has the default ValueStringConverter implementation set to 
+// an object that simply calls 'ToString()' on the value.  
 //
 // Since LSLLibraryFunctionSignature.ValueString can parse the 'ToString()' output of
 // every OpenSim type used as a constant so far in OpenSim's code base (including Vectors and Rotations),
 // its not a problem for the existing code.
 //
 // However, if a module implementor wants to use some strange type as an LSL constant, they will need to implement
-// the 'LibLSLCC.LibraryData.Reflection.ILSLValueStringConverter' interface, and pass the implementation to the [LSLConstantAttribute]
-// in the named parameter 'ValueStringConverter'.
+// the 'LibLSLCC.LibraryData.Reflection.ILSLValueStringConverter' interface, and pass the implementation 
+// to the [LSLConstantAttribute] in the named parameter 'ValueStringConverter'.
 //
 [LSLConstant(LSLType.Integer, ValueStringConverter = typeof(MyValueStringConverter))]
 public const int MY_CONSTANT = 42;
