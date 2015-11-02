@@ -58,11 +58,94 @@ asks you in the command prompt.
 # OpenSim Framework Changes (IScriptModuleComms)
 
 
-
 I have modified the IScriptModuleComms interface to return more information
 about the origin of script constants and library methods.
 
 The ScriptModuleCommsModule implementation has been updated to support this new interface.
+
+
+```C#
+
+    public interface IScriptModuleComms
+    {
+        event ScriptCommand OnScriptCommand;
+
+        void RegisterScriptInvocation(object target, string method);
+
+        void RegisterScriptInvocation(object target, MethodInfo method);
+
+        void RegisterScriptInvocation(object target, string[] methods);
+
+        void RegisterScriptInvocation(Type target, string[] methods);
+
+        void RegisterScriptInvocations(IRegionModuleBase target);
+
+        Delegate[] GetScriptInvocationList();
+
+        Delegate LookupScriptInvocation(string fname);
+		
+        string LookupModInvocation(string fname);
+		
+        Type[] LookupTypeSignature(string fname);
+		
+        Type LookupReturnType(string fname);
+
+        object InvokeOperation(UUID hostId, UUID scriptId, string fname, params object[] parms);
+		
+        void DispatchReply(UUID scriptId, int code, string text, string key);
+
+        void RegisterConstant(string cname, object value);
+		
+        void RegisterConstants(IRegionModuleBase target);
+		
+        object LookupModConstant(string cname);
+		
+        Dictionary<string, object> GetConstants();
+		
+        void RaiseEvent(UUID script, string id, string module, string command, string key);
+    }
+	
+	//Has changed to:
+	
+	public interface IScriptModuleComms
+    {
+        event ScriptCommand OnScriptCommand;
+
+        void RegisterScriptInvocation(object target, string method);
+
+        void RegisterScriptInvocation(object target, MethodInfo method);
+
+        void RegisterScriptInvocation(object target, string[] methods);
+
+        void RegisterScriptInvocation(Type target, string[] methods);
+
+        void RegisterScriptInvocations(IRegionModuleBase target);
+
+        ScriptInvocationInfo[] GetScriptInvocationList();
+
+        ScriptInvocationInfo LookupScriptInvocation(string fname);
+
+        string LookupModInvocation(string fname);
+
+        Type[] LookupTypeSignature(string fname);
+
+        Type LookupReturnType(string fname);
+
+        object InvokeOperation(UUID hostId, UUID scriptId, string fname, params object[] parms);
+
+        void DispatchReply(UUID scriptId, int code, string text, string key);
+
+        void RegisterConstants(IRegionModuleBase target);
+		
+        ScriptConstantInfo LookupModConstant(string cname);
+
+        Dictionary<string, ScriptConstantInfo> GetConstants();
+
+        void RaiseEvent(UUID script, string id, string module, string command, string key);
+    }
+	
+
+```
 
 
 The interface can now provide MethodInfo objects pertaining to where a script
