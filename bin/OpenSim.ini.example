@@ -858,7 +858,7 @@
     ;; Money Unit fee to create groups.  Default is 0.
     ; PriceGroupCreate = 0
 
-	
+
 [LibLSLCC]
     ; Disable or enable LibLSLCC extended compiler warnings.
     ; This is set to true by default, but you can set it to false if you think
@@ -867,35 +867,31 @@
     ; In the future I will probably implement warning codes that can be disabled
     ; selectively from this configuration file.
     EnableCompilerWarnings = true
-	
-	
+
+
 [XEngine]
     ;# {Enabled} {} {Enable the XEngine scripting engine?} {true false} true
     ;; Enable this engine in this OpenSim instance
     ; Enabled = true
-		
-	
-	; WriteScriptSourceToDebugFile = true
-	
-	
-	; ==========================================
-	; LibLSLCC Patch Settings
-	; ==========================================
-	
-	; The name of the class that implements the compiler
-	; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler
-	;
-	; CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
-	  CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler"
-	
-	; The assembly to load the compiler implementation from
-	; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.dll
-	;
-	; CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
-	  CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
-	
-	;============================================
-	
+
+
+    ; ==========================================
+    ; LibLSLCC Patch Settings
+    ; ==========================================
+
+    ; The name of the class that implements the compiler
+    ; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler
+    ;
+    ; CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
+      CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler"
+
+    ; The assembly to load the compiler implementation from
+    ; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.dll
+    ;
+    ; CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
+      CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
+
+    ;============================================
 
     ;; How many threads to keep alive even if nothing is happening
     ; MinThreads = 2
@@ -1002,6 +998,8 @@
     ;; Path to script engine assemblies
     ;; Default is ./bin/ScriptEngines
     ; ScriptEnginesPath = "ScriptEngines"
+
+
 
 [OSSL]
     ;# {Include-osslEnable} {} {Include file for enabling and permissions for OSSL functions} {}
@@ -1188,7 +1186,7 @@
     ;; "config-include/StandaloneCommon.ini.example" to "config-include/StandaloneCommon.ini" before
     ;; editing it to set the database and backend services that OpenSim will use.
     ;;
-    ; Include-Architecture = "config-include/Standalone.ini"
+     Include-Architecture = "config-include/Standalone.ini"
     ; Include-Architecture = "config-include/StandaloneHypergrid.ini"
     ; Include-Architecture = "config-include/Grid.ini"
     ; Include-Architecture = "config-include/GridHypergrid.ini"
