@@ -170,6 +170,12 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
+            //this defaults to true, we should turn it off so that parameter
+            //converters can be implemented my module classes if they do not want
+            //to explicitly attribute every function parameter.
+            reflectionSerializer.AttributedParametersOnly = false;
+
+
 
             foreach (var method in reflectionSerializer.DeSerializeMethods(typeof(ScriptBaseClass)))
             {

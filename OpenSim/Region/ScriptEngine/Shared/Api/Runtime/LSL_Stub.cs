@@ -1373,7 +1373,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         public void llMakeExplosion([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
             [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
             [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
-            LSL_Vector offset)
+            [LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             m_LSL_Functions.llMakeExplosion(particles, scale, vel, lifetime, arc, texture, offset);
         }
@@ -1382,7 +1382,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         public void llMakeFire([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
             [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
             [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
-            LSL_Vector offset)
+            [LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             m_LSL_Functions.llMakeFire(particles, scale, vel, lifetime, arc, texture, offset);
         }
@@ -1391,7 +1391,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         public void llMakeFountain([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
             [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
             [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.Integer)] int bounce,
-            string texture, [LSLParam(LSLType.Vector)] LSL_Vector offset, [LSLParam(LSLType.Float)] double bounce_offset)
+            [LSLParam(LSLType.String)] string texture, [LSLParam(LSLType.Vector)] LSL_Vector offset, [LSLParam(LSLType.Float)] double bounce_offset)
         {
             m_LSL_Functions.llMakeFountain(particles, scale, vel, lifetime, arc, bounce, texture, offset, bounce_offset);
         }
@@ -1400,7 +1400,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         public void llMakeSmoke([LSLParam(LSLType.Integer)] int particles, [LSLParam(LSLType.Float)] double scale,
             [LSLParam(LSLType.Float)] double vel, [LSLParam(LSLType.Float)] double lifetime,
             [LSLParam(LSLType.Float)] double arc, [LSLParam(LSLType.String)] string texture,
-            LSL_Vector offset)
+            [LSLParam(LSLType.Vector)] LSL_Vector offset)
         {
             m_LSL_Functions.llMakeSmoke(particles, scale, vel, lifetime, arc, texture, offset);
         }
@@ -2004,7 +2004,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         public void llSetLinkTextureAnim([LSLParam(LSLType.Integer)] int linknum, [LSLParam(LSLType.Integer)] int mode,
             [LSLParam(LSLType.Integer)] int face, [LSLParam(LSLType.Integer)] int sizex,
             [LSLParam(LSLType.Integer)] int sizey, [LSLParam(LSLType.Float)] double start,
-            double length, [LSLParam(LSLType.Float)] double rate)
+            [LSLParam(LSLType.Float)] double length, [LSLParam(LSLType.Float)] double rate)
         {
             m_LSL_Functions.llSetLinkTextureAnim(linknum, mode, face, sizex, sizey, start, length, rate);
         }
@@ -2409,8 +2409,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
 
         [LSLFunction(LSLType.Void)]
         public void llTriggerSoundLimited([LSLParam(LSLType.String)] string sound,
-            [LSLParam(LSLType.Float)] double volume, [LSLParam(LSLType.Vector)] LSL_Vector top_north_east,
-            LSL_Vector bottom_south_west)
+            [LSLParam(LSLType.Float)] double volume, [LSLParam(LSLType.Vector)] LSL_Vector top_north_east, [LSLParam(LSLType.Vector)] LSL_Vector bottom_south_west)
         {
             m_LSL_Functions.llTriggerSoundLimited(sound, volume, top_north_east, bottom_south_west);
         }

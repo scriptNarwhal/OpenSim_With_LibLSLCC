@@ -120,7 +120,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         }
 
         [LSLFunction(LSLType.Void)]
-        public void osSetWindParam([LSLParam(LSLType.String)] string plugin, [LSLParam(LSLType.String)] string param, LSL_Float value)
+        public void osSetWindParam([LSLParam(LSLType.String)] string plugin, [LSLParam(LSLType.String)] string param, [LSLParam(LSLType.Float)] LSL_Float value)
         {
             m_OSSL_Functions.osSetWindParam(plugin, param, value);
         }
@@ -157,52 +157,62 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         }
 
         [LSLFunction(LSLType.Float)]
-        public double osList2Double(LSL_Types.list src, [LSLParam(LSLType.Integer)] int index)
+        public double osList2Double([LSLParam(LSLType.List)] LSL_Types.list src, [LSLParam(LSLType.Integer)] int index)
         {
             return m_OSSL_Functions.osList2Double(src, index);
         }
 
         [LSLFunction(LSLType.String)]
-        public string osSetDynamicTextureURL([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string url, [LSLParam(LSLType.String)] string extraParams,
-            int timer)
+        public string osSetDynamicTextureURL([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string url, [LSLParam(LSLType.String)] string extraParams, [LSLParam(LSLType.Integer)] int timer)
         {
             return m_OSSL_Functions.osSetDynamicTextureURL(dynamicID, contentType, url, extraParams, timer);
         }
 
         [LSLFunction(LSLType.String)]
-        public string osSetDynamicTextureData([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string data, [LSLParam(LSLType.String)] string extraParams,
-            int timer)
+        public string osSetDynamicTextureData([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string data, [LSLParam(LSLType.String)] string extraParams, [LSLParam(LSLType.Integer)] int timer)
         {
             return m_OSSL_Functions.osSetDynamicTextureData(dynamicID, contentType, data, extraParams, timer);
         }
 
         [LSLFunction(LSLType.String)]
-        public string osSetDynamicTextureURLBlend([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string url, [LSLParam(LSLType.String)] string extraParams,
-            int timer, [LSLParam(LSLType.Integer)] int alpha)
+        public string osSetDynamicTextureURLBlend([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string url, [LSLParam(LSLType.String)] string extraParams, [LSLParam(LSLType.Integer)] int timer, [LSLParam(LSLType.Integer)] int alpha)
         {
             return m_OSSL_Functions.osSetDynamicTextureURLBlend(dynamicID, contentType, url, extraParams, timer, alpha);
         }
 
         [LSLFunction(LSLType.String)]
-        public string osSetDynamicTextureDataBlend([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string data, [LSLParam(LSLType.String)] string extraParams,
-            int timer, [LSLParam(LSLType.Integer)] int alpha)
+        public string osSetDynamicTextureDataBlend([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string data, [LSLParam(LSLType.String)] string extraParams, [LSLParam(LSLType.Integer)] int timer, [LSLParam(LSLType.Integer)] int alpha)
         {
             return m_OSSL_Functions.osSetDynamicTextureDataBlend(dynamicID, contentType, data, extraParams, timer, alpha);
         }
 
         [LSLFunction(LSLType.String)]
-        public string osSetDynamicTextureURLBlendFace([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string url,
-            string extraParams,
-            bool blend, [LSLParam(LSLType.Integer)] int disp, [LSLParam(LSLType.Integer)] int timer, [LSLParam(LSLType.Integer)] int alpha, [LSLParam(LSLType.Integer)] int face)
+        public string osSetDynamicTextureURLBlendFace(
+            [LSLParam(LSLType.String)] string dynamicID, 
+            [LSLParam(LSLType.String)] string contentType, 
+            [LSLParam(LSLType.String)] string url, 
+            [LSLParam(LSLType.String)] string extraParams,
+            [LSLParam(LSLType.Integer)] bool blend, 
+            [LSLParam(LSLType.Integer)] int disp, 
+            [LSLParam(LSLType.Integer)] int timer, 
+            [LSLParam(LSLType.Integer)] int alpha, 
+            [LSLParam(LSLType.Integer)] int face)
         {
             return m_OSSL_Functions.osSetDynamicTextureURLBlendFace(dynamicID, contentType, url, extraParams,
                 blend, disp, timer, alpha, face);
         }
 
         [LSLFunction(LSLType.String)]
-        public string osSetDynamicTextureDataBlendFace([LSLParam(LSLType.String)] string dynamicID, [LSLParam(LSLType.String)] string contentType, [LSLParam(LSLType.String)] string data,
-            string extraParams,
-            bool blend, [LSLParam(LSLType.Integer)] int disp, [LSLParam(LSLType.Integer)] int timer, [LSLParam(LSLType.Integer)] int alpha, [LSLParam(LSLType.Integer)] int face)
+        public string osSetDynamicTextureDataBlendFace(
+            [LSLParam(LSLType.String)] string dynamicID, 
+            [LSLParam(LSLType.String)] string contentType, 
+            [LSLParam(LSLType.String)] string data, 
+            [LSLParam(LSLType.String)] string extraParams,
+            [LSLParam(LSLType.Integer)] bool blend, 
+            [LSLParam(LSLType.Integer)] int disp, 
+            [LSLParam(LSLType.Integer)] int timer, 
+            [LSLParam(LSLType.Integer)] int alpha, 
+            [LSLParam(LSLType.Integer)] int face)
         {
             return m_OSSL_Functions.osSetDynamicTextureDataBlendFace(dynamicID, contentType, data, extraParams,
                 blend, disp, timer, alpha, face);
@@ -532,7 +542,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         }
 
         [LSLFunction(LSLType.Void)]
-        public void osMakeNotecard([LSLParam(LSLType.String)] string notecardName, LSL_Types.list contents)
+        public void osMakeNotecard([LSLParam(LSLType.String)] string notecardName, [LSLParam(LSLType.List)] LSL_Types.list contents)
         {
             m_OSSL_Functions.osMakeNotecard(notecardName, contents);
         }
@@ -678,13 +688,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         }
 
         [LSLFunction(LSLType.Key)]
-        public key osNpcCreate([LSLParam(LSLType.String)] string user, [LSLParam(LSLType.String)] string name, [LSLParam(LSLType.Vector)] vector position, key cloneFrom)
+        public key osNpcCreate([LSLParam(LSLType.String)] string user, [LSLParam(LSLType.String)] string name, [LSLParam(LSLType.Vector)] vector position, [LSLParam(LSLType.Key)] key cloneFrom)
         {
             return m_OSSL_Functions.osNpcCreate(user, name, position, cloneFrom);
         }
 
         [LSLFunction(LSLType.Key)]
-        public key osNpcCreate([LSLParam(LSLType.String)] string user, [LSLParam(LSLType.String)] string name, [LSLParam(LSLType.Vector)] vector position, key cloneFrom, [LSLParam(LSLType.Integer)] int options)
+        public key osNpcCreate([LSLParam(LSLType.String)] string user, [LSLParam(LSLType.String)] string name, [LSLParam(LSLType.Vector)] vector position, [LSLParam(LSLType.Key)] key cloneFrom, [LSLParam(LSLType.Integer)] int options)
         {
             return m_OSSL_Functions.osNpcCreate(user, name, position, cloneFrom, options);
         }
@@ -799,7 +809,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         }
 
         [LSLFunction(LSLType.Void)]
-        public void osNpcTouch([LSLParam(LSLType.Key)] LSL_Key npcLSL_Key, [LSLParam(LSLType.Key)] LSL_Key object_key, LSL_Integer link_num)
+        public void osNpcTouch([LSLParam(LSLType.Key)] LSL_Key npcLSL_Key, [LSLParam(LSLType.Key)] LSL_Key object_key, [LSLParam(LSLType.Integer)] LSL_Integer link_num)
         {
             m_OSSL_Functions.osNpcTouch(npcLSL_Key, object_key, link_num);
         }
@@ -1064,7 +1074,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         }
 
         [LSLFunction(LSLType.Void)]
-        public void osSetSpeed([LSLParam(LSLType.String)] string UUID, LSL_Float SpeedModifier)
+        public void osSetSpeed([LSLParam(LSLType.String)] string UUID, [LSLParam(LSLType.Float)] LSL_Float SpeedModifier)
         {
             m_OSSL_Functions.osSetSpeed(UUID, SpeedModifier);
         }
@@ -1118,8 +1128,12 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         }
 
         [LSLFunction(LSLType.Void)]
-        public void osSetProjectionParams([LSLParam(LSLType.Key)] LSL_Key prim, [LSLParam(LSLType.Integer)] bool projection, [LSLParam(LSLType.Key)] LSL_Key texture, [LSLParam(LSLType.Float)] double fov, [LSLParam(LSLType.Float)] double focus,
-            double amb)
+        public void osSetProjectionParams([LSLParam(LSLType.Key)]     LSL_Key prim, 
+                                          [LSLParam(LSLType.Integer)] bool projection, 
+                                          [LSLParam(LSLType.Key)]     LSL_Key texture, 
+                                          [LSLParam(LSLType.Float)]   double fov, 
+                                          [LSLParam(LSLType.Float)]   double focus, 
+                                          [LSLParam(LSLType.Float)]   double amb)
         {
             m_OSSL_Functions.osSetProjectionParams(prim, projection, texture, fov, focus, amb);
         }
@@ -1131,7 +1145,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.ScriptBase
         }
 
         [LSLFunction(LSLType.String)]
-        public LSL_String osUnixTimeToTimestamp(long time)
+        public LSL_String osUnixTimeToTimestamp([LSLParam(LSLType.Integer)] long time)
         {
             return m_OSSL_Functions.osUnixTimeToTimestamp(time);
         }
