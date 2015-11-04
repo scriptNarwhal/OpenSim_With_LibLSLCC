@@ -27,7 +27,7 @@ set to the "LibLSLCCCompiler.dll" so that LibLSLCC is used as the default compil
 # Configuration I Have Added
 
 
-There is a new section in OpenSim.ini for LibLSLCC related settings called [LibLSLCC].
+There is a new section in OpenSim.ini.example for LibLSLCC related settings called [LibLSLCC].
 currently the only option is for turning extended compiler warnings on and off:
 
 	[LibLSLCC]
@@ -41,7 +41,7 @@ currently the only option is for turning extended compiler warnings on and off:
 
 
 
-Under [XEngine] in OpenSim.ini you will find these new settings:
+Under [XEngine] in OpenSim.ini.example you will find these new settings:
 
 
 	; ==========================================
@@ -62,14 +62,6 @@ Under [XEngine] in OpenSim.ini you will find these new settings:
 	
 	;============================================
 
-When you clone this repository OpenSim is pre-configured in standalone mode using the SQLite storage backend.
-
-
-OpenSim.ini and bin/config-include/StandaloneCommon.ini have been left in the repository
-for this distribution to make running a test server on your PC easier.  If you just want
-to run a test server on localhost, you should not have to modify any configuration after building,
-just run OpenSim.exe and set up your region and region owner by answering the questions OpenSim
-asks you in the command prompt.
 
 
 # Dependencies I Have Added
