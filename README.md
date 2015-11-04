@@ -16,12 +16,12 @@ https://gitlab.com/erihoss/LibLSLCC
 
 
 Settings that determine the compiler Assembly (dll) and class have been added under the
-[XEngine] configuration section in OpenSim.ini.  See OpenSim.ini in the 'bin' folder where the OpenSim
-executable resides.
+[XEngine] configuration section in OpenSim.ini.example.  
 
-The included OpenSim.ini.example and OpenSim.ini have the default compiler assembly
+See 'OpenSim.ini.example' in the 'bin' folder where the OpenSim executable resides.
+
+The included OpenSim.ini.example has the default compiler assembly
 set to the "LibLSLCCCompiler.dll" so that LibLSLCC is used as the default compiler.
-
 
 
 # Configuration I Have Added
