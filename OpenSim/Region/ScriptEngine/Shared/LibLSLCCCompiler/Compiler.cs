@@ -36,6 +36,7 @@ using System.Reflection;
 using System.Text;
 using log4net;
 using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.Compilers;
 using LibLSLCC.LibraryData;
 using LibLSLCC.LibraryData.Reflection;
 using Microsoft.CSharp;
@@ -104,6 +105,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         private bool in_startup = true;
 
         private bool EnableCompilerWarnings;
+        private bool CreateClassWrapperForCSharpScripts;
+        private bool CreateClassWrapperForVBScripts;
 
 
         public Compiler(IScriptEngine scriptEngine)
@@ -272,9 +275,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             if ((libLslccConfig = configSource.Configs["LibLSLCC"]) != null)
             {
                 EnableCompilerWarnings = libLslccConfig.GetBoolean("EnableCompilerWarnings", true);
+                CreateClassWrapperForCSharpScripts = libLslccConfig.GetBoolean("CreateClassWrapperForCSharpScripts", true);
+                CreateClassWrapperForVBScripts = libLslccConfig.GetBoolean("CreateClassWrapperForVBScripts", true);
             }
             else
             {
+                CreateClassWrapperForVBScripts = true;
+                CreateClassWrapperForCSharpScripts = true;
                 EnableCompilerWarnings = true;
             }
 
@@ -373,6 +380,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             // We now have an allow-list, a mapping list, and a default language
         }
+
+
 
 
         /// <summary>
@@ -542,10 +551,10 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             if (language == CompileLanguage.lsl)
             {
                 // Its LSL, convert it to C#
-                var converter = new LibLSLCCCodeGenerator(_libLslccMainLibraryDataProvider);
+                var converter = new LibLSLCCCodeGenerator(createLSLCompilerSettings());
+
 
                 converter.EmitCompilerWarnings = EnableCompilerWarnings;
-                converter.InsertCoopTerminationCalls = m_insertCoopTerminationCalls;
 
 
                 LSL_Converter = converter;
@@ -560,24 +569,30 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
                 //no more line map junk!
             }
 
-            switch (language)
+            //the LibLSLCC code generator generates everything, the class, constructor, namespace and imports
+            //using the settings we created and gave to it.
+            //
+            //so we now only need to modify incoming CSharp or VB scripts before compiling them.
+            if (language == CompileLanguage.cs && CreateClassWrapperForCSharpScripts)
             {
-                case CompileLanguage.cs:
-                case CompileLanguage.lsl:
-                    compileScript = CreateCSCompilerScript(
+                compileScript = CreateCSCompilerScript(
                         compileScript,
                         m_scriptEngine.ScriptClassName,
                         m_scriptEngine.ScriptBaseClassName,
                         m_scriptEngine.ScriptBaseClassParameters);
-                    break;
-                case CompileLanguage.vb:
-                    compileScript = CreateVBCompilerScript(
-                        compileScript, m_scriptEngine.ScriptClassName, m_scriptEngine.ScriptBaseClassName);
-                    break;
+            }
+
+            if (language == CompileLanguage.vb && CreateClassWrapperForVBScripts)
+            {
+                compileScript = CreateVBCompilerScript(
+                        compileScript,
+                        m_scriptEngine.ScriptClassName,
+                        m_scriptEngine.ScriptBaseClassName);
             }
 
             assembly = CompileFromDotNetText(compileScript, language, asset, assembly);
         }
+
 
 
         public string[] GetWarnings()
@@ -593,6 +608,48 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
                 m_warnings.Add(warning);
             }
         }
+
+
+
+        private LSLOpenSimCSCompilerSettings createLSLCompilerSettings()
+        {
+
+
+            var constructorParameters = m_scriptEngine.ScriptBaseClassParameters;
+
+            var constructorSigParams = constructorParameters != null
+                    ? string.Join(", ", Array.ConvertAll(constructorParameters, pi => pi.ToString())) : "";
+
+            var constructorSigParamNames = constructorParameters != null
+                   ? string.Join(", ", Array.ConvertAll(constructorParameters, pi => pi.Name)) : "";
+
+            var constructorSig =  "(" + constructorSigParams + ") : base(" + constructorSigParamNames + ")";
+
+            var compilerSettings = new LSLOpenSimCSCompilerSettings(_libLslccMainLibraryDataProvider)
+            {
+                GenerateClass = true,
+
+                GeneratedClassNamespace = "SecondLife",
+
+                GeneratedClassName = m_scriptEngine.ScriptClassName,
+
+                GeneratedClassInherit = m_scriptEngine.ScriptBaseClassName,
+
+                GeneratedConstructorSignature = constructorSig,
+
+                GeneratedNamespaceImports =
+                    new HashSet<string> {"OpenSim.Region.ScriptEngine.Shared", "System.Collections.Generic"},
+
+                InsertCoOpTerminationCalls = m_insertCoopTerminationCalls,
+
+                CoOpTerminationFunctionCall = "opensim_reserved_CheckForCoopTermination()"
+
+            };
+
+            return compilerSettings;
+        }
+
+
 
 
         private static string CreateCSCompilerScript(

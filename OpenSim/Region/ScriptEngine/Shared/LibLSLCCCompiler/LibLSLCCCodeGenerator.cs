@@ -17,18 +17,19 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         private readonly ILSLLibraryDataProvider _libraryData;
 
 
-        public LibLSLCCCodeGenerator(ILSLLibraryDataProvider libraryData)
+        public LibLSLCCCodeGenerator(LSLOpenSimCSCompilerSettings compilerSettings)
         {
-            _libraryData = libraryData;
+            _libraryData = compilerSettings.LibraryDataProvider;
+            CompilerSettings = compilerSettings;
+
         }
+
 
 
         public Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>> PositionMap
         {
             get { return new Dictionary<KeyValuePair<int, int>, KeyValuePair<int, int>>(); }
         }
-
-        public bool InsertCoopTerminationCalls { get; set; }
 
         public bool EmitCompilerWarnings { get; set; }
 
@@ -88,6 +89,10 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
+        public LSLOpenSimCSCompilerSettings CompilerSettings { get; private set; }
+
+
+
         public string Convert(string script)
         {
             var validatorServices = new LSLCustomValidatorServiceProvider();
@@ -121,10 +126,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             var outStream = new MemoryStream();
 
-            var compilerSettings = LSLOpenSimCSCompilerSettings.OpenSimClientUploadable(_libraryData);
-            compilerSettings.InsertCoOpTerminationCalls = InsertCoopTerminationCalls;
-
-            var compiler = new LSLOpenSimCSCompiler(compilerSettings);
+            var compiler = new LSLOpenSimCSCompiler(CompilerSettings);
 
             compiler.Compile(syntaxTree, new StreamWriter(outStream, Encoding.Unicode));
             

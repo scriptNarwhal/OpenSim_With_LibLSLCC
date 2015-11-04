@@ -27,17 +27,42 @@ set to the "LibLSLCCCompiler.dll" so that LibLSLCC is used as the default compil
 # Configuration I Have Added
 
 
-There is a new section in OpenSim.ini.example for LibLSLCC related settings called [LibLSLCC].
-currently the only option is for turning extended compiler warnings on and off:
+There is a new section in OpenSim.ini.example for LibLSLCC related settings called [LibLSLCC]:
 
 	[LibLSLCC]
-		; Disable or enable LibLSLCC extended compiler warnings.
-		; This is set to true by default, but you can set it to false if you think
-		; LibLSLCC's extended warnings are too pedantic.
-		;
-		; In the future I will probably implement warning codes that can be disabled
-		; selectively from this configuration file.
-		EnableCompilerWarnings = true
+		;; Disable or enable LibLSLCC extended compiler warnings.
+		;; This is set to true by default, but you can set it to false if you think
+		;; LibLSLCC's extended warnings are too pedantic.
+		;;
+		;; In the future I will probably implement warning codes that can be disabled
+		;; selectively from this configuration file.
+		;;
+		;  EnableCompilerWarnings = true
+		
+		
+		;; Allows you to turn automatic class generation for CSharp
+		;; scripts on and off when uploading CSharp directly to the LibLSLCC compiler.
+		;; This setting only meaningful if you have CSharp scripting enabled and are 
+		;; using LibLSLCC as your compiler.
+		;;
+		;; This is for advanced users who know how to completely define 
+		;; the script class that derives from OpenSim's runtime base class
+		;; for script instances.
+		;;
+		;; Its primary purpose is debuging LibLSLCC's code generation
+		;; via client uploaded scripts compiled in server side mode from LSLCCEditor.
+		;;
+		;; It defaults to 'true' which is the normal behavior for CSharp uploads
+		;; while using the old compiler.
+		;;
+		;  CreateClassWrapperForCSharpScripts = true
+		
+		
+		;; Same idea as CreateClassWrapperForCSharpScripts
+		;; Except this applies to when Visual Basic scripts are uploaded
+		;; from the client.
+		;;
+		;  CreateClassWrapperForVBScripts = true
 
 
 
