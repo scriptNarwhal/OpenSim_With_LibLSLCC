@@ -769,7 +769,6 @@ namespace SecondLife
                 {
                     string severity = CompErr.IsWarning ? "Warning" : "Error";
 
-                    KeyValuePair<int, int> errorPos;
 
                     // Show 5 errors max, but check entire list for errors
 
