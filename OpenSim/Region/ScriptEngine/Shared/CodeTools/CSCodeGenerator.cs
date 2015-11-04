@@ -932,9 +932,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.CodeTools
         {
             if (m_comms != null)
             {
-                object value = m_comms.LookupModConstant(id).ConstantValue;
-                if (value != null)
+                ScriptConstantInfo info = m_comms.LookupModConstant(id);
+
+
+                if (info != null)
                 {
+                    object value = info.ConstantValue;
+
                     string retval = null;
                     if (value is int)
                         retval = String.Format("new LSL_Types.LSLInteger({0})",((int)value).ToString());
