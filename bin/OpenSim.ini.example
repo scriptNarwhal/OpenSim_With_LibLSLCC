@@ -995,35 +995,35 @@
     ;; Default language for scripts
     ; DefaultCompileLanguage = "lsl"
 
-	
+    
     ;# {AllowedCompilers} {Enabled:true} {Languages to allow (comma separated)?} {} lsl
-	;;
+    ;;
     ;; Languages accepted by 'OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler':  (lsl,vb,cs) 
-	;;
-	;; Languages accepted by 'OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler':  (lsl,vb,cs,csraw,vbraw)
-	;;
-	;; The LibLSLCC compiler additionally accepts csraw and vbraw when active.
-	;; The code headers for them are: //c#-raw  and //vb-raw
-	;;
-	;; These two new accepted language settings allow the LibLSLCC compiler to accept raw C# and VB code. 
-	;; LibLSLCC will not generate a wrapper class for these code types, you must implement the entire script 
-	;; class yourself when uploading 'csraw' or 'vbraw' scripts.
-	;;
-	;; example:
-	;;
+    ;;
+    ;; Languages accepted by 'OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler':  (lsl,vb,cs,csraw,vbraw)
+    ;;
+    ;; The LibLSLCC compiler additionally accepts csraw and vbraw when active.
+    ;; The code headers for them are: //c#-raw  and //vb-raw
+    ;;
+    ;; These two new accepted language settings allow the LibLSLCC compiler to accept raw C# and VB code. 
+    ;; LibLSLCC will not generate a wrapper class for these code types, you must implement the entire script 
+    ;; class yourself when uploading 'csraw' or 'vbraw' scripts.
+    ;;
+    ;; example:
+    ;;
     ;; AllowedCompilers=lsl,cs,vb
-	;;
+    ;;
     ;; *warning*, non lsl languages have access to static methods such as
     ;; System.IO.File.  Enable at your own risk.
     ; AllowedCompilers = "lsl"
-	
-	
-
+    
+    
+    
     ;; Compile debug info (line numbers) into the script assemblies
     ; CompileWithDebugInformation = true
-	
-	;; Save the source of all compiled scripts next to their assemblies under the ScriptEngines directory.
-	; WriteScriptSourceToDebugFile = false
+    
+    ;; Save the source of all compiled scripts next to their assemblies under the ScriptEngines directory.
+    ; WriteScriptSourceToDebugFile = false
 
     ; ==== Settings for MOD and OSSL functions have been moved to the [OSSL] section
 
