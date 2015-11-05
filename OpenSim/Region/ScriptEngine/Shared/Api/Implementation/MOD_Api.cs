@@ -167,9 +167,6 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api
 //                ((MethodInfo)MethodBase.GetCurrentMethod()).ReturnType);
 
             Type returntype = m_comms.LookupReturnType(fname);
-
-            Console.WriteLine(returntype.FullName);
-
             if (returntype != typeof(int))
                 MODError(String.Format("return type mismatch for {0}",fname));
 
