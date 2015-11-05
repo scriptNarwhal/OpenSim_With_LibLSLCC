@@ -782,21 +782,37 @@ namespace OpenSim.Region.ScriptEngine.XEngine
         /// <returns>A dynamically loaded implementation of ICompiler</returns>
         private ICompiler LoadCompiler()
         {
-            var compilerClass = this.Config.GetString("CompilerClass",
+            var compilerClassName = this.Config.GetString("CompilerClass",
                 "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler");
 
-            var compilerAssembly = this.Config.GetString("CompilerAssembly",
+            var compilerAssemblyName = this.Config.GetString("CompilerAssembly",
                 "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll");
 
+            Assembly compilerAssembly;
 
+            try
+            {
+                compilerAssembly = Assembly.LoadFile(Path.GetFullPath(compilerAssemblyName));
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format("XEngine Failed to load the specified compiler assembly: {0}", compilerAssemblyName+", message: "+e.Message, e));
+            }
 
+            ICompiler compiler;
+            Type compilerType;
 
-            var assembly = Assembly.LoadFile(Path.GetFullPath(compilerAssembly));
+            try
+            {
+                compilerType = compilerAssembly.GetType(compilerClassName);
 
+                compiler = Activator.CreateInstance(compilerType, this) as ICompiler;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(string.Format("XEngine Failed to load the specified compiler class: {0}", compilerClassName + ", message: " + e.Message, e));
+            }
 
-            var cType = assembly.GetType(compilerClass);
-
-            var compiler = Activator.CreateInstance(cType, this) as ICompiler;
 
             if (compiler != null)
             {
@@ -806,7 +822,7 @@ namespace OpenSim.Region.ScriptEngine.XEngine
 
             var message = string.Format(
                 "\"{0}\" is not a valid Compiler, Compilers must derive from ICompiler"
-                , cType.Name);
+                , compilerType.Name);
 
             m_log.Error(message);
 

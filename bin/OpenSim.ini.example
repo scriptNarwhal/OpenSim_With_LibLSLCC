@@ -871,8 +871,9 @@
     ;  EnableCompilerWarnings = true
 	
 	
-	;; Allows you to turn automatic class generation for CSharp
-	;; scripts on and off when uploading CSharp directly to the LibLSLCC compiler.
+	;; Allows you to enable or disable automatic class generation for all CSharp
+	;; scripts when uploading CSharp directly to the LibLSLCC compiler.
+	;;
     ;; This setting only meaningful if you have CSharp scripting enabled and are 
 	;; using LibLSLCC as your compiler.
 	;;
@@ -886,12 +887,29 @@
 	;; It defaults to 'true' which is the normal behavior for CSharp uploads
 	;; while using the old compiler.
 	;;
+	;; You can override this on a per script basis by adding 'csraw' to the allowed
+	;; languages list for XEngine when LibLSLCC is active.  When 'csraw' is allowed, you can put
+	;; a '//c#-raw' comment at the very begining of your script.  It will cause the compiler
+	;; not to generate the class wrapper, namespace or includes normally added to a C# upload.
+	;; This happens just for that one script and not others uploaded with a '//c#' header.
+	;;
+	;; Setting this setting to 'false' effectively means you want all CSharp script types to be
+	;; considered 'csraw' regardless of whether or not XEngine has it in the allowed languages list.
+	;;
 	;  CreateClassWrapperForCSharpScripts = true
 	
 	
 	;; Same idea as CreateClassWrapperForCSharpScripts
 	;; Except this applies to when Visual Basic scripts are uploaded
 	;; from the client.
+	;;
+	;; You can override this setting on a per script basis by adding 'vbraw' to the allowed
+	;; languages list for XEngine.  When 'vbraw' is allowed, you can put a '//vb-raw' comment 
+	;; at the very begining of your script.  It will cause the compiler not to generate the class
+	;; wrapper, namespace or includes normally added to a VB upload.
+	;;
+	;; Setting this setting to 'false' effectively means you want all VB script upload types to be
+	;; considered 'vbraw' regardless of whether or not XEngine has it in the allowed languages list.
 	;;
 	;  CreateClassWrapperForVBScripts = true
 	
@@ -977,12 +995,29 @@
     ;; Default language for scripts
     ; DefaultCompileLanguage = "lsl"
 
+	
     ;# {AllowedCompilers} {Enabled:true} {Languages to allow (comma separated)?} {} lsl
-    ;; List of allowed languages (lsl,vb,cs)
+	;;
+    ;; Languages accepted by 'OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler':  (lsl,vb,cs) 
+	;;
+	;; Languages accepted by 'OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler':  (lsl,vb,cs,csraw,vbraw)
+	;;
+	;; The LibLSLCC compiler additionally accepts csraw and vbraw when active.
+	;; The code headers for them are: //c#-raw  and //vb-raw
+	;;
+	;; These two new accepted language settings allow the LibLSLCC compiler to accept raw C# and VB code. 
+	;; LibLSLCC will not generate a wrapper class for these code types, you must implement the entire script 
+	;; class yourself when uploading 'csraw' or 'vbraw' scripts.
+	;;
+	;; example:
+	;;
     ;; AllowedCompilers=lsl,cs,vb
+	;;
     ;; *warning*, non lsl languages have access to static methods such as
     ;; System.IO.File.  Enable at your own risk.
     ; AllowedCompilers = "lsl"
+	
+	
 
     ;; Compile debug info (line numbers) into the script assemblies
     ; CompileWithDebugInformation = true

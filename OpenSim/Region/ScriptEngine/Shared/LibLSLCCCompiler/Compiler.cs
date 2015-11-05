@@ -70,7 +70,9 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         {
             lsl = 0,
             cs = 1,
-            vb = 2
+            vb = 2,
+            csraw = 3,
+            vbraw = 4,
         }
 
 
@@ -218,7 +220,6 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             //remove the filter, just because.
             reflectionSerializer.ParameterFilter = null;
 
-
             foreach (var constant in comms.GetConstants())
             {
                 var memberInfo = constant.Value.ClassMember;
@@ -310,10 +311,12 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             }
 
             // Map name and enum type of our supported languages
+            LanguageMapping.Add(CompileLanguage.csraw.ToString(), CompileLanguage.csraw);
             LanguageMapping.Add(CompileLanguage.cs.ToString(), CompileLanguage.cs);
             LanguageMapping.Add(CompileLanguage.vb.ToString(), CompileLanguage.vb);
+            LanguageMapping.Add(CompileLanguage.vbraw.ToString(), CompileLanguage.vbraw);
             LanguageMapping.Add(CompileLanguage.lsl.ToString(), CompileLanguage.lsl);
-
+            
 
             // Allowed compilers
             string allowComp = m_scriptEngine.Config.GetString("AllowedCompilers", "lsl");
@@ -513,17 +516,29 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             {
                 language = CompileLanguage.cs;
             }
+            if (source.StartsWith("//c#-raw", true, CultureInfo.InvariantCulture))
+            {
+                language = CompileLanguage.csraw;
+            }
+            if (source.StartsWith("//vb-raw", true, CultureInfo.InvariantCulture))
+            {
+                language = CompileLanguage.vbraw;
+
+                // We need to remove //vb-raw, it won't compile with that
+                source = source.Substring(8, source.Length - 8);
+            }
             if (source.StartsWith("//vb", true, CultureInfo.InvariantCulture))
             {
                 language = CompileLanguage.vb;
-                // We need to remove //vb, it won't compile with that
 
+                // We need to remove //vb, it won't compile with that
                 source = source.Substring(4, source.Length - 4);
             }
             if (source.StartsWith("//lsl", true, CultureInfo.InvariantCulture))
             {
                 language = CompileLanguage.lsl;
             }
+
 
 
             //            m_log.DebugFormat("[Compiler]: Compile language is {0}", language);
@@ -770,10 +785,12 @@ namespace SecondLife
             CompilerResults results;
             switch (lang)
             {
+                case CompileLanguage.vbraw:
                 case CompileLanguage.vb:
                     results = VBcodeProvider.CompileAssemblyFromSource(
                         parameters, script);
                     break;
+                case CompileLanguage.csraw:
                 case CompileLanguage.cs:
                 case CompileLanguage.lsl:
                     bool complete = false;

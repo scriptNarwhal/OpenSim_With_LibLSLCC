@@ -69,23 +69,58 @@ There is a new section in OpenSim.ini.example for LibLSLCC related settings call
 Under [XEngine] in OpenSim.ini.example you will find these new settings:
 
 
-	; ==========================================
-	; LibLSLCC Patch Settings
-	; ==========================================
+    ;; ==========================================
+    ;; LibLSLCC Patch Settings
+    ;; ==========================================
+
+    ;; The name of the class that implements the compiler
+    ;; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler
+    ;;
+    ;  CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
+       CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler"
+
+    ;; The assembly to load the compiler implementation from
+    ;; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.dll
+    ;;
+    ;  CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
+       CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
+
+    ;;============================================
 	
-	; The name of the class that implements the compiler
-	; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler
-	;
-	; CompilerClass = "OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler"
-	  CompilerClass = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler"
 	
-	; The assembly to load the compiler implementation from
-	; Default is OpenSim.Region.ScriptEngine.Shared.CodeTools.dll
-	;
-	; CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.CodeTools.dll"
-	  CompilerAssembly = "OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.dll"
+Additionally, When LibLSL is enabled two new Allowed Compiler language settings
+('csraw' and 'vbraw') are available under the [XEngine] section:
+
+
+    ;# {AllowedCompilers} {Enabled:true} {Languages to allow (comma separated)?} {} lsl
+	;;
+    ;; Languages accepted by 'OpenSim.Region.ScriptEngine.Shared.CodeTools.Compiler':  (lsl,vb,cs) 
+	;;
+	;; Languages accepted by 'OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler.Compiler':  (lsl,vb,cs,csraw,vbraw)
+	;;
+	;; The LibLSLCC compiler additionally accepts csraw and vbraw when active.
+	;; The code headers for them are: //c#-raw  and //vb-raw
+	;;
+	;; These two new accepted language settings allow the LibLSLCC compiler to accept raw C# and VB code. 
+	;; LibLSLCC will not generate a wrapper class for these code types, you must implement the entire script 
+	;; class yourself when uploading 'csraw' or 'vbraw' scripts.
+	;;
+	;; example:
+	;;
+    ;; AllowedCompilers=lsl,cs,vb
+	;;
+    ;; *warning*, non lsl languages have access to static methods such as
+    ;; System.IO.File.  Enable at your own risk.
+    ; AllowedCompilers = "lsl"
 	
-	;============================================
+	
+	
+LSLCCEditor can produce scripts compatible with the **'csraw'** upload mode, it is mostly for code
+generation debuging purposes.  **'csraw'** functions just like the global **[LibLSLCC].CreateClassWrapperForCSharpScripts**
+setting, except it works on a per script basis.  You add the **'//c#-raw'** script header comment to your script and the 
+compiler will recognize that you do not want a class wrapper generated for the CSharp you just uploaded.
+
+**'vb-raw'** is basically the same idea as **'csraw'** except its for VB scripts. 
 
 
 
