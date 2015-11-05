@@ -234,7 +234,7 @@ namespace OpenSim.Region.CoreModules.Scripting.ScriptModuleComms
                     BindingFlags.Static))
             {
                 bool osScriptFuncAttribute = method.GetCustomAttributes(
-                    typeof(ScriptConstantAttribute), true).Any();
+                    typeof(ScriptInvocationAttribute), true).Any();
 
                 bool libLslccScriptFuncAttribute = method
                     .GetCustomAttributes(typeof(LSLFunctionAttribute), true).Any();
