@@ -116,7 +116,9 @@ Additionally, When LibLSL is enabled two new Allowed Compiler language settings
 	
 	
 LSLCCEditor can produce scripts compatible with the **'csraw'** upload mode, it is mostly for code generation debuging purposes.
+
 **'csraw'** functions just like the global **[LibLSLCC].CreateClassWrapperForCSharpScripts** setting, except it works on a per script basis.
+
 You add the **'//c#-raw'** script header comment to your script and the compiler will recognize that you do not want a class wrapper
 generated for the CSharp you just uploaded.
 
