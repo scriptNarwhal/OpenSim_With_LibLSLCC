@@ -102,7 +102,7 @@ Additionally, When LibLSL is enabled two new Allowed Compiler language settings
 	;; The code headers for them are: //c#-raw  and //vb-raw
 	;;
 	;; These two new accepted language settings allow the LibLSLCC compiler to accept raw C# and VB code. 
-	;; LibLSLCC will not generate a wrapper class for these code types, you must implement the entire script 
+	;; LibLSLCCCompiler will not generate a wrapper class for these code types, you must implement the entire script 
 	;; class yourself when uploading 'csraw' or 'vbraw' scripts.
 	;;
 	;; example:
