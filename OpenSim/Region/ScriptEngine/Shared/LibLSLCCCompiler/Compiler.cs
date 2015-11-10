@@ -36,6 +36,7 @@ using System.Reflection;
 using System.Text;
 using log4net;
 using LibLSLCC.CodeValidator.Enums;
+using LibLSLCC.Collections;
 using LibLSLCC.Compilers;
 using LibLSLCC.LibraryData;
 using LibLSLCC.LibraryData.Reflection;
@@ -243,7 +244,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             //the following is a hack, because OpenSim does not keep information about event signatures around, just the names.
 
             //Open LSL, no additions, just the events get loaded into memory since live filtering disabled.
-            var ev = new LSLDefaultLibraryDataProvider(
+            var ev = new LSLEmbeddedLibraryDataProvider(
                 LSLLibraryBaseData.OpensimLsl,LSLLibraryDataAdditions.None, false,
                 LSLLibraryDataLoadOptions.Events);
 
@@ -566,7 +567,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             if (language == CompileLanguage.lsl)
             {
                 // Its LSL, convert it to C#
-                var converter = new LibLSLCCCodeGenerator(createLSLCompilerSettings());
+                var converter = new LibLSLCCCodeGenerator(_libLslccMainLibraryDataProvider, createLSLCompilerSettings());
 
 
                 converter.EmitCompilerWarnings = EnableCompilerWarnings;
@@ -626,9 +627,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
-        private LSLOpenSimCSCompilerSettings createLSLCompilerSettings()
+        private LSLOpenSimCompilerSettings createLSLCompilerSettings()
         {
-
 
             var constructorParameters = m_scriptEngine.ScriptBaseClassParameters;
 
@@ -640,7 +640,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             var constructorSig =  "(" + constructorSigParams + ") : base(" + constructorSigParamNames + ")";
 
-            var compilerSettings = new LSLOpenSimCSCompilerSettings(_libLslccMainLibraryDataProvider)
+
+            var compilerSettings = new LSLOpenSimCompilerSettings()
             {
                 GenerateClass = true,
 
@@ -652,14 +653,16 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
                 GeneratedConstructorSignature = constructorSig,
 
-                GeneratedNamespaceImports =
-                    new HashSet<string> {"OpenSim.Region.ScriptEngine.Shared", "System.Collections.Generic"},
 
                 InsertCoOpTerminationCalls = m_insertCoopTerminationCalls,
 
                 CoOpTerminationFunctionCall = "opensim_reserved_CheckForCoopTermination()"
 
             };
+
+            compilerSettings.GeneratedNamespaceImports.Add("System.Collections.Generic");
+            compilerSettings.GeneratedNamespaceImports.Add("OpenSim.Region.ScriptEngine.Shared");
+            
 
             return compilerSettings;
         }

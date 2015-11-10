@@ -17,9 +17,9 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         private readonly ILSLLibraryDataProvider _libraryData;
 
 
-        public LibLSLCCCodeGenerator(LSLOpenSimCSCompilerSettings compilerSettings)
+        public LibLSLCCCodeGenerator(ILSLLibraryDataProvider libraryDataProvider, LSLOpenSimCompilerSettings compilerSettings)
         {
-            _libraryData = compilerSettings.LibraryDataProvider;
+            _libraryData = libraryDataProvider;
             CompilerSettings = compilerSettings;
 
         }
@@ -89,13 +89,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
-        public LSLOpenSimCSCompilerSettings CompilerSettings { get; private set; }
+        public LSLOpenSimCompilerSettings CompilerSettings { get; private set; }
 
 
 
         public string Convert(string script)
         {
-            var validatorServices = new LSLCustomValidatorServiceProvider();
+            var validatorServices = new LSLValidatorServiceProvider();
 
 
             var errorListener = new ErrorListener(this);
@@ -126,7 +126,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             var outStream = new MemoryStream();
 
-            var compiler = new LSLOpenSimCSCompiler(CompilerSettings);
+            var compiler = new LSLOpenSimCompiler(_libraryData, CompilerSettings);
 
             compiler.Compile(syntaxTree, new StreamWriter(outStream, Encoding.Unicode));
             
