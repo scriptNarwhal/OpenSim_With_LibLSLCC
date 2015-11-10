@@ -243,7 +243,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             //the following is a hack, because OpenSim does not keep information about event signatures around, just the names.
 
-            //Open LSL, no additions, just the events get loaded into memory since live filtering disabled.
+            //Opensim LSL, no additions, just the events get loaded into memory since live filtering disabled.
             var ev = new LSLEmbeddedLibraryDataProvider(
                 LSLLibraryBaseData.OpensimLsl,LSLLibraryDataAdditions.None, false,
                 LSLLibraryDataLoadOptions.Events);
