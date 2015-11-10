@@ -90,10 +90,9 @@ namespace OpenSim.Region.ScriptEngine.Shared
                     x=y=z=0;
                     return;
                 }
-                bool res;
-                res = Double.TryParse(tmps[0], NumberStyles.Float, Culture.NumberFormatInfo, out x);
-                res = res & Double.TryParse(tmps[1], NumberStyles.Float, Culture.NumberFormatInfo, out y);
-                res = res & Double.TryParse(tmps[2], NumberStyles.Float, Culture.NumberFormatInfo, out z);
+                x = LSLFloat.FromString(tmps[0]);
+                y = LSLFloat.FromString(tmps[1]);
+                z = LSLFloat.FromString(tmps[2]);
             }
 
             #endregion
@@ -108,13 +107,13 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             public static explicit operator LSLString(Vector3 vec)
             {
-                const string format = "{0:0.000000}";
+                const string format = "{0:0.00000}";
                 return new LSLString(String.Format("<{0}, {1}, {2}>", LSLFloat.ToString(vec.x, format), LSLFloat.ToString(vec.y, format), LSLFloat.ToString(vec.z, format)));
             }
 
             public static explicit operator string(Vector3 vec)
             {
-                const string format = "{0:0.000000}";
+                const string format = "{0:0.00000}";
                 return String.Format("<{0}, {1}, {2}>", LSLFloat.ToString(vec.x, format), LSLFloat.ToString(vec.y, format), LSLFloat.ToString(vec.z, format));
             }
 
@@ -352,11 +351,10 @@ namespace OpenSim.Region.ScriptEngine.Shared
                     x=y=z=s=0;
                     return;
                 }
-                bool res;
-                res = Double.TryParse(tmps[0], NumberStyles.Float, Culture.NumberFormatInfo, out x);
-                res = res & Double.TryParse(tmps[1], NumberStyles.Float, Culture.NumberFormatInfo, out y);
-                res = res & Double.TryParse(tmps[2], NumberStyles.Float, Culture.NumberFormatInfo, out z);
-                res = res & Double.TryParse(tmps[3], NumberStyles.Float, Culture.NumberFormatInfo, out s);
+                x = LSLFloat.FromString(tmps[0]);
+                y = LSLFloat.FromString(tmps[1]);
+                z = LSLFloat.FromString(tmps[2]);
+                s = LSLFloat.FromString(tmps[3]);
                 if (x == 0 && y == 0 && z == 0 && s == 0)
                     s = 1;
             }
@@ -424,7 +422,7 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             public static explicit operator string(Quaternion r)
             {
-                const string format = "{0:0.000000}";
+                const string format = "{0:0.00000}";
                 return String.Format("<{0}, {1}, {2}, {3}>",
                     LSLFloat.ToString(r.x,format), 
                     LSLFloat.ToString(r.y, format), 
@@ -434,7 +432,7 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             public static explicit operator LSLString(Quaternion r)
             {
-                const string format = "{0:0.000000}";
+                const string format = "{0:0.00000}";
                 return new LSLString(String.Format("<{0}, {1}, {2}, {3}>", 
                     LSLFloat.ToString(r.x, format), 
                     LSLFloat.ToString(r.y, format), 
@@ -1995,21 +1993,7 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             public LSLFloat(string s)
             {
-                Regex r = new Regex("^ *(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?");
-                Match m = r.Match(s);
-                string v = m.Groups[0].Value;
-
-                v = v.Trim();
-
-                if (v == String.Empty || v == null)
-                    v = "0.0";
-                else
-                    if (!v.Contains(".") && !v.ToLower().Contains("e"))
-                        v = v + ".0";
-                    else
-                        if (v.EndsWith("."))
-                            v = v + "0";
-                this.value = double.Parse(v, System.Globalization.NumberStyles.Float, Culture.NumberFormatInfo);
+                this.value = FromString(s);
             }
 
             #endregion
@@ -2152,12 +2136,6 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             #region Overriders
 
-            private static readonly long NegativeZeroBits = BitConverter.DoubleToInt64Bits(-0.0);
-
-            public static string ToString(double val, string format)
-            {
-                return String.Format(Culture.FormatProvider, ((BitConverter.DoubleToInt64Bits(val) == NegativeZeroBits)?"-":"")+format,val);
-            }
 
             public override string ToString()
             {
@@ -2176,6 +2154,113 @@ namespace OpenSim.Region.ScriptEngine.Shared
                 return value.GetHashCode();
             }
 
+
+            #endregion
+
+
+            #region FloatUtility
+
+            //this is not perfect since we are using doubles and not floats, but its closer
+            //to SL than the previous conversions.
+
+            //the other types now depend on these conversions as well
+
+
+            private static readonly Regex HexTest = new Regex(@"^\s*(0x[0-9A-Fa-f])+.*");
+            private static readonly Regex NanTest = new Regex(@"^\s*[+\-]?nan.*", RegexOptions.IgnoreCase);
+            private static readonly Regex InfTest = new Regex(@"^\s*([+\-])?inf.*", RegexOptions.IgnoreCase);
+            private static readonly Regex FloatTest = new Regex(@"^\s*(\+|-)?([0-9]+\.?[0-9]*|\.[0-9]+)([eE](\+|-)?[0-9]+)?");
+            private static readonly Regex NegZeroTest = new Regex(@"^\s*-0*[.]0.*");
+
+            private static readonly long NegativeZeroBits = BitConverter.DoubleToInt64Bits(-0.0);
+
+
+            public static bool IsNegativeZero(double x)
+            {
+                return BitConverter.DoubleToInt64Bits(x) == NegativeZeroBits;
+            }
+
+
+            public static double FromString(string str)
+            {
+                //hex is allowed
+                var attemptedHex = HexTest.Match(str);
+
+                if (attemptedHex.Success)
+                {
+                    return Convert.ToInt32(attemptedHex.Groups[1].Value, 16);
+                }
+
+
+                if (NanTest.IsMatch(str))
+                {
+                    return double.NaN;
+                }
+
+                var testInf = InfTest.Match(str);
+
+                if (testInf.Success)
+                {
+                    return testInf.Groups[1].Value == "-" ? double.NegativeInfinity : double.PositiveInfinity;
+                }
+
+
+
+                Match match = FloatTest.Match(str);
+
+                string v = match.Groups[0].Value;
+
+                v = v.Trim();
+
+                if (v == string.Empty)
+                {
+                    v = "0.0";
+                }
+                else if (!v.Contains(".") && !v.ToLower().Contains("e"))
+                {
+                    v = v + ".0";
+                }
+                else if (v.EndsWith("."))
+                {
+                    v = v + "0";
+                }
+
+
+                var negZ = NegZeroTest.IsMatch(v);
+
+                double value;
+                try
+                {
+                    value = double.Parse(v, System.Globalization.NumberStyles.Float, Culture.NumberFormatInfo);
+                }
+                catch (OverflowException)
+                {
+                    return v.StartsWith("-") ? double.NegativeInfinity : double.PositiveInfinity;
+                }
+
+
+                if (negZ && !IsNegativeZero(value))
+                {
+                    //maintain sign, check for neg zero first to rule out variations in double.Parse
+                    value = -0.0;
+                }
+                return value;
+            }
+
+
+            public static string ToString(double val, string format)
+            {
+                if (double.IsNegativeInfinity(val))
+                {
+                    return "-Infinity";
+                }
+                if (double.IsPositiveInfinity(val))
+                {
+                    return "Infinity";
+                }
+
+                return (IsNegativeZero(val) ? "-" : "") + string.Format(Culture.FormatProvider, format, val);
+            }
 
             #endregion
         }
