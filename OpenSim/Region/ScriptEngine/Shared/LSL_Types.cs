@@ -102,20 +102,20 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             public override string ToString()
             {
-				string s=String.Format(Culture.FormatProvider,"<{0:0.000000},{1:0.000000},{2:0.000000}>", x, y, z);
-                return s;
+                const string format = "{0:0.000000}";
+                return String.Format("<{0}, {1}, {2}>", LSLFloat.ToString(x, format), LSLFloat.ToString(y, format), LSLFloat.ToString(z, format));
             }
 
             public static explicit operator LSLString(Vector3 vec)
             {
-				string s=String.Format(Culture.FormatProvider,"<{0:0.000000},{1:0.000000},{2:0.000000}>", vec.x, vec.y, vec.z);
-                return new LSLString(s);
+                const string format = "{0:0.000000}";
+                return new LSLString(String.Format("<{0}, {1}, {2}>", LSLFloat.ToString(vec.x, format), LSLFloat.ToString(vec.y, format), LSLFloat.ToString(vec.z, format)));
             }
 
             public static explicit operator string(Vector3 vec)
             {
-				string s=String.Format(Culture.FormatProvider,"<{0:0.000000},{1:0.000000},{2:0.000000}>", vec.x, vec.y, vec.z);
-                return s;
+                const string format = "{0:0.000000}";
+                return String.Format("<{0}, {1}, {2}>", LSLFloat.ToString(vec.x, format), LSLFloat.ToString(vec.y, format), LSLFloat.ToString(vec.z, format));
             }
 
             public static explicit operator Vector3(string s)
@@ -414,20 +414,32 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             public override string ToString()
             {
-                string st=String.Format(Culture.FormatProvider, "<{0:0.000000},{1:0.000000},{2:0.000000},{3:0.000000}>", x, y, z, s);
-                return st;
+                const string format = "{0:0.000000}";
+                return String.Format("<{0}, {1}, {2}, {3}>", 
+                    LSLFloat.ToString(x, format), 
+                    LSLFloat.ToString(y, format), 
+                    LSLFloat.ToString(z, format), 
+                    LSLFloat.ToString(s, format));
             }
 
             public static explicit operator string(Quaternion r)
             {
-                string s=String.Format("<{0:0.000000},{1:0.000000},{2:0.000000},{3:0.000000}>", r.x, r.y, r.z, r.s);
-                return s;
+                const string format = "{0:0.000000}";
+                return String.Format("<{0}, {1}, {2}, {3}>",
+                    LSLFloat.ToString(r.x,format), 
+                    LSLFloat.ToString(r.y, format), 
+                    LSLFloat.ToString(r.z, format), 
+                    LSLFloat.ToString(r.s, format));
             }
 
             public static explicit operator LSLString(Quaternion r)
             {
-                string s=String.Format("<{0:0.000000},{1:0.000000},{2:0.000000},{3:0.000000}>", r.x, r.y, r.z, r.s);
-                return new LSLString(s);
+                const string format = "{0:0.000000}";
+                return new LSLString(String.Format("<{0}, {1}, {2}, {3}>", 
+                    LSLFloat.ToString(r.x, format), 
+                    LSLFloat.ToString(r.y, format), 
+                    LSLFloat.ToString(r.z, format), 
+                    LSLFloat.ToString(r.s, format)));
             }
 
             public static explicit operator Quaternion(string s)
@@ -1504,13 +1516,13 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             public LSLString(double d)
             {
-                string s = String.Format(Culture.FormatProvider, "{0:0.000000}", d);
+                string s = LSLFloat.ToString(d, "{0:0.000000}");
                 m_string = s;
             }
 
             public LSLString(LSLFloat f)
             {
-                string s = String.Format(Culture.FormatProvider, "{0:0.000000}", f.value);
+                string s = LSLFloat.ToString(f.value, "{0:0.000000}");
                 m_string = s;
             }
             
@@ -2140,9 +2152,16 @@ namespace OpenSim.Region.ScriptEngine.Shared
 
             #region Overriders
 
+            private static readonly long NegativeZeroBits = BitConverter.DoubleToInt64Bits(-0.0);
+
+            public static string ToString(double val, string format)
+            {
+                return String.Format(Culture.FormatProvider, ((BitConverter.DoubleToInt64Bits(val) == NegativeZeroBits)?"-":"")+format,val);
+            }
+
             public override string ToString()
             {
-                return String.Format(Culture.FormatProvider, "{0:0.000000}", this.value);
+                return ToString(value, "{0:0.000000}");
             }
 
             public override bool Equals(Object o)
