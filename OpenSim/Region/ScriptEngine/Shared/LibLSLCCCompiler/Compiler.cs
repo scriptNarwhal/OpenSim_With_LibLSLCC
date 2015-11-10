@@ -57,7 +57,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 
-        private LSLLibraryDataProvider _libLslccMainLibraryDataProvider;
+        private LSLLibraryDataProvider _libraryDataProvider;
 
 
         // * Uses "LSL2Converter" to convert LSL to C# if necessary.
@@ -147,11 +147,11 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var comms = m_scriptEngine.World.RequestModuleInterface<IScriptModuleComms>();
 
 
-            _libLslccMainLibraryDataProvider = new LSLLibraryDataProvider(new[] {"os-lsl"}, false);
+            _libraryDataProvider = new LSLLibraryDataProvider(new[] {"os-lsl"}, false);
 
 
             //this subset is for everything reflected from OpenSims loaded modules and script base class.
-            _libLslccMainLibraryDataProvider.AddSubsetDescription(new LSLLibrarySubsetDescription("os-lsl", "OpenSim Modules"));
+            _libraryDataProvider.AddSubsetDescription(new LSLLibrarySubsetDescription("os-lsl", "OpenSim Modules"));
 
 
             var reflectionSerializer = new LSLLibraryDataReflectionSerializer();
@@ -186,13 +186,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             foreach (var method in reflectionSerializer.DeSerializeMethods(typeof(ScriptBaseClass)))
             {
                 method.Subsets.Add("os-lsl");
-                _libLslccMainLibraryDataProvider.DefineFunction(method);
+                _libraryDataProvider.DefineFunction(method);
             }
 
             foreach (var method in reflectionSerializer.DeSerializeConstants(typeof(ScriptBaseClass)))
             {
                 method.Subsets.Add("os-lsl");
-                _libLslccMainLibraryDataProvider.DefineConstant(method);
+                _libraryDataProvider.DefineConstant(method);
             }
 
 
@@ -210,7 +210,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
                     //make sure it does not get filtered when you add it by giving it the all subset
                     def.Subsets.Add("os-lsl");
                     def.ModInvoke = true;
-                    _libLslccMainLibraryDataProvider.DefineFunction(def);
+                    _libraryDataProvider.DefineFunction(def);
                 }
                 else
                 {
@@ -231,7 +231,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
                 {
                     c.Subsets.Add("os-lsl");
                     c.Expand = true;
-                    _libLslccMainLibraryDataProvider.DefineConstant(c);
+                    _libraryDataProvider.DefineConstant(c);
                 }
                 else
                 {
@@ -251,7 +251,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             //define them, we need to reset the subsets defined in the standard library data, so they match the ones we have defined in our 
             //data provider.
-            _libLslccMainLibraryDataProvider.DefineEventHandlers(ev.SupportedEventHandlers.Select(x =>
+            _libraryDataProvider.DefineEventHandlers(ev.SupportedEventHandlers.Select(x =>
                 {
                     //LSLDefaultLibraryDataProvider will yell at us if we try to change the subsets of one of its signatures out from underneath it. 
                     //it tracks changes to the signatures it owns and will throw an exception if we change the subsets of one without cloning it first.
@@ -567,7 +567,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             if (language == CompileLanguage.lsl)
             {
                 // Its LSL, convert it to C#
-                var converter = new LibLSLCCCodeGenerator(_libLslccMainLibraryDataProvider, createLSLCompilerSettings());
+                var converter = new LibLSLCCCodeGenerator(_libraryDataProvider, CreateLslCompilerSettings());
 
 
                 converter.EmitCompilerWarnings = EnableCompilerWarnings;
@@ -627,7 +627,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
 
 
-        private LSLOpenSimCompilerSettings createLSLCompilerSettings()
+        private LSLOpenSimCompilerSettings CreateLslCompilerSettings()
         {
 
             var constructorParameters = m_scriptEngine.ScriptBaseClassParameters;
