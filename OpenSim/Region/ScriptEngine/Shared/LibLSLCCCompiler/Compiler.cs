@@ -36,8 +36,8 @@ using System.Reflection;
 using System.Text;
 using log4net;
 using LibLSLCC.CodeValidator.Enums;
-using LibLSLCC.Collections;
-using LibLSLCC.Compilers;
+using LibLSLCC.Compilers.OpenSim;
+using LibLSLCC.CSharp;
 using LibLSLCC.LibraryData;
 using LibLSLCC.LibraryData.Reflection;
 using Microsoft.CSharp;
@@ -147,7 +147,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var comms = m_scriptEngine.World.RequestModuleInterface<IScriptModuleComms>();
 
 
-            _libraryDataProvider = new LSLLibraryDataProvider(new[] {"os-lsl"}, false);
+            _libraryDataProvider = new LSLLibraryDataProvider(new[] { "os-lsl" }, false);
 
 
             //this subset is for everything reflected from OpenSims loaded modules and script base class.
@@ -199,7 +199,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             //we need to tell the serializer to discard the first two parameters in registered
             //module functions, since modInvoke fills them out.
-            reflectionSerializer.ParameterFilter = parameterInfo => parameterInfo.Position < 2; 
+            reflectionSerializer.ParameterFilter = parameterInfo => parameterInfo.Position < 2;
 
             //get the registered module functions
             foreach (var method in comms.GetScriptInvocationList().Select(x => x.Method))
@@ -245,25 +245,25 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             //Opensim LSL, no additions, just the events get loaded into memory since live filtering disabled.
             var ev = new LSLEmbeddedLibraryDataProvider(
-                LSLLibraryBaseData.OpensimLsl,LSLLibraryDataAdditions.None, false,
+                LSLLibraryBaseData.OpensimLsl, LSLLibraryDataAdditions.None, false,
                 LSLLibraryDataLoadOptions.Events);
 
 
             //define them, we need to reset the subsets defined in the standard library data, so they match the ones we have defined in our 
             //data provider.
             _libraryDataProvider.DefineEventHandlers(ev.SupportedEventHandlers.Select(x =>
-                {
-                    //LSLDefaultLibraryDataProvider will yell at us if we try to change the subsets of one of its signatures out from underneath it. 
-                    //it tracks changes to the signatures it owns and will throw an exception if we change the subsets of one without cloning it first.
-                    var clone = new LSLLibraryEventSignature(x);
+            {
+                //LSLDefaultLibraryDataProvider will yell at us if we try to change the subsets of one of its signatures out from underneath it. 
+                //it tracks changes to the signatures it owns and will throw an exception if we change the subsets of one without cloning it first.
+                var clone = new LSLLibraryEventSignature(x);
 
-                    //set the subsets of the function signature so it can be added to our provider.
-                    //the default library data provider attaches an 'lsl' subset to events that both OpenSim and 
-                    //SecondLife implement.  Since we have not defined that subset in our provider, a missing subset error
-                    //would be thrown when we tried to add an event which contained an 'lsl' subset on it.
-                    clone.Subsets.SetSubsets("os-lsl");
-                    return clone;
-                }));
+                //set the subsets of the function signature so it can be added to our provider.
+                //the default library data provider attaches an 'lsl' subset to events that both OpenSim and 
+                //SecondLife implement.  Since we have not defined that subset in our provider, a missing subset error
+                //would be thrown when we tried to add an event which contained an 'lsl' subset on it.
+                clone.Subsets.SetSubsets("os-lsl");
+                return clone;
+            }));
         }
 
 
@@ -317,7 +317,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             LanguageMapping.Add(CompileLanguage.vb.ToString(), CompileLanguage.vb);
             LanguageMapping.Add(CompileLanguage.vbraw.ToString(), CompileLanguage.vbraw);
             LanguageMapping.Add(CompileLanguage.lsl.ToString(), CompileLanguage.lsl);
-            
+
 
             // Allowed compilers
             string allowComp = m_scriptEngine.Config.GetString("AllowedCompilers", "lsl");
@@ -553,7 +553,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
                 throw new Exception(errtext);
             }
 
-            if (m_scriptEngine.World.Permissions.CanCompileScript(ownerUUID, (int) language) == false)
+            if (m_scriptEngine.World.Permissions.CanCompileScript(ownerUUID, (int)language) == false)
             {
                 // Not allowed to compile to this language!
                 string errtext = string.Empty;
@@ -638,10 +638,10 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var constructorSigParamNames = constructorParameters != null
                    ? string.Join(", ", Array.ConvertAll(constructorParameters, pi => pi.Name)) : "";
 
-            var constructorSig =  "(" + constructorSigParams + ") : base(" + constructorSigParamNames + ")";
+            var constructorSig = "(" + constructorSigParams + ") : base(" + constructorSigParamNames + ")";
 
 
-            var compilerSettings = new LSLOpenSimCompilerSettings()
+            var compilerSettings = new LSLOpenSimCompilerSettings
             {
                 GenerateClass = true,
 
@@ -653,16 +653,18 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
                 GeneratedConstructorSignature = constructorSig,
 
-
                 InsertCoOpTerminationCalls = m_insertCoopTerminationCalls,
 
-                CoOpTerminationFunctionCall = "opensim_reserved_CheckForCoopTermination()"
+                CoOpTerminationFunctionCall = "opensim_reserved_CheckForCoopTermination()",
 
+                GeneratedClassAccessibility = ClassAccessibilityLevel.Default,
+
+                GeneratedConstructorAccessibility = MemberAccessibilityLevel.Public
             };
 
             compilerSettings.GeneratedNamespaceImports.Add("System.Collections.Generic");
             compilerSettings.GeneratedNamespaceImports.Add("OpenSim.Region.ScriptEngine.Shared");
-            
+
 
             return compilerSettings;
         }

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using LibLSLCC.Compilers;
 using LibLSLCC.LibraryData;
 using LibLSLCC.CodeValidator.Components;
 using LibLSLCC.CodeValidator.Components.Interfaces;
 using LibLSLCC.CodeValidator.Nodes.Interfaces;
+using LibLSLCC.Compilers.OpenSim;
 using OpenSim.Region.ScriptEngine.Shared.CodeTools;
 
 namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
@@ -129,7 +129,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             var compiler = new LSLOpenSimCompiler(_libraryData, CompilerSettings);
 
             compiler.Compile(syntaxTree, new StreamWriter(outStream, Encoding.Unicode));
-            
+
 
             return Encoding.Unicode.GetString(outStream.ToArray());
         }
