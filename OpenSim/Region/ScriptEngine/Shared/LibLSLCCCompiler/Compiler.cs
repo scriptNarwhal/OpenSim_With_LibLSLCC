@@ -292,7 +292,13 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             WriteScriptSourceToDebugFile = m_scriptEngine.Config.GetBoolean("WriteScriptSourceToDebugFile", false);
             CompileWithDebugInformation = m_scriptEngine.Config.GetBoolean("CompileWithDebugInformation", true);
             bool deleteScriptsOnStartup = m_scriptEngine.Config.GetBoolean("DeleteScriptsOnStartup", true);
-            m_insertCoopTerminationCalls = m_scriptEngine.Config.GetString("ScriptStopStrategy", "abort") == "co-op";
+
+            //force co-op termination calls to be inserted un-conditionally.
+            //it does not hurt for them to be there when co-op stop is not
+            //actually enabled in XEngine.  This way there does not need to be any
+            //recompile when going from preemptive stop mode to co-op stop mode
+            m_insertCoopTerminationCalls = true;
+                //m_scriptEngine.Config.GetString("ScriptStopStrategy", "abort") == "co-op";
 
             // Get file prefix from script-engine name and make it file system safe:
             FilePrefix = "CommonCompiler";
@@ -899,7 +905,7 @@ namespace SecondLife
             //
             FileInfo fi = new FileInfo(assembly);
 
-            //I don't know what this is about so I am leaving it?
+            //could not stat
             if (fi == null)
             {
                 errtext = string.Empty;
