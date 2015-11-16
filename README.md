@@ -268,7 +268,7 @@ and did not support the idea behind the new interface:
 ```
 
 	
-All refactoring’s have been made to make this new interface work with the old OpenSim
+All refactoring's have been made to make this new interface work with the old OpenSim
 compiler, there was only one change made to the old compiler.
 
 It was for a single call to: **LookupModConstant(string cname);**
@@ -328,11 +328,11 @@ do not want to explicitly attribute each method.  You can also explicitly set th
 used per method/constant.
 
 Constants require a ValueStringConverter to convert their raw value into a string that 
-**LSLLibraryFunctionSignature.ValueString** can parse for the given type, the serializer in the compiler
+**LSLLibraryConstantSignature.ValueString** can parse for the given type, the serializer in the compiler
 sets a default one that just (ToString()'s) the constant value.  
 
 This works for OpenSim, OpenMetaverse and CSharp built in types that may be used to define a constant, 
-since **LSLLibraryFunctionSignature.ValueString** is able to parse their (ToString()) output.  
+since **LSLLibraryConstantSignature.ValueString** is able to parse their (ToString()) output.  
 
 But module implementors may need to implement their own ValueStringConverter if they are using strange types to define constants.
 
@@ -366,15 +366,15 @@ public const int MY_CONSTANT = 42;
 
 //
 // Optionally you can set a value string converter for your type, to convert the value
-// of the field into a value that can be assigned to LSLLibraryFunctionSignature.ValueString.
+// of the field into a value that can be assigned to LSLLibraryConstantSignature.ValueString.
 //
-// The LSLLibraryFunctionSignature.ValueString is format checked, and will throw an exception
+// The LSLLibraryConstantSignature.ValueString is format checked, and will throw an exception
 // if an improper value string is supplied for the constant type.
 //
 // The serializer in the compiler has the default ValueStringConverter implementation set to 
 // an object that simply calls 'ToString()' on the value.  
 //
-// Since LSLLibraryFunctionSignature.ValueString can parse the 'ToString()' output of
+// Since LSLLibraryConstantSignature.ValueString can parse the 'ToString()' output of
 // every OpenSim type used as a constant so far in OpenSim's code base (including Vectors and Rotations),
 // its not a problem for the existing code.
 //
@@ -390,7 +390,7 @@ public const int MY_CONSTANT = 42;
 //
 // You can also just explicitly specify the value string as "42"
 //
-// LSLLibraryFunctionSignature.ValueString's parsing rules are still in effect.
+// LSLLibraryConstantSignature.ValueString's parsing rules are still in effect.
 //
 [LSLConstant(LSLType.Integer, ValueString = "42")]
 public const int MY_CONSTANT = 42;
