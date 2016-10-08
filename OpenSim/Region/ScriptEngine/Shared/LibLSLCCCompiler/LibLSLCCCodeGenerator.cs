@@ -28,13 +28,6 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
         private class ErrorListener : LSLDefaultSyntaxErrorListener
         {
-            private LibLSLCCCodeGenerator _libLslccCodeGenerator;
-
-            public ErrorListener(LibLSLCCCodeGenerator libLslccCodeGenerator)
-            {
-                _libLslccCodeGenerator = libLslccCodeGenerator;
-            }
-
             protected override void OnError(LSLSourceCodeRange location, string message)
             {
                 int line = MapLineNumber(location.LineStart);
@@ -84,13 +77,19 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         public LSLOpenSimCompilerSettings CompilerSettings { get; private set; }
 
 
-
         public string Convert(string script)
+        {
+            StringBuilder codeOut = new StringBuilder(4096);
+            Convert(script, codeOut);
+            return codeOut.ToString();
+        }
+
+        public void Convert(string script, StringBuilder sb)
         {
             var validatorServices = new LSLCodeValidatorStrategies();
 
 
-            var errorListener = new ErrorListener(this);
+            var errorListener = new ErrorListener();
             var warningListener = new WarningListener(this);
 
             validatorServices.ExpressionValidator = ExpressionValidator;
@@ -112,9 +111,14 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
             _warnings = warningListener.Warnings;
 
-
-
-            if (validator.HasSyntaxErrors) return "";
+            /*
+             * An exception will be thrown from the ErrorListener defined at the top of this file in case of syntax errors, so skip this check.
+             * 
+                if (validator.HasSyntaxErrors)
+                {
+                    return;
+                }
+            */
 
             var outStream = new MemoryStream();
 
@@ -123,9 +127,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
             compiler.Compile(syntaxTree, new StreamWriter(outStream, Encoding.Unicode));
 
 
-            return Encoding.Unicode.GetString(outStream.ToArray());
+            sb.Append(Encoding.Unicode.GetString(outStream.ToArray()));
         }
-
 
 
         private List<string> _warnings;
@@ -133,6 +136,12 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         public string[] GetWarnings()
         {
             return _warnings.ToArray();
+        }
+
+        public void Clear()
+        {
+            // this compiler does not need to implement this function as it has no line mapping data or any state.
+            // this implementation is entirely reentrant
         }
     }
 }
