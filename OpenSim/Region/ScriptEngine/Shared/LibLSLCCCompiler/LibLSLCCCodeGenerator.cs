@@ -142,6 +142,8 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
         {
             // this compiler does not need to implement this function as it has no line mapping data or any state.
             // this implementation is entirely reentrant
+
+            // the _warnings member is effectively cleared by assignment inside of the Convert function.
         }
     }
 }
