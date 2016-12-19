@@ -2235,7 +2235,6 @@
       <Reference name="Nini" path="../../../../../bin/"/>
       <Reference name="log4net" path="../../../../../bin/"/>
       <Reference name="Tools" path="../../../../../bin/"/>
-	  <Reference name="Antlr4.Runtime" path="./../../../../bin/"/>
 	  <Reference name="LibLSLCC" path="../../../../../bin/"/>
 	  
       <Files>
