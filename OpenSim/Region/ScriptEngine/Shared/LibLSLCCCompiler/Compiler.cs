@@ -63,14 +63,6 @@ namespace OpenSim.Region.ScriptEngine.Shared.LibLSLCCCompiler
 
         private LSLLibraryDataProvider _libraryDataProvider;
 
-
-        // * Uses "LSL2Converter" to convert LSL to C# if necessary.
-        // * Compiles C#-code into an assembly
-        // * Returns assembly name ready for AppDomain load.
-        //
-        // Assembly is compiled using LSL_BaseClass as base. Look at debug C# code file created when LSL script is compiled for full details.
-        //
-
         internal enum CompileLanguage
         {
             lsl = 0,
